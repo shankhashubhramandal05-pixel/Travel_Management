@@ -1,0 +1,581 @@
+{% extends "Travel/base.html" %}
+{% load static %}
+
+{% block title %}
+    YatraNest - Booking Confirmed Successfully
+{% endblock %}
+
+{% block content %}
+
+<style>
+    /* =====================================================
+       BOOKING SUCCESS PAGE
+    ===================================================== */
+
+    .success-viewport-wrapper {
+        max-width: 750px;
+        margin: 110px auto 60px auto;
+        padding: 0 24px;
+        text-align: center;
+    }
+
+    /* Animated Success Checkmark */
+    .success-icon-ring {
+        width: 80px;
+        height: 80px;
+        background-color: #dcfce7;
+        color: #16a34a;
+        border-radius: 50%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 36px;
+        margin: 0 auto 24px auto;
+
+        box-shadow: 0 0 0 8px rgba(220, 252, 231, 0.5);
+
+        animation: pulseRing 1.5s infinite ease-in-out;
+    }
+
+    .success-title {
+        font-size: 28px;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 8px;
+    }
+
+    .success-subtitle {
+        font-size: 15px;
+        color: #64748b;
+        margin-bottom: 40px;
+        line-height: 1.6;
+    }
+
+    /* =====================================================
+       DIGITAL INVOICE
+    ===================================================== */
+
+    .digital-invoice-slip {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+
+        padding: 32px;
+        text-align: left;
+
+        box-shadow:
+            0 10px 25px -5px rgba(15, 23, 42, 0.05);
+
+        margin-bottom: 32px;
+
+        position: relative;
+    }
+
+    .digital-invoice-slip::after {
+        content: '';
+
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+
+        width: 100%;
+        height: 10px;
+
+        background-image:
+            linear-gradient(
+                -45deg,
+                transparent 4px,
+                #ffffff 4px,
+                #ffffff 8px,
+                transparent 8px
+            ),
+            linear-gradient(
+                45deg,
+                transparent 4px,
+                #ffffff 4px,
+                #ffffff 8px,
+                transparent 8px
+            );
+
+        background-size: 12px 12px;
+    }
+
+    .invoice-meta-header {
+        display: flex;
+        justify-content: space-between;
+
+        border-bottom: 1px dashed #cbd5e1;
+
+        padding-bottom: 16px;
+        margin-bottom: 20px;
+    }
+
+    .invoice-meta-header h4 {
+        font-size: 16px;
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+    .invoice-meta-header p {
+        font-size: 13px;
+        color: #64748b;
+        font-weight: 500;
+    }
+
+    .invoice-row-detail {
+        display: flex;
+        justify-content: space-between;
+
+        font-size: 14px;
+        color: #475569;
+
+        margin-bottom: 12px;
+
+        gap: 20px;
+    }
+
+    .invoice-row-detail strong {
+        color: #0f172a;
+        text-align: right;
+    }
+
+    .invoice-total-highlight {
+        display: flex;
+        justify-content: space-between;
+
+        border-top: 1px solid #e2e8f0;
+
+        padding-top: 16px;
+        margin-top: 16px;
+
+        font-size: 18px;
+        font-weight: 700;
+
+        color: #0284c7;
+    }
+
+    /* =====================================================
+       ACTION BUTTONS
+    ===================================================== */
+
+    .action-control-row {
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+
+        flex-wrap: wrap;
+    }
+
+    .btn-control-base {
+        text-decoration: none;
+
+        padding: 12px 28px;
+
+        border-radius: 8px;
+
+        font-size: 14px;
+        font-weight: 600;
+
+        cursor: pointer;
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        gap: 8px;
+
+        transition:
+            all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn-success-outline {
+        background-color: transparent;
+
+        border: 1px solid #cbd5e1;
+
+        color: #475569;
+    }
+
+    .btn-success-outline:hover {
+        background-color: #f8fafc;
+        color: #0f172a;
+
+        transform: translateY(-1px);
+    }
+
+    .btn-success-primary {
+        background-color: #0f172a;
+
+        color: #ffffff;
+
+        border: none;
+    }
+
+    .btn-success-primary:hover {
+        background-color: #0284c7;
+
+        color: #ffffff;
+
+        transform: translateY(-1px);
+    }
+
+    /* =====================================================
+       ANIMATION
+    ===================================================== */
+
+    @keyframes pulseRing {
+
+        0% {
+            box-shadow:
+                0 0 0 0
+                rgba(220, 252, 231, 0.7);
+        }
+
+        70% {
+            box-shadow:
+                0 0 0 12px
+                rgba(220, 252, 231, 0);
+        }
+
+        100% {
+            box-shadow:
+                0 0 0 0
+                rgba(220, 252, 231, 0);
+        }
+    }
+
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
+
+    @media (max-width: 700px) {
+
+        .success-viewport-wrapper {
+            margin-top: 90px;
+        }
+
+        .invoice-meta-header {
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .invoice-meta-header div:last-child {
+            text-align: left !important;
+        }
+
+        .invoice-row-detail {
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .invoice-row-detail strong {
+            text-align: left;
+        }
+
+        .invoice-total-highlight {
+            gap: 20px;
+        }
+
+        .btn-control-base {
+            width: 100%;
+        }
+    }
+
+    /* =====================================================
+       PRINT VERSION
+    ===================================================== */
+
+    @media print {
+
+        body {
+            background: #ffffff !important;
+            color: #000000 !important;
+        }
+
+        .success-icon-ring,
+        .success-title,
+        .success-subtitle,
+        .action-control-row {
+            display: none !important;
+        }
+
+        .success-viewport-wrapper {
+            margin: 0;
+            max-width: 100%;
+        }
+
+        .digital-invoice-slip {
+            border: none;
+            box-shadow: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .digital-invoice-slip::after {
+            display: none;
+        }
+    }
+</style>
+
+
+<!-- =====================================================
+     BOOKING SUCCESS MODULE
+===================================================== -->
+
+<main class="success-viewport-wrapper">
+
+    <!-- Success Icon -->
+    <div class="success-icon-ring">
+
+        <i class="fa-solid fa-circle-check"></i>
+
+    </div>
+
+
+    <!-- Success Heading -->
+
+    <h1 class="success-title">
+
+        Your Escape is Locked In!
+
+    </h1>
+
+
+    <p class="success-subtitle">
+
+        Thank you for choosing YatraNest.
+        Your booking has been confirmed successfully.
+
+        A confirmation receipt has been added
+        to your booking records.
+
+    </p>
+
+
+    <!-- =================================================
+         DIGITAL INVOICE
+    ================================================== -->
+
+    <div class="digital-invoice-slip">
+
+        <div class="invoice-meta-header">
+
+            <div>
+
+                <h4>
+                    Transaction Invoice Statement
+                </h4>
+
+                <p style="margin-top: 4px;">
+
+                    Receipt Token ID:
+
+                    #JN-TXN-{{ booking.id }}
+
+                </p>
+
+            </div>
+
+
+            <div style="text-align: right;">
+
+                <p>
+
+                    Status:
+
+                    <strong>
+                        PAID / SECURED
+                    </strong>
+
+                </p>
+
+                <p style="margin-top: 4px;">
+
+                    Logged:
+
+                    {{ booking.created_at|date:"d M Y" }}
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Account Holder -->
+
+        <div class="invoice-row-detail">
+
+            <span>
+                Account Holder Profile
+            </span>
+
+            <strong>
+
+                {{ booking.user.get_full_name|default:booking.user.username }}
+
+            </strong>
+
+        </div>
+
+
+        <!-- Destination -->
+
+        <div class="invoice-row-detail">
+
+            <span>
+                Selected Destination
+            </span>
+
+            <strong>
+
+                {{ booking.tour.destination.name }}
+
+            </strong>
+
+        </div>
+
+
+        <!-- Tour -->
+
+        <div class="invoice-row-detail">
+
+            <span>
+                Selected Tour Package
+            </span>
+
+            <strong>
+
+                {{ booking.tour }}
+
+            </strong>
+
+        </div>
+
+
+        <!-- Guests -->
+
+        <div class="invoice-row-detail">
+
+            <span>
+                Allotted Guest Distribution
+            </span>
+
+            <strong>
+
+                {{ booking.number_of_guests }}
+                Guest{{ booking.number_of_guests|pluralize }}
+
+            </strong>
+
+        </div>
+
+
+        <!-- Payment -->
+
+        <div class="invoice-row-detail">
+
+            <span>
+                Payment Method
+            </span>
+
+            <strong>
+
+                {{ booking.payment_method|default:"Online Payment" }}
+
+            </strong>
+
+        </div>
+
+
+        <!-- Booking Date -->
+
+        <div class="invoice-row-detail">
+
+            <span>
+                Booking Date
+            </span>
+
+            <strong>
+
+                {{ booking.booking_date|date:"d M Y" }}
+
+            </strong>
+
+        </div>
+
+
+        <!-- Total -->
+
+        <div class="invoice-total-highlight">
+
+            <span>
+                Total Amount Charged
+            </span>
+
+            <span>
+
+                ₹{{ booking.total_amount }}
+
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         ACTION BUTTONS
+    ================================================== -->
+
+    <div class="action-control-row">
+
+        <!-- Print -->
+
+        <button
+            type="button"
+            class="btn-control-base btn-success-outline"
+            onclick="window.print()"
+        >
+
+            <i class="fa-solid fa-print"></i>
+
+            Print Account Invoice
+
+        </button>
+
+
+        <!-- Booking List -->
+
+        <a
+            href="{% url 'booking_list' %}"
+            class="btn-control-base btn-success-outline"
+        >
+
+            <i class="fa-solid fa-list-check"></i>
+
+            View Booking Records
+
+        </a>
+
+
+        <!-- Homepage -->
+
+        <a
+            href="{% url 'home' %}"
+            class="btn-control-base btn-success-primary"
+        >
+
+            Return to Homepage
+
+            <i class="fa-solid fa-house"></i>
+
+        </a>
+
+    </div>
+
+</main>
+
+{% endblock %}

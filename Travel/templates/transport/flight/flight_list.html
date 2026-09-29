@@ -1,0 +1,1268 @@
+{% extends "Travel/base.html" %}
+
+{% load static %}
+
+{% block title %}
+Flight Services | YatraNest
+{% endblock %}
+
+
+{% block content %}
+
+<section class="transport-page">
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="transport-header">
+
+        <div class="transport-icon header-icon">
+
+            <i class="fa-solid fa-plane-departure"
+               aria-hidden="true"></i>
+
+        </div>
+
+        <h1>
+            Flight Services
+        </h1>
+
+        <p>
+            Find comfortable and convenient flights for your journey.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         FLIGHT LIST
+    ====================================================== -->
+
+    {% if flights %}
+
+        <div class="transport-grid">
+
+            {% for flight in flights %}
+
+                <article
+                    class="transport-card"
+                    data-flight-card
+                >
+
+                    <!-- =================================================
+                         FLIGHT ICON
+                    ================================================== -->
+
+                    <div class="transport-icon">
+
+                        <i class="fa-solid fa-plane"
+                           aria-hidden="true"></i>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         AIRLINE
+                    ================================================== -->
+
+                    <h2>
+                        {{ flight.airline }}
+                    </h2>
+
+
+                    <!-- =================================================
+                         FLIGHT NUMBER
+                    ================================================== -->
+
+                    <div class="transport-number">
+
+                        <span>
+                            Flight Number:
+                        </span>
+
+                        <strong>
+                            {{ flight.flight_number }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         ROUTE
+                    ================================================== -->
+
+                    <div class="route">
+
+                        <span>
+                            {{ flight.source }}
+                        </span>
+
+                        <i
+                            class="fa-solid fa-arrow-right"
+                            aria-hidden="true"
+                        ></i>
+
+                        <span>
+                            {{ flight.destination }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         INFORMATION
+                    ================================================== -->
+
+                    <div class="transport-info">
+
+
+                        <!-- DEPARTURE -->
+
+                        <div class="info-box">
+
+                            <span>
+
+                                <i
+                                    class="fa-regular fa-clock"
+                                    aria-hidden="true"
+                                ></i>
+
+                                Departure
+
+                            </span>
+
+                            <strong>
+
+                                {{ flight.departure_time|time:"h:i A" }}
+
+                            </strong>
+
+                        </div>
+
+
+                        <!-- ARRIVAL -->
+
+                        <div class="info-box">
+
+                            <span>
+
+                                <i
+                                    class="fa-regular fa-clock"
+                                    aria-hidden="true"
+                                ></i>
+
+                                Arrival
+
+                            </span>
+
+                            <strong>
+
+                                {{ flight.arrival_time|time:"h:i A" }}
+
+                            </strong>
+
+                        </div>
+
+
+                        <!-- TOTAL SEATS -->
+
+                        <div class="info-box">
+
+                            <span>
+
+                                <i
+                                    class="fa-solid fa-chair"
+                                    aria-hidden="true"
+                                ></i>
+
+                                Total Seats
+
+                            </span>
+
+                            <strong>
+
+                                {{ flight.total_seats }}
+
+                            </strong>
+
+                        </div>
+
+
+                        <!-- AVAILABLE SEATS -->
+
+                        <div class="info-box">
+
+                            <span>
+
+                                <i
+                                    class="fa-solid fa-chair"
+                                    aria-hidden="true"
+                                ></i>
+
+                                Available Seats
+
+                            </span>
+
+
+                            {% if flight.available_seats > 0 %}
+
+                                <strong class="available">
+
+                                    {{ flight.available_seats }}
+
+                                </strong>
+
+                            {% else %}
+
+                                <strong class="unavailable">
+
+                                    Sold Out
+
+                                </strong>
+
+                            {% endif %}
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- =================================================
+                         PRICE
+                    ================================================== -->
+
+                    <div class="price-box">
+
+                        <div>
+
+                            <span class="price-label">
+                                Fare per passenger
+                            </span>
+
+                            <div class="price">
+
+                                ₹{{ flight.price|floatformat:2 }}
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- STATUS -->
+
+                        {% if flight.active %}
+
+                            <div class="active-status">
+
+                                <i
+                                    class="fa-solid fa-circle"
+                                    aria-hidden="true"
+                                ></i>
+
+                                Active
+
+                            </div>
+
+                        {% else %}
+
+                            <div class="inactive-status">
+
+                                Inactive
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- =================================================
+                         BUTTONS
+                    ================================================== -->
+
+                    <div class="card-buttons">
+
+
+                        <!-- DETAILS -->
+
+                        <a
+                            href="{% url 'flight_detail' flight.pk %}"
+                            class="btn btn-details"
+                        >
+
+                            <i
+                                class="fa-solid fa-circle-info"
+                                aria-hidden="true"
+                            ></i>
+
+                            View Details
+
+                        </a>
+
+
+                        <!-- SEAT SELECTION -->
+
+                        {% if flight.active and flight.available_seats > 0 %}
+
+                            <a
+                                href="{% url 'flight_seat_selection' flight.pk %}"
+                                class="btn btn-book"
+                            >
+
+                                <i
+                                    class="fa-solid fa-chair"
+                                    aria-hidden="true"
+                                ></i>
+
+                                Select Seat
+
+                            </a>
+
+                        {% else %}
+
+                            <span
+                                class="btn btn-disabled"
+                            >
+
+                                <i
+                                    class="fa-solid fa-ban"
+                                    aria-hidden="true"
+                                ></i>
+
+                                Unavailable
+
+                            </span>
+
+                        {% endif %}
+
+
+                    </div>
+
+
+                </article>
+
+            {% endfor %}
+
+        </div>
+
+
+    {% else %}
+
+
+        <!-- =====================================================
+             EMPTY STATE
+        ====================================================== -->
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+
+                <i
+                    class="fa-solid fa-plane"
+                    aria-hidden="true"
+                ></i>
+
+            </div>
+
+
+            <h2>
+                No Flights Available
+            </h2>
+
+
+            <p>
+                There are currently no active flight services.
+                Please check again later.
+            </p>
+
+
+            <button
+                type="button"
+                class="empty-button"
+                onclick="window.location.reload();"
+            >
+
+                <i
+                    class="fa-solid fa-rotate-right"
+                    aria-hidden="true"
+                ></i>
+
+                Refresh
+
+            </button>
+
+        </div>
+
+    {% endif %}
+
+
+</section>
+
+
+
+<style>
+
+/* =========================================================
+   YATRANEST FLIGHT LIST
+   ========================================================= */
+
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.transport-page {
+
+    min-height: 100vh;
+
+    padding:
+        120px
+        6%
+        80px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #f7f9fc 0%,
+            #f3f6fa 100%
+        );
+
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.transport-header {
+
+    text-align: center;
+
+    margin-bottom: 48px;
+
+}
+
+
+.transport-header h1 {
+
+    margin:
+        0
+        0
+        12px;
+
+    font-family:
+        "Playfair Display",
+        serif;
+
+    font-size: 46px;
+
+    font-weight: 700;
+
+    color: #172036;
+
+}
+
+
+.transport-header p {
+
+    margin: 0;
+
+    font-size: 17px;
+
+    color: #687386;
+
+}
+
+
+.header-icon {
+
+    margin:
+        0
+        auto
+        18px;
+
+}
+
+
+/* =========================================================
+   ICON
+   ========================================================= */
+
+.transport-icon {
+
+    width: 66px;
+
+    height: 66px;
+
+    border-radius: 17px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eef4ff,
+            #e2ecff
+        );
+
+    color: #172036;
+
+    font-size: 28px;
+
+}
+
+
+.transport-icon i {
+
+    font-size: 28px;
+
+}
+
+
+/* =========================================================
+   GRID
+   ========================================================= */
+
+.transport-grid {
+
+    max-width: 1200px;
+
+    margin:
+        0
+        auto;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(
+                310px,
+                1fr
+            )
+        );
+
+    gap: 26px;
+
+}
+
+
+/* =========================================================
+   CARD
+   ========================================================= */
+
+.transport-card {
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        #e3e8ef;
+
+    border-radius: 20px;
+
+    padding: 27px;
+
+    box-shadow:
+        0
+        10px
+        35px
+        rgba(
+            23,
+            32,
+            54,
+            .07
+        );
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease,
+        border-color .3s ease;
+
+}
+
+
+.transport-card:hover {
+
+    transform:
+        translateY(-6px);
+
+    border-color:
+        #d5dce6;
+
+    box-shadow:
+        0
+        18px
+        45px
+        rgba(
+            23,
+            32,
+            54,
+            .13
+        );
+
+}
+
+
+/* =========================================================
+   CARD ICON
+   ========================================================= */
+
+.transport-card >
+.transport-icon {
+
+    margin-bottom: 18px;
+
+}
+
+
+/* =========================================================
+   AIRLINE
+   ========================================================= */
+
+.transport-card h2 {
+
+    margin:
+        0
+        0
+        7px;
+
+    font-family:
+        "Playfair Display",
+        serif;
+
+    font-size: 24px;
+
+    color: #172036;
+
+}
+
+
+/* =========================================================
+   FLIGHT NUMBER
+   ========================================================= */
+
+.transport-number {
+
+    margin-bottom: 15px;
+
+    font-size: 13px;
+
+    color: #778196;
+
+}
+
+
+.transport-number strong {
+
+    color: #344054;
+
+    font-weight: 700;
+
+}
+
+
+/* =========================================================
+   ROUTE
+   ========================================================= */
+
+.route {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+    flex-wrap: wrap;
+
+    margin-bottom: 21px;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+    color: #52607a;
+
+}
+
+
+.route i {
+
+    font-size: 13px;
+
+    color: #e8a83e;
+
+}
+
+
+/* =========================================================
+   INFORMATION GRID
+   ========================================================= */
+
+.transport-info {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 11px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.info-box {
+
+    padding: 12px;
+
+    border-radius: 11px;
+
+    background: #f7f8fa;
+
+}
+
+
+.info-box span {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    color: #7b8493;
+
+}
+
+
+.info-box span i {
+
+    margin-right: 4px;
+
+}
+
+
+.info-box strong {
+
+    display: block;
+
+    font-size: 14px;
+
+    line-height: 1.45;
+
+    color: #202938;
+
+    word-break: break-word;
+
+}
+
+
+/* AVAILABLE */
+
+.info-box strong.available {
+
+    color: #15803d;
+
+}
+
+
+/* SOLD OUT */
+
+.info-box strong.unavailable {
+
+    color: #b91c1c;
+
+}
+
+
+/* =========================================================
+   PRICE
+   ========================================================= */
+
+.price-box {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 18px;
+
+}
+
+
+.price-label {
+
+    display: block;
+
+    margin-bottom: 3px;
+
+    font-size: 12px;
+
+    color: #7b8493;
+
+}
+
+
+.price {
+
+    font-size: 25px;
+
+    font-weight: 800;
+
+    color: #172036;
+
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.active-status,
+.inactive-status {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding:
+        6px
+        10px;
+
+    border-radius: 20px;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+
+}
+
+
+.active-status {
+
+    background: #dcfce7;
+
+    color: #15803d;
+
+}
+
+
+.active-status i {
+
+    font-size: 6px;
+
+}
+
+
+.inactive-status {
+
+    background: #fee2e2;
+
+    color: #b91c1c;
+
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.card-buttons {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    gap: 10px;
+
+}
+
+
+.btn {
+
+    min-height: 44px;
+
+    padding:
+        11px
+        12px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    box-sizing: border-box;
+
+    text-decoration: none;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    transition:
+        background .2s ease,
+        transform .2s ease;
+
+}
+
+
+.btn-details {
+
+    background: #eef1f5;
+
+    color: #263246;
+
+}
+
+
+.btn-details:hover {
+
+    background: #dfe4eb;
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+.btn-book {
+
+    background: #172036;
+
+    color: #ffffff;
+
+}
+
+
+.btn-book:hover {
+
+    background: #e8a83e;
+
+    color: #172036;
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+.btn-disabled {
+
+    background: #d7dde5;
+
+    color: #758195;
+
+    cursor: not-allowed;
+
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.empty-state {
+
+    max-width: 680px;
+
+    margin:
+        0
+        auto;
+
+    padding:
+        60px
+        30px;
+
+    text-align: center;
+
+    background: #ffffff;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0
+        10px
+        35px
+        rgba(
+            23,
+            32,
+            54,
+            .07
+        );
+
+}
+
+
+.empty-icon {
+
+    width: 75px;
+
+    height: 75px;
+
+    margin:
+        0
+        auto
+        20px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #eef4ff;
+
+    color: #172036;
+
+    font-size: 31px;
+
+}
+
+
+.empty-state h2 {
+
+    margin:
+        0
+        0
+        10px;
+
+    font-family:
+        "Playfair Display",
+        serif;
+
+    color: #172036;
+
+}
+
+
+.empty-state p {
+
+    margin:
+        0
+        0
+        25px;
+
+    color: #717b8c;
+
+    line-height: 1.6;
+
+}
+
+
+.empty-button {
+
+    border: none;
+
+    padding:
+        11px
+        20px;
+
+    border-radius: 9px;
+
+    background: #172036;
+
+    color: #ffffff;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+
+}
+
+
+.empty-button:hover {
+
+    background: #e8a83e;
+
+    color: #172036;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .transport-page {
+
+        padding:
+            105px
+            5%
+            55px;
+
+    }
+
+
+    .transport-header h1 {
+
+        font-size: 35px;
+
+    }
+
+
+    .transport-header p {
+
+        font-size: 15px;
+
+    }
+
+
+    .transport-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .transport-info {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .card-buttons {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .price-box {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+    }
+
+}
+
+
+</style>
+
+
+
+<script>
+
+/* =========================================================
+   YATRANEST FLIGHT PAGE JAVASCRIPT
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const cards =
+            document.querySelectorAll(
+                "[data-flight-card]"
+            );
+
+
+        /* -----------------------------------------------------
+           CARD ANIMATION
+        ----------------------------------------------------- */
+
+        cards.forEach(
+            function (card, index) {
+
+                card.style.opacity = "0";
+
+                card.style.transform =
+                    "translateY(15px)";
+
+
+                setTimeout(
+                    function () {
+
+                        card.style.transition =
+                            "opacity .45s ease, transform .45s ease";
+
+                        card.style.opacity =
+                            "1";
+
+                        card.style.transform =
+                            "translateY(0)";
+
+                    },
+                    80 * index
+                );
+
+            }
+        );
+
+
+        /* -----------------------------------------------------
+           PREVENT DOUBLE CLICK ON BOOKING
+        ----------------------------------------------------- */
+
+        const bookingButtons =
+            document.querySelectorAll(
+                ".btn-book"
+            );
+
+
+        bookingButtons.forEach(
+            function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        button.style.pointerEvents =
+                            "none";
+
+                        button.style.opacity =
+                            "0.7";
+
+                    }
+                );
+
+            }
+        );
+
+
+    }
+);
+
+</script>
+
+
+{% endblock %}

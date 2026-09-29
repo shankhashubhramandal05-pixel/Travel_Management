@@ -1,0 +1,529 @@
+{% extends "Travel/base.html" %}
+
+{% block title %}
+Select Train Coach - {{ train.train_number }}
+{% endblock %}
+
+{% block content %}
+
+<main style="
+    max-width:1100px;
+    margin:130px auto 80px;
+    padding:0 20px;
+">
+
+    <!-- Back -->
+    <div style="margin-bottom:24px;">
+
+        <a href="{% url 'train_detail' train.id %}"
+           style="
+               display:inline-flex;
+               align-items:center;
+               gap:8px;
+               text-decoration:none;
+               color:#475569;
+               border:1px solid #cbd5e1;
+               padding:9px 16px;
+               border-radius:7px;
+               font-size:13px;
+               font-weight:600;
+               background:#ffffff;
+           ">
+
+            <i class="fa-solid fa-arrow-left"></i>
+            Back to Train Details
+
+        </a>
+
+    </div>
+
+
+    <!-- Header -->
+    <section style="
+        background:#ffffff;
+        border:1px solid #e2e8f0;
+        border-radius:14px;
+        padding:28px;
+        margin-bottom:25px;
+        box-shadow:var(--shadow,0 4px 15px rgba(0,0,0,.06));
+    ">
+
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:20px;
+        ">
+
+            <div>
+
+                <span style="
+                    color:#0284c7;
+                    font-size:12px;
+                    font-weight:700;
+                    text-transform:uppercase;
+                ">
+                    {{ train.railway_name }}
+                </span>
+
+                <h1 style="
+                    margin:5px 0;
+                    color:#0f172a;
+                    font-size:25px;
+                ">
+                    {{ train.train_name }}
+                </h1>
+
+                <p style="
+                    margin:0;
+                    color:#64748b;
+                    font-size:14px;
+                ">
+                    {{ train.train_number }}
+                    &nbsp;•&nbsp;
+                    {{ train.source }}
+                    →
+                    {{ train.destination }}
+                </p>
+
+            </div>
+
+
+            <div style="text-align:right;">
+
+                <span style="
+                    color:#64748b;
+                    font-size:12px;
+                ">
+                    Available Seats
+                </span>
+
+                <strong style="
+                    display:block;
+                    color:#15803d;
+                    font-size:20px;
+                ">
+                    {{ train.available_seats }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Coach Selection -->
+    <section style="
+        background:#ffffff;
+        border:1px solid #e2e8f0;
+        border-radius:14px;
+        padding:30px;
+        box-shadow:var(--shadow,0 4px 15px rgba(0,0,0,.06));
+    ">
+
+        <h2 style="
+            margin:0;
+            color:#0f172a;
+            font-size:22px;
+        ">
+            Select Your Coach Class
+        </h2>
+
+        <p style="
+            margin-top:7px;
+            color:#64748b;
+            font-size:14px;
+        ">
+            Choose the class that best suits your journey.
+        </p>
+
+
+        <!-- Coach Options -->
+        <form method="POST"
+              action=""
+              id="coachForm">
+
+            {% csrf_token %}
+
+            <div style="
+                display:grid;
+                grid-template-columns:repeat(2,1fr);
+                gap:18px;
+                margin-top:28px;
+            ">
+
+
+                <!-- Shovon -->
+                <label class="coach-option">
+
+                    <input type="radio"
+                           name="coach_class"
+                           value="SHOVON"
+                           required>
+
+                    <div class="coach-card">
+
+                        <div class="coach-icon">
+                            <i class="fa-solid fa-train"></i>
+                        </div>
+
+                        <div class="coach-info">
+
+                            <h3>Shovon</h3>
+
+                            <p>
+                                Basic non-AC seating
+                                for budget travellers.
+                            </p>
+
+                        </div>
+
+                        <span class="coach-price">
+                            ₹{{ train.price|floatformat:2 }}
+                        </span>
+
+                    </div>
+
+                </label>
+
+
+                <!-- Shovon Chair -->
+                <label class="coach-option">
+
+                    <input type="radio"
+                           name="coach_class"
+                           value="SHOVON_CHAIR">
+
+                    <div class="coach-card">
+
+                        <div class="coach-icon">
+                            <i class="fa-solid fa-chair"></i>
+                        </div>
+
+                        <div class="coach-info">
+
+                            <h3>Shovon Chair</h3>
+
+                            <p>
+                                Comfortable non-AC
+                                chair seating.
+                            </p>
+
+                        </div>
+
+                        <span class="coach-price">
+                            ₹{{ train.price|floatformat:2 }}
+                        </span>
+
+                    </div>
+
+                </label>
+
+
+                <!-- Snigdha -->
+                <label class="coach-option">
+
+                    <input type="radio"
+                           name="coach_class"
+                           value="SNIGDHA">
+
+                    <div class="coach-card">
+
+                        <div class="coach-icon">
+                            <i class="fa-solid fa-couch"></i>
+                        </div>
+
+                        <div class="coach-info">
+
+                            <h3>Snigdha</h3>
+
+                            <p>
+                                Premium AC seating
+                                with enhanced comfort.
+                            </p>
+
+                        </div>
+
+                        <span class="coach-price">
+                            ₹{{ train.price|floatformat:2 }}
+                        </span>
+
+                    </div>
+
+                </label>
+
+
+                <!-- AC Seat -->
+                <label class="coach-option">
+
+                    <input type="radio"
+                           name="coach_class"
+                           value="AC_SEAT">
+
+                    <div class="coach-card">
+
+                        <div class="coach-icon">
+                            <i class="fa-solid fa-snowflake"></i>
+                        </div>
+
+                        <div class="coach-info">
+
+                            <h3>AC Seat</h3>
+
+                            <p>
+                                Air-conditioned
+                                comfortable seating.
+                            </p>
+
+                        </div>
+
+                        <span class="coach-price">
+                            ₹{{ train.price|floatformat:2 }}
+                        </span>
+
+                    </div>
+
+                </label>
+
+
+                <!-- AC Berth -->
+                <label class="coach-option">
+
+                    <input type="radio"
+                           name="coach_class"
+                           value="AC_BERTH">
+
+                    <div class="coach-card">
+
+                        <div class="coach-icon">
+                            <i class="fa-solid fa-bed"></i>
+                        </div>
+
+                        <div class="coach-info">
+
+                            <h3>AC Berth</h3>
+
+                            <p>
+                                Air-conditioned sleeping
+                                berth for overnight travel.
+                            </p>
+
+                        </div>
+
+                        <span class="coach-price">
+                            ₹{{ train.price|floatformat:2 }}
+                        </span>
+
+                    </div>
+
+                </label>
+
+
+                <!-- First Class -->
+                <label class="coach-option">
+
+                    <input type="radio"
+                           name="coach_class"
+                           value="FIRST_CLASS">
+
+                    <div class="coach-card">
+
+                        <div class="coach-icon">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+
+                        <div class="coach-info">
+
+                            <h3>First Class</h3>
+
+                            <p>
+                                Premium private
+                                accommodation.
+                            </p>
+
+                        </div>
+
+                        <span class="coach-price">
+                            ₹{{ train.price|floatformat:2 }}
+                        </span>
+
+                    </div>
+
+                </label>
+
+            </div>
+
+
+            <!-- Continue -->
+            <div style="
+                margin-top:30px;
+                padding-top:25px;
+                border-top:1px solid #e2e8f0;
+                display:flex;
+                justify-content:flex-end;
+            ">
+
+                <button type="submit"
+                        style="
+                            border:none;
+                            background:#0f172a;
+                            color:#ffffff;
+                            padding:14px 28px;
+                            border-radius:8px;
+                            font-size:15px;
+                            font-weight:700;
+                            cursor:pointer;
+                        ">
+
+                    Continue to Booking
+                    <i class="fa-solid fa-arrow-right"
+                       style="margin-left:7px;">
+                    </i>
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+</main>
+
+
+<!-- Coach Selection CSS -->
+<style>
+
+.coach-option {
+    display:block;
+    cursor:pointer;
+}
+
+.coach-option input {
+    display:none;
+}
+
+.coach-card {
+    display:flex;
+    align-items:center;
+    gap:16px;
+    position:relative;
+    min-height:115px;
+    padding:20px;
+    box-sizing:border-box;
+
+    border:2px solid #e2e8f0;
+    border-radius:12px;
+    background:#ffffff;
+
+    transition:
+        border-color .2s ease,
+        background-color .2s ease,
+        box-shadow .2s ease,
+        transform .2s ease;
+}
+
+.coach-card:hover {
+    border-color:#7dd3fc;
+    transform:translateY(-2px);
+    box-shadow:0 6px 18px rgba(15,23,42,.08);
+}
+
+.coach-option input:checked + .coach-card {
+    border-color:#0284c7;
+    background:#f0f9ff;
+    box-shadow:0 0 0 3px rgba(2,132,199,.10);
+}
+
+.coach-icon {
+    width:48px;
+    height:48px;
+    flex-shrink:0;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:10px;
+
+    background:#e0f2fe;
+    color:#0284c7;
+
+    font-size:20px;
+}
+
+.coach-info {
+    flex:1;
+    padding-right:70px;
+}
+
+.coach-info h3 {
+    margin:0 0 5px;
+
+    color:#0f172a;
+    font-size:17px;
+    font-weight:800;
+}
+
+.coach-info p {
+    margin:0;
+
+    color:#64748b;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.coach-price {
+    position:absolute;
+    top:20px;
+    right:20px;
+
+    color:#0284c7;
+    font-size:15px;
+    font-weight:800;
+}
+
+
+/* Responsive */
+@media (max-width: 800px) {
+
+    .coach-card {
+        min-height:100px;
+    }
+
+    .coach-info {
+        padding-right:0;
+    }
+
+    .coach-price {
+        position:static;
+        margin-left:auto;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    main {
+        margin-top:100px important;
+    }
+
+    .coach-card {
+        flex-wrap:wrap;
+    }
+
+    .coach-info {
+        width:calc(100% - 65px);
+    }
+
+    .coach-price {
+        width:100%;
+        margin-left:64px;
+    }
+
+}
+
+</style>
+
+{% endblock %}

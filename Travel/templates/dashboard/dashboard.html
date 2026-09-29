@@ -1,0 +1,725 @@
+{% extends "Travel/base.html" %}
+
+{% block title %}
+    YatraNest | Dashboard
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+/* =====================================================
+   DASHBOARD CONTAINER
+===================================================== */
+
+.dashboard-container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 50px 30px;
+}
+
+
+/* =====================================================
+   DASHBOARD HEADER
+===================================================== */
+
+.dashboard-header {
+    margin-bottom: 35px;
+}
+
+.dashboard-header h1 {
+    font-family: "Playfair Display", serif;
+    font-size: 36px;
+    color: #222;
+    margin: 0 0 10px;
+}
+
+.dashboard-header p {
+    color: #777;
+    font-size: 16px;
+    line-height: 1.7;
+    margin: 0;
+}
+
+
+/* =====================================================
+   USER INFORMATION
+===================================================== */
+
+.user-section {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 35px;
+
+    box-shadow:
+        0 5px 18px rgba(0, 0, 0, 0.07);
+}
+
+.user-section h2 {
+    margin: 0 0 8px;
+    font-size: 22px;
+    color: #222;
+}
+
+.user-section p {
+    margin: 0;
+    color: #777;
+    line-height: 1.6;
+}
+
+
+/* =====================================================
+   DASHBOARD GRID
+===================================================== */
+
+.dashboard-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(270px, 1fr));
+
+    gap: 25px;
+}
+
+
+/* =====================================================
+   DASHBOARD CARD
+===================================================== */
+
+.dashboard-card {
+    background: #ffffff;
+
+    border-radius: 14px;
+
+    padding: 27px;
+
+    box-shadow:
+        0 5px 20px rgba(0, 0, 0, 0.08);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =====================================================
+   CARD ICON
+===================================================== */
+
+.dashboard-icon {
+    width: 60px;
+    height: 60px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: #eaf2ff;
+
+    color: #0d6efd;
+
+    font-size: 27px;
+
+    margin-bottom: 18px;
+}
+
+
+/* =====================================================
+   CARD TEXT
+===================================================== */
+
+.dashboard-card h3 {
+    font-size: 21px;
+
+    color: #222;
+
+    margin: 0 0 10px;
+}
+
+.dashboard-card p {
+    color: #777;
+
+    line-height: 1.6;
+
+    min-height: 55px;
+
+    margin: 0 0 22px;
+}
+
+
+/* =====================================================
+   DASHBOARD BUTTON
+===================================================== */
+
+.dashboard-btn {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    width: fit-content;
+
+    padding: 10px 17px;
+
+    background: #0d6efd;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    border-radius: 7px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+
+    margin-top: auto;
+}
+
+.dashboard-btn:hover {
+    background: #0b5ed7;
+
+    color: #ffffff;
+
+    transform: translateY(-1px);
+}
+
+
+/* =====================================================
+   PAYMENT BUTTON
+===================================================== */
+
+.payment-btn {
+    background: #198754;
+}
+
+.payment-btn:hover {
+    background: #157347;
+}
+
+
+/* =====================================================
+   REVIEW BUTTON
+===================================================== */
+
+.review-btn {
+    background: #ffc107;
+
+    color: #212529;
+}
+
+.review-btn:hover {
+    background: #e0a800;
+
+    color: #212529;
+}
+
+
+/* =====================================================
+   TRANSPORT BUTTONS
+===================================================== */
+
+.transport-buttons {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-top: auto;
+}
+
+.transport-buttons a {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    padding: 9px 13px;
+
+    background: #0d6efd;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    border-radius: 6px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.transport-buttons a:hover {
+    background: #0b5ed7;
+
+    color: #ffffff;
+
+    transform: translateY(-1px);
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 768px) {
+
+    .dashboard-container {
+        padding: 35px 20px;
+    }
+
+    .dashboard-header h1 {
+        font-size: 30px;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .dashboard-container {
+        padding: 25px 15px;
+    }
+
+    .dashboard-header h1 {
+        font-size: 27px;
+    }
+
+    .dashboard-card {
+        padding: 22px;
+    }
+
+    .transport-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .transport-buttons a {
+        width: 100%;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="dashboard-container">
+
+
+    <!-- =================================================
+         DASHBOARD HEADER
+    ================================================= -->
+
+    <div class="dashboard-header">
+
+        <h1>
+            Welcome,
+            {% if user.first_name %}
+                {{ user.first_name }}
+            {% else %}
+                {{ user.username }}
+            {% endif %}
+            !
+        </h1>
+
+        <p>
+            Manage your YatraNest travel activities,
+            bookings and travel services from one place.
+        </p>
+
+    </div>
+
+
+
+    <!-- =================================================
+         USER INFORMATION
+    ================================================= -->
+
+    {% if user.is_authenticated %}
+
+    <div class="user-section">
+
+        <h2>
+            Hello,
+
+            {% if user.first_name %}
+                {{ user.first_name }}
+            {% else %}
+                {{ user.username }}
+            {% endif %}
+
+            👋
+        </h2>
+
+        <p>
+            Welcome back to your YatraNest travel dashboard.
+            Explore destinations, manage bookings and
+            plan your next adventure.
+        </p>
+
+    </div>
+
+    {% endif %}
+
+
+
+    <!-- =================================================
+         DASHBOARD CARDS
+    ================================================= -->
+
+    <div class="dashboard-grid">
+
+
+        <!-- =================================================
+             DESTINATIONS
+        ================================================= -->
+
+        <div class="dashboard-card">
+
+            <div class="dashboard-icon">
+                <i class="fa-solid fa-location-dot"></i>
+            </div>
+
+            <h3>
+                Destinations
+            </h3>
+
+            <p>
+                Explore beautiful destinations and discover
+                your next travel experience across India.
+            </p>
+
+            <a
+                href="{% url 'destination_list' %}"
+                class="dashboard-btn"
+            >
+
+                <i class="fa-solid fa-arrow-right"></i>
+
+                View Destinations
+
+            </a>
+
+        </div>
+
+
+
+        <!-- =================================================
+             TOURS
+        ================================================= -->
+
+        <div class="dashboard-card">
+
+            <div class="dashboard-icon">
+                <i class="fa-solid fa-suitcase-rolling"></i>
+            </div>
+
+            <h3>
+                Tours
+            </h3>
+
+            <p>
+                Browse available tour packages and choose
+                the perfect journey for your next trip.
+            </p>
+
+            <a
+                href="{% url 'tour_list' %}"
+                class="dashboard-btn"
+            >
+
+                <i class="fa-solid fa-arrow-right"></i>
+
+                View Tours
+
+            </a>
+
+        </div>
+
+
+
+        <!-- =================================================
+             HOTELS
+        ================================================= -->
+
+        <div class="dashboard-card">
+
+            <div class="dashboard-icon">
+                <i class="fa-solid fa-hotel"></i>
+            </div>
+
+            <h3>
+                Hotels
+            </h3>
+
+            <p>
+                Find hotels and accommodation for your
+                travel plans.
+            </p>
+
+            <a
+                href="{% url 'hotel_list' %}"
+                class="dashboard-btn"
+            >
+
+                <i class="fa-solid fa-arrow-right"></i>
+
+                View Hotels
+
+            </a>
+
+        </div>
+
+
+
+        <!-- =================================================
+             GUIDES
+        ================================================= -->
+
+        <div class="dashboard-card">
+
+            <div class="dashboard-icon">
+                <i class="fa-solid fa-user-tie"></i>
+            </div>
+
+            <h3>
+                Travel Guides
+            </h3>
+
+            <p>
+                Discover experienced travel guides and
+                make your journey easier.
+            </p>
+
+            <a
+                href="{% url 'guide_list' %}"
+                class="dashboard-btn"
+            >
+
+                <i class="fa-solid fa-arrow-right"></i>
+
+                View Guides
+
+            </a>
+
+        </div>
+
+
+
+        <!-- =================================================
+             BOOKINGS
+        ================================================= -->
+
+        <div class="dashboard-card">
+
+            <div class="dashboard-icon">
+                <i class="fa-solid fa-calendar-check"></i>
+            </div>
+
+            <h3>
+                My Bookings
+            </h3>
+
+            <p>
+                View and manage your current and previous
+                travel bookings.
+            </p>
+
+            <a
+                href="{% url 'booking_list' %}"
+                class="dashboard-btn"
+            >
+
+                <i class="fa-solid fa-list"></i>
+
+                My Bookings
+
+            </a>
+
+        </div>
+
+
+
+        <!-- =================================================
+             TRANSPORT
+        ================================================= -->
+
+        <div class="dashboard-card">
+
+            <div class="dashboard-icon">
+                <i class="fa-solid fa-route"></i>
+            </div>
+
+            <h3>
+                Transport
+            </h3>
+
+            <p>
+                Find buses, flights and trains for your
+                journey.
+            </p>
+
+            <div class="transport-buttons">
+
+                <a
+                    href="{% url 'bus_list' %}"
+                >
+
+                    <i class="fa-solid fa-bus"></i>
+
+                    Bus
+
+                </a>
+
+
+                <a
+                    href="{% url 'flight_list' %}"
+                >
+
+                    <i class="fa-solid fa-plane"></i>
+
+                    Flight
+
+                </a>
+
+
+                <a
+                    href="{% url 'train_list' %}"
+                >
+
+                    <i class="fa-solid fa-train"></i>
+
+                    Train
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             PAYMENTS
+        ================================================= -->
+
+        <div class="dashboard-card">
+
+            <div class="dashboard-icon">
+                <i class="fa-solid fa-credit-card"></i>
+            </div>
+
+            <h3>
+                Payments
+            </h3>
+
+            <p>
+                Select one of your bookings to continue
+                with the payment process.
+            </p>
+
+            <a
+                href="{% url 'booking_list' %}"
+                class="dashboard-btn payment-btn"
+            >
+
+                <i class="fa-solid fa-wallet"></i>
+
+                Select Booking
+
+            </a>
+
+        </div>
+
+
+
+        <!-- =================================================
+             REVIEWS
+        ================================================= -->
+
+        <div class="dashboard-card">
+
+            <div class="dashboard-icon">
+                <i class="fa-solid fa-star"></i>
+            </div>
+
+            <h3>
+                Reviews
+            </h3>
+
+            <p>
+                Share your travel experience and write
+                a review about a tour you have completed.
+            </p>
+
+            <!--
+                IMPORTANT:
+                There is NO URL named "review".
+
+                The actual URL is:
+
+                tours/<int:tour_id>/review/
+
+                Therefore a tour_id is required.
+
+                We first send the user to the tour list,
+                where they can select the tour they want
+                to review.
+            -->
+
+            <a
+                href="{% url 'tour_list' %}"
+                class="dashboard-btn review-btn"
+            >
+
+                <i class="fa-solid fa-pen"></i>
+
+                Choose Tour to Review
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+{% endblock %}

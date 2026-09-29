@@ -1,0 +1,7 @@
+Category Table
+        -> id(Primary Key) -> provided by model itself
+        -> Category Name -> Charfield(200) -> Unique
+        -> Category Slug -> Slugfield(Category Name) -> Unique
+        -> Category Description -> textfield
+        -> Category Image -> ImageField()
+        -> Category Created At -> Datetimefield

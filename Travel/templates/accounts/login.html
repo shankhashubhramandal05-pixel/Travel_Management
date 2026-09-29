@@ -1,0 +1,733 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>YatraNest Gateway - Login Portal</title>
+
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+            margin: 0;
+            font-family: "DM Sans", Arial, sans-serif;
+            background:
+                linear-gradient(
+                    135deg,
+                    #f8fafc 0%,
+                    #eef6ff 50%,
+                    #f8fafc 100%
+                );
+            color: #0f172a;
+        }
+
+
+        .auth-viewport-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+
+        .auth-card {
+            background: #ffffff;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 440px;
+            padding: 40px;
+            box-shadow:
+                0 10px 30px -5px rgba(15, 23, 42, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+
+        /* ================= BACK HOME ================= */
+
+        .nav-back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: #0284c7;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 28px;
+            transition: all 0.2s ease;
+        }
+
+
+        .nav-back-home:hover {
+            color: #0369a1;
+            transform: translateX(-4px);
+        }
+
+
+        /* ================= HEADER ================= */
+
+        .auth-header {
+            margin-bottom: 32px;
+        }
+
+
+        .auth-header h2 {
+            font-size: 26px;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0 0 6px;
+        }
+
+
+        .auth-header p {
+            font-size: 14px;
+            color: #64748b;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+
+        /* ================= INPUT ================= */
+
+        .input-group-field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+
+        .input-group-field label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #0f172a;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+
+        .input-icon-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+
+        .input-icon-wrapper i {
+            position: absolute;
+            left: 14px;
+            color: #94a3b8;
+            font-size: 16px;
+            z-index: 1;
+        }
+
+
+        .input-icon-wrapper input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px 16px 12px 42px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            color: #334155;
+            background: #f8fafc;
+            transition: all 0.2s ease;
+        }
+
+
+        .input-icon-wrapper input:focus {
+            border-color: #0284c7;
+            background: #ffffff;
+            box-shadow:
+                0 0 0 3px rgba(2, 132, 199, 0.15);
+        }
+
+
+        .input-icon-wrapper input::placeholder {
+            color: #94a3b8;
+        }
+
+
+        /* ================= OPTIONS ================= */
+
+        .form-options-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: -4px;
+            margin-bottom: 28px;
+            gap: 10px;
+        }
+
+
+        .remember-checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #475569;
+            cursor: pointer;
+        }
+
+
+        .remember-checkbox-label input {
+            accent-color: #0284c7;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+
+        .pwd-reset-link {
+            font-size: 13px;
+            color: #0284c7;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+
+        .pwd-reset-link:hover {
+            color: #0369a1;
+            text-decoration: underline;
+        }
+
+
+        /* ================= SUBMIT BUTTON ================= */
+
+        .btn-auth-submit {
+            background-color: #0f172a;
+            color: #ffffff;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+
+            transition: all 0.25s ease;
+        }
+
+
+        .btn-auth-submit:hover {
+            background-color: #0284c7;
+            transform: translateY(-1px);
+            box-shadow:
+                0 4px 12px rgba(2, 132, 199, 0.2);
+        }
+
+
+        .btn-auth-submit:active {
+            transform: translateY(0);
+        }
+
+
+        /* ================= LOADING ================= */
+
+        .btn-auth-submit.is-loading {
+            background-color: #64748b;
+            pointer-events: none;
+            cursor: not-allowed;
+        }
+
+
+        .btn-auth-submit.is-loading i {
+            animation: spin 0.8s linear infinite;
+        }
+
+
+        @keyframes spin {
+
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+
+        }
+
+
+        /* ================= FOOTER ================= */
+
+        .auth-footer-prompt {
+            text-align: center;
+            margin-top: 28px;
+            margin-bottom: 0;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+
+        .auth-footer-prompt a {
+            color: #0284c7;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+
+        .auth-footer-prompt a:hover {
+            text-decoration: underline;
+        }
+
+
+        /* ================= MESSAGE ================= */
+
+        .message-box {
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            background: #fee2e2;
+            color: #991b1b;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+
+        /* ================= SUCCESS MESSAGE ================= */
+
+        .message-box.success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+
+        /* ================= ERROR MESSAGE ================= */
+
+        .message-box.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 500px) {
+
+            .auth-viewport-wrapper {
+                padding: 20px 15px;
+            }
+
+
+            .auth-card {
+                padding: 28px 22px;
+            }
+
+
+            .auth-header h2 {
+                font-size: 23px;
+            }
+
+
+            .form-options-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<main class="auth-viewport-wrapper">
+
+
+    <div class="auth-card">
+
+
+        <!-- ================= BACK TO HOME ================= -->
+
+        <a
+            href="{% url 'home' %}"
+            class="nav-back-home"
+        >
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Return to Homepage
+
+        </a>
+
+
+
+        <!-- ================= HEADER ================= -->
+
+        <div class="auth-header">
+
+            <h2>
+                Welcome Traveler
+            </h2>
+
+            <p>
+                Sign in to configure your custom itinerary clipboard files.
+            </p>
+
+        </div>
+
+
+
+        <!-- ================= DJANGO MESSAGES ================= -->
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <div class="message-box {{ message.tags }}">
+
+                    {{ message }}
+
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+
+
+        <!-- ================= JAVASCRIPT ERROR BOX ================= -->
+
+        <div
+            id="js-error-box"
+            class="message-box"
+            style="display: none;"
+        ></div>
+
+
+
+        <!-- ================= LOGIN FORM ================= -->
+
+        <form
+            id="djangoLoginForm"
+            method="POST"
+            action="{% url 'login' %}"
+        >
+
+            {% csrf_token %}
+
+
+
+            <!-- ================= USERNAME ================= -->
+
+            <div class="input-group-field">
+
+                <label for="username">
+                    Username
+                </label>
+
+
+                <div class="input-icon-wrapper">
+
+                    <i class="fa-solid fa-user"></i>
+
+
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        autocomplete="username"
+                        placeholder="Enter your username"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ================= PASSWORD ================= -->
+
+            <div class="input-group-field">
+
+                <label for="password">
+                    Password
+                </label>
+
+
+                <div class="input-icon-wrapper">
+
+                    <i class="fa-solid fa-lock"></i>
+
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        autocomplete="current-password"
+                        placeholder="Enter your password"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ================= OPTIONS ================= -->
+
+            <div class="form-options-row">
+
+
+                <label class="remember-checkbox-label">
+
+                    <input
+                        type="checkbox"
+                        name="remember_me"
+                    >
+
+                    Keep me signed in
+
+                </label>
+
+
+
+                <a
+                    href="#"
+                    class="pwd-reset-link"
+                    id="forgotPasswordLink"
+                >
+                    Forgot Password?
+                </a>
+
+            </div>
+
+
+
+            <!-- ================= SUBMIT ================= -->
+
+            <button
+                type="submit"
+                class="btn-auth-submit"
+                id="loginSubmitBtn"
+            >
+
+                <span id="btnText">
+                    Sign In to Portal
+                </span>
+
+                <i
+                    class="fa-solid fa-arrow-right-to-bracket"
+                    id="btnIcon"
+                ></i>
+
+            </button>
+
+
+
+            <!-- ================= REGISTER ================= -->
+
+            <p class="auth-footer-prompt">
+
+                New to YatraNest ?
+
+                <a href="{% url 'register' %}">
+                    Create an Account
+                </a>
+
+            </p>
+
+
+        </form>
+
+
+    </div>
+
+
+</main>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+     ========================================================= -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+
+
+    /* ================= ELEMENTS ================= */
+
+    const loginForm =
+        document.getElementById("djangoLoginForm");
+
+
+    const submitBtn =
+        document.getElementById("loginSubmitBtn");
+
+
+    const btnText =
+        document.getElementById("btnText");
+
+
+    const btnIcon =
+        document.getElementById("btnIcon");
+
+
+    const errorBox =
+        document.getElementById("js-error-box");
+
+
+    const forgotPwd =
+        document.getElementById("forgotPasswordLink");
+
+
+    const usernameInput =
+        document.getElementById("username");
+
+
+    const passwordInput =
+        document.getElementById("password");
+
+
+
+    /* =====================================================
+       LOGIN FORM
+       ===================================================== */
+
+    if (loginForm) {
+
+        loginForm.addEventListener("submit", (event) => {
+
+
+            const username =
+                usernameInput.value.trim();
+
+
+            const password =
+                passwordInput.value.trim();
+
+
+
+            /* Clear previous JS error */
+
+            errorBox.style.display = "none";
+
+            errorBox.textContent = "";
+
+
+
+            /* ================= VALIDATION ================= */
+
+            if (username === "") {
+
+                event.preventDefault();
+
+                errorBox.textContent =
+                    "Please enter your username.";
+
+                errorBox.style.display = "block";
+
+                usernameInput.focus();
+
+                return;
+
+            }
+
+
+
+            if (password === "") {
+
+                event.preventDefault();
+
+                errorBox.textContent =
+                    "Please enter your password.";
+
+                errorBox.style.display = "block";
+
+                passwordInput.focus();
+
+                return;
+
+            }
+
+
+
+            /* =================================================
+               SHOW LOADING STATE
+
+               The form is NOT prevented here.
+
+               Django will receive the POST request normally.
+               ================================================= */
+
+            submitBtn.classList.add("is-loading");
+
+            submitBtn.disabled = true;
+
+
+            btnText.textContent =
+                "Signing In...";
+
+
+            btnIcon.className =
+                "fa-solid fa-spinner";
+
+
+        });
+
+    }
+
+
+
+    /* =====================================================
+       FORGOT PASSWORD
+       ===================================================== */
+
+    if (forgotPwd) {
+
+        forgotPwd.addEventListener("click", (event) => {
+
+            event.preventDefault();
+
+
+            errorBox.textContent =
+                "Password recovery will be available soon.";
+
+            errorBox.style.display = "block";
+
+
+        });
+
+    }
+
+
+});
+
+</script>
+
+
+</body>
+
+</html>

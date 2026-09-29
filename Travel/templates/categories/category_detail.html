@@ -1,0 +1,127 @@
+{% extends "Travel/base.html" %}
+
+{% block title %}
+{{ category.category_name }} | YatraNest
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .category-detail-page {
+        max-width: 1100px;
+        margin: 110px auto 60px;
+        padding: 0 24px;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 22px;
+        color: #0284c7;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .back-link:hover {
+        color: #0369a1;
+    }
+
+    .category-detail-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 32px;
+        box-shadow: 0 5px 18px rgba(15, 23, 42, 0.06);
+    }
+
+    .category-detail-image {
+        width: 100%;
+        max-height: 420px;
+        object-fit: cover;
+        border-radius: 12px;
+        margin-bottom: 28px;
+    }
+
+    .category-detail-card h1 {
+        margin: 0 0 15px;
+        color: #0f172a;
+        font-size: 36px;
+        font-weight: 800;
+    }
+
+    .category-description {
+        color: #475569;
+        font-size: 16px;
+        line-height: 1.8;
+        margin: 0;
+        white-space: pre-line;
+    }
+
+    .no-description {
+        color: #64748b;
+        font-style: italic;
+    }
+
+    @media (max-width: 600px) {
+        .category-detail-page {
+            margin-top: 90px;
+            padding: 0 15px;
+        }
+
+        .category-detail-card {
+            padding: 20px;
+        }
+
+        .category-detail-card h1 {
+            font-size: 28px;
+        }
+    }
+</style>
+
+<main class="category-detail-page">
+
+<a
+    href="{% url 'category_list' %}"
+    class="back-link"
+>
+    <i class="fa-solid fa-arrow-left"></i>
+    Back to Categories
+</a>
+
+<section class="category-detail-card">
+
+    {% if category.category_image %}
+
+        <img
+            src="{{ category.category_image.url }}"
+            alt="{{ category.category_name }}"
+            class="category-detail-image"
+        >
+
+    {% endif %}
+
+    <h1>
+        {{ category.category_name }}
+    </h1>
+
+    {% if category.category_desc %}
+
+        <p class="category-description">
+            {{ category.category_desc }}
+        </p>
+
+    {% else %}
+
+        <p class="no-description">
+            No description is available for this category.
+        </p>
+
+    {% endif %}
+
+</section>
+
+</main>
+
+{% endblock %}

@@ -1,0 +1,1029 @@
+{% extends "Travel/base.html" %}
+
+{% block title %}Bus Details - {{ bus.bus_number }}{% endblock %}
+
+{% block content %}
+
+<main class="bus-detail-page">
+
+<!-- =========================================================
+     BACK BUTTON
+========================================================== -->
+
+<div class="bus-back">
+    <a href="{% url 'bus_list' %}" class="back-button">
+        <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+        <span>Back to Bus Search</span>
+    </a>
+</div>
+
+
+<!-- =========================================================
+     MAIN LAYOUT
+========================================================== -->
+
+<div class="bus-detail-grid">
+
+    <!-- =====================================================
+         LEFT: BUS DETAILS
+    ====================================================== -->
+
+    <section class="details-card">
+
+        <!-- Header -->
+
+        <header class="details-header">
+
+            <div class="details-heading">
+
+                <div class="operator-name">
+                    {{ bus.bus_operator|default:"Bus Service" }}
+                </div>
+
+                <h1>
+                    {{ bus.bus_number|default:"Bus" }}
+                </h1>
+
+                <p>
+                    Bus Service Details
+                </p>
+
+            </div>
+
+
+            <!-- Active / Inactive Status -->
+
+            {% if bus.is_active %}
+
+                <span class="status active">
+                    <i class="fa-solid fa-circle" aria-hidden="true"></i>
+                    Active
+                </span>
+
+            {% else %}
+
+                <span class="status inactive">
+                    <i class="fa-solid fa-circle" aria-hidden="true"></i>
+                    Inactive
+                </span>
+
+            {% endif %}
+
+        </header>
+
+
+        <!-- =================================================
+             ROUTE
+        ================================================== -->
+
+        <section class="route-card">
+
+            <div class="route-content">
+
+                <!-- Boarding Point -->
+
+                <div class="route-point">
+
+                    <span class="point-label">
+                        Boarding Point
+                    </span>
+
+                    <h2>
+                        {{ bus.source|default:"Not specified" }}
+                    </h2>
+
+                    <div class="time-info">
+
+                        <i class="fa-regular fa-clock"
+                           aria-hidden="true"></i>
+
+                        {% if bus.departure_time %}
+                            {{ bus.departure_time|date:"d M Y, h:i A" }}
+                        {% else %}
+                            Time not available
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Route Line -->
+
+                <div class="route-line">
+
+                    <span>
+                        DIRECT SERVICE
+                    </span>
+
+                    <div class="line">
+
+                        <i class="fa-solid fa-bus"
+                           aria-hidden="true"></i>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Drop-off Point -->
+
+                <div class="route-point destination">
+
+                    <span class="point-label">
+                        Drop-off Point
+                    </span>
+
+                    <h2>
+                        {{ bus.destination|default:"Not specified" }}
+                    </h2>
+
+                    <div class="time-info">
+
+                        <i class="fa-regular fa-clock"
+                           aria-hidden="true"></i>
+
+                        {% if bus.arrival_time %}
+                            {{ bus.arrival_time|date:"d M Y, h:i A" }}
+                        {% else %}
+                            Time not available
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             BUS SERVICE
+        ================================================== -->
+
+        <h2 class="section-title">
+            Bus Service
+        </h2>
+
+        <div class="service-card">
+
+            <div class="service-icon">
+
+                <i class="fa-solid fa-bus"
+                   aria-hidden="true"></i>
+
+            </div>
+
+            <div class="service-details">
+
+                <strong>
+                    {{ bus.bus_operator|default:"Bus Service" }}
+                </strong>
+
+                <span>
+                    Bus Number:
+                    {{ bus.bus_number|default:"Not available" }}
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             DROP-OFF INFORMATION
+        ================================================== -->
+
+        <h2 class="section-title">
+            Drop-off Information
+        </h2>
+
+        <div class="dropoff-card">
+
+            <div class="dropoff-icon">
+
+                <i class="fa-solid fa-location-dot"
+                   aria-hidden="true"></i>
+
+            </div>
+
+            <div class="dropoff-details">
+
+                <strong>
+                    {{ bus.destination|default:"Not specified" }}
+                </strong>
+
+                <span>
+                    Final drop-off point
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             SEAT AVAILABILITY
+        ================================================== -->
+
+        <h2 class="section-title">
+            Seat Availability
+        </h2>
+
+        <div class="seat-info-grid">
+
+            <!-- Total Seats -->
+
+            <div class="seat-info total">
+
+                <span>
+                    Total Seats
+                </span>
+
+                <strong>
+                    {{ bus.total_seats|default:"0" }}
+                </strong>
+
+            </div>
+
+
+            <!-- Available Seats -->
+
+            <div class="seat-info available">
+
+                <span>
+                    Available Seats
+                </span>
+
+                <strong>
+                    {{ bus.available_seats|default:"0" }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- No Seats Message -->
+
+        {% if bus.is_active and bus.available_seats == 0 %}
+
+            <div class="sold-out-message">
+
+                <i class="fa-solid fa-circle-exclamation"
+                   aria-hidden="true"></i>
+
+                <span>
+                    This bus is currently fully booked.
+                </span>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- =====================================================
+         RIGHT: BOOKING SUMMARY
+    ====================================================== -->
+
+    <aside class="booking-card">
+
+        <h2>
+            <i class="fa-solid fa-receipt"
+               aria-hidden="true"></i>
+
+            Booking Summary
+        </h2>
+
+
+        <!-- Route Summary -->
+
+        <div class="booking-route">
+
+            <div class="booking-route-line">
+
+                <strong>
+                    {{ bus.source|default:"N/A" }}
+                </strong>
+
+                <i class="fa-solid fa-arrow-right"
+                   aria-hidden="true"></i>
+
+                <strong>
+                    {{ bus.destination|default:"N/A" }}
+                </strong>
+
+            </div>
+
+            <small>
+                {{ bus.bus_operator|default:"Bus Service" }}
+                ·
+                {{ bus.bus_number|default:"N/A" }}
+            </small>
+
+        </div>
+
+
+        <!-- Travel Date -->
+
+        <div class="booking-info">
+
+            <span>
+                Travel Date
+            </span>
+
+            <strong>
+
+                {% if bus.departure_time %}
+                    {{ bus.departure_time|date:"d M Y" }}
+                {% else %}
+                    N/A
+                {% endif %}
+
+            </strong>
+
+        </div>
+
+
+        <!-- Departure -->
+
+        <div class="booking-info">
+
+            <span>
+                Departure
+            </span>
+
+            <strong>
+
+                {% if bus.departure_time %}
+                    {{ bus.departure_time|date:"h:i A" }}
+                {% else %}
+                    N/A
+                {% endif %}
+
+            </strong>
+
+        </div>
+
+
+        <!-- Arrival -->
+
+        <div class="booking-info">
+
+            <span>
+                Arrival
+            </span>
+
+            <strong>
+
+                {% if bus.arrival_time %}
+                    {{ bus.arrival_time|date:"h:i A" }}
+                {% else %}
+                    N/A
+                {% endif %}
+
+            </strong>
+
+        </div>
+
+
+        <!-- Fare -->
+
+        <div class="fare-row">
+
+            <span>
+                Fare / Passenger
+            </span>
+
+            <strong>
+                {% if bus.price %}
+                    ₹{{ bus.price|floatformat:2 }}
+                {% else %}
+                    ₹0.00
+                {% endif %}
+            </strong>
+
+        </div>
+
+
+        <!-- Starting Price -->
+
+        <div class="total-row">
+
+            <span>
+                Starting From
+            </span>
+
+            <strong>
+                {% if bus.price %}
+                    ₹{{ bus.price|floatformat:2 }}
+                {% else %}
+                    ₹0.00
+                {% endif %}
+            </strong>
+
+        </div>
+
+
+        <!-- =================================================
+             SEAT SELECTION BUTTON
+        ================================================== -->
+
+        {% if bus.is_active and bus.available_seats > 0 %}
+
+            <a
+                href="{% url 'bus_seat_selection' pk=bus.pk %}"
+                class="continue-button"
+            >
+
+                <span>
+                    Select Your Seat
+                </span>
+
+                <i class="fa-solid fa-arrow-right"
+                   aria-hidden="true"></i>
+
+            </a>
+
+        {% elif not bus.is_active %}
+
+            <button
+                type="button"
+                class="continue-button disabled"
+                disabled
+            >
+                <span>Bus Unavailable</span>
+
+            </button>
+
+        {% else %}
+
+            <button
+                type="button"
+                class="continue-button disabled"
+                disabled
+            >
+                <span>Fully Booked</span>
+
+            </button>
+
+        {% endif %}
+
+
+        <!-- Booking Note -->
+
+        <p class="booking-note">
+
+            <i class="fa-solid fa-shield-halved"
+               aria-hidden="true"></i>
+
+            Select your seat before proceeding to booking.
+
+        </p>
+
+    </aside>
+
+</div>
+
+</main>
+
+<style>
+
+.bus-detail-page {
+    max-width: 1200px;
+    margin: 130px auto 80px;
+    padding: 0 20px;
+}
+
+
+/* Back */
+
+.bus-back {
+    margin-bottom: 24px;
+}
+
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+    padding: 9px 16px;
+    border-radius: 7px;
+    background: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    transition: .2s;
+}
+
+
+.back-button:hover {
+    color: #0284c7;
+    border-color: #0284c7;
+}
+
+
+/* Layout */
+
+.bus-detail-grid {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.8fr)
+        minmax(300px, 1fr);
+    gap: 30px;
+    align-items: start;
+}
+
+
+/* Cards */
+
+.details-card,
+.booking-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    box-shadow: 0 5px 20px rgba(15, 23, 42, .06);
+}
+
+
+.details-card {
+    padding: 32px;
+}
+
+
+/* Header */
+
+.details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 22px;
+    margin-bottom: 25px;
+}
+
+
+.operator-name {
+    font-size: 12px;
+    color: #0284c7;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+}
+
+
+.details-header h1 {
+    margin: 5px 0 0;
+    font-size: 27px;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+
+.details-header p {
+    margin: 6px 0 0;
+    color: #64748b;
+    font-size: 14px;
+}
+
+
+/* Status */
+
+.status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 13px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+
+.status.active {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+
+.status.active i {
+    font-size: 7px;
+}
+
+
+.status.inactive {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+
+/* Route */
+
+.route-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 30px;
+}
+
+
+.route-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+
+.route-point {
+    min-width: 150px;
+}
+
+
+.route-point.destination {
+    text-align: right;
+}
+
+
+.point-label {
+    font-size: 11px;
+    color: #94a3b8;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+
+.route-point h2 {
+    margin: 5px 0;
+    font-size: 21px;
+    color: #0f172a;
+}
+
+
+.time-info {
+    color: #0284c7;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+
+.route-line {
+    flex: 1;
+    text-align: center;
+}
+
+
+.route-line > span {
+    display: block;
+    font-size: 11px;
+    color: #94a3b8;
+    font-weight: 700;
+    margin-bottom: 7px;
+}
+
+
+.route-line .line {
+    height: 2px;
+    background: #cbd5e1;
+    position: relative;
+}
+
+
+.route-line i {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: #f8fafc;
+    padding: 0 8px;
+    color: #0284c7;
+    font-size: 17px;
+}
+
+
+/* Section */
+
+.section-title {
+    font-size: 18px;
+    color: #0f172a;
+    margin: 0 0 15px;
+}
+
+
+/* Service */
+
+.service-card,
+.dropoff-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 28px;
+}
+
+
+.service-icon,
+.dropoff-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.service-icon {
+    background: #eff6ff;
+    color: #0284c7;
+}
+
+
+.dropoff-icon {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+
+.service-card strong,
+.dropoff-card strong {
+    display: block;
+    color: #0f172a;
+}
+
+
+.service-card span,
+.dropoff-card span {
+    display: block;
+    margin-top: 3px;
+    font-size: 13px;
+    color: #64748b;
+}
+
+
+/* Seats */
+
+.seat-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+
+.seat-info {
+    padding: 18px;
+    border-radius: 9px;
+}
+
+
+.seat-info.total {
+    background: #f8fafc;
+}
+
+
+.seat-info.available {
+    background: #f0fdf4;
+}
+
+
+.seat-info span {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+.seat-info.total span {
+    color: #64748b;
+}
+
+
+.seat-info.available span {
+    color: #15803d;
+}
+
+
+.seat-info strong {
+    display: block;
+    margin-top: 5px;
+    font-size: 22px;
+}
+
+
+.seat-info.total strong {
+    color: #0f172a;
+}
+
+
+.seat-info.available strong {
+    color: #15803d;
+}
+
+
+/* Booking Card */
+
+.booking-card {
+    padding: 28px;
+    position: sticky;
+    top: 110px;
+}
+
+
+.booking-card h2 {
+    margin: 0 0 20px;
+    font-size: 18px;
+    color: #0f172a;
+}
+
+
+/* Route summary */
+
+.booking-route {
+    background: #f8fafc;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+
+.booking-route-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    color: #0f172a;
+}
+
+
+.booking-route-line i {
+    color: #0284c7;
+}
+
+
+.booking-route small {
+    display: block;
+    margin-top: 8px;
+    color: #64748b;
+}
+
+
+/* Booking info */
+
+.booking-info {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 11px 0;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 13px;
+}
+
+
+.booking-info span {
+    color: #64748b;
+}
+
+
+.booking-info strong {
+    color: #0f172a;
+    text-align: right;
+}
+
+
+/* Fare */
+
+.fare-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 17px;
+    color: #475569;
+    font-size: 14px;
+}
+
+
+.fare-row strong {
+    color: #0f172a;
+}
+
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 16px;
+    margin-top: 16px;
+    color: #0284c7;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+
+/* Continue */
+
+.continue-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 22px;
+    padding: 14px;
+    border: 0;
+    border-radius: 7px;
+    background: #0f172a;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+
+.continue-button:hover {
+    background: #0284c7;
+}
+
+
+.continue-button.disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+}
+
+
+.booking-note {
+    margin: 15px 0 0;
+    color: #64748b;
+    font-size: 11px;
+    line-height: 1.5;
+    text-align: center;
+}
+
+
+/* Responsive */
+
+@media (max-width: 850px) {
+
+    .bus-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .booking-card {
+        position: static;
+    }
+
+    .route-content {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .route-point.destination {
+        text-align: left;
+    }
+
+    .route-line {
+        width: 100%;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .bus-detail-page {
+        margin-top: 110px;
+        padding: 0 12px;
+    }
+
+    .details-card,
+    .booking-card {
+        padding: 20px;
+    }
+
+    .details-header {
+        flex-direction: column;
+    }
+
+    .seat-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+</style>
+
+{% endblock %}

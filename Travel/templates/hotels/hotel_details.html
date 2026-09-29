@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jatranest - Accommodation Spotlight</title>
+    <!-- Relative navigation path pointing directly back to your root style sheet -->
+    <link rel="stylesheet" href="../style.css">
+    <!-- Font Awesome for clean user-focused UI icons -->
+    <link rel="stylesheet" href="https://cloudflare.com">
+    
+    <style>
+        /* Standalone Hotel Detail Dashboard Structure */
+        .hotel-detail-container {
+            max-width: 1200px;
+            margin: 110px auto 60px auto;
+            padding: 0 24px;
+        }
+
+        /* High-Fidelity Photo Showcase Matrix Grid */
+        .property-photo-matrix {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            grid-template-rows: repeat(2, 180px);
+            gap: 16px;
+            margin-bottom: 32px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+
+        .photo-pane-main {
+            grid-row: span 2;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-pane-sub {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Document Architecture Split Split Column Matrix */
+        .hotel-detail-grid-split {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 32px;
+        }
+
+        .hotel-info-card, .hotel-action-widget {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.01);
+            height: fit-content;
+        }
+
+        .hotel-info-card h2, .hotel-action-widget h3 {
+            font-size: 20px;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hotel-info-card p {
+            color: #475569;
+            line-height: 1.7;
+            font-size: 15px;
+            margin-bottom: 24px;
+        }
+
+        /* Shared Icon Features/Amenities Grid Wrapper */
+        .hotel-amenities-matrix {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .amenity-grid-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #334155;
+            background-color: #f8fafc;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid #f1f5f9;
+        }
+
+        .amenity-grid-item i {
+            color: #0284c7;
+            font-size: 16px;
+        }
+
+        /* Available Tiers List Layout Block */
+        .room-tier-list-box {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 10px;
+        }
+
+        .room-variant-row {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: border-color 0.2s;
+        }
+
+        .room-variant-row:hover {
+            border-color: #0284c7;
+        }
+
+        .room-variant-meta h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+
+        .room-variant-meta p {
+            font-size: 13px;
+            color: #64748b;
+            margin: 0;
+        }
+
+        .room-booking-block {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: flex-end;
+        }
+
+        .room-price-lbl {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0284c7;
+        }
+
+        .room-price-lbl small {
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 400;
+        }
+
+        /* Local Layout Shortcut Navigation Anchor Links */
+        .back-hotel-catalog {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            color: #64748b;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            transition: color 0.2s;
+        }
+
+        .back-hotel-catalog:hover { color: #0284c7; }
+
+        .btn-room-lock {
+            background-color: #0f172a;
+            color: #ffffff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-room-lock:hover { background-color: #0284c7; }
+
+        @media (max-width: 900px) {
+            .hotel-detail-grid-split { grid-template-columns: 1fr; }
+            .property-photo-matrix { grid-template-columns: 1fr; grid-template-rows: 240px; }
+            .photo-pane-sub { display: none; }
+            .room-variant-row { flex-direction: column; align-items: flex-start; gap: 16px; }
+            .room-booking-block { align-items: flex-start; width: 100%; text-align: left; }
+            .btn-room-lock { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= UNIFIED DETAIL WORKSPACE MAIN WRAPPER ================= -->
+    <main class="hotel-detail-container">
+        
+        <!-- Standard Step Back Anchor Route straight to Accommodation Hub Portfolio -->
+        <a href="hotel_list.html" class="back-hotel-catalog">
+            <i class="fa-solid fa-arrow-left"></i> Return to Accommodations Hub
+        </a>
+
+        <!-- High-Fidelity Photo Showcase Matrix Component Gallery -->
+        <div class="property-photo-matrix">
+            <img src="https://unsplash.com" alt="Main Luxury Suite View" class="photo-pane-main">
+            <img src="https://unsplash.com" alt="Premium Bedroom Interior" class="photo-pane-sub">
+            <img src="https://unsplash.com" alt="Resort Infinity Pool View" class="photo-pane-sub">
+        </div>
+
+        <!-- Layout Split Column Structure Grid Matrix -->
+        <div class="hotel-detail-grid-split">
+            
+            <!-- Left Column Component: Property Narrative, Amenities & Variant Selector -->
+            <div class="hotel-info-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                    <div>
+                        <h1 style="font-size:26px; font-weight:800; color:#0f172a;">Grand Caldera Cliff Sanctuary</h1>
+                        <p style="font-size:14px; color:#64748b; margin-top:4px;"><i class="fa-solid fa-location-dot"></i> Rim Road, Oia, Santorini, Greece</p>
+                    </div>
+                    <span style="font-size:15px; font-weight:700; color:#f59e0b; background-color:#fef3c7; padding:4px 12px; border-radius:12px;"><i class="fa-solid fa-star"></i> 4.9 Superb</span>
+                </div>
+                
+                <p>
+                    Perched directly on the edge of the dramatic Santorini caldera volcanic cliff line, this luxury hotel sanctuary features unparalleled Aegean seascape viewpoints. Guests can relax inside carved cliff architecture structures and swim along iconic crystal clear private outdoor areas built cleanly for unforgettable travel getaways.
+                </p>
+
+                <h2><i class="fa-solid fa-sparkles"></i> Curated Property Amenities</h2>
+                <!-- Shared Icon Features Grid Layer -->
+                <div class="hotel-amenities-matrix">
+                    <div class="amenity-grid-item"><i class="fa-solid fa-water-ladder"></i> <span>Infinity Pool</span></div>
+                    <div class="amenity-grid-item"><i class="fa-solid fa-spa"></i> <span>Wellness Spa Centre</span></div>
+                    <div class="amenity-grid-item"><i class="fa-solid fa-wifi"></i> <span>High-Speed Wi-Fi</span></div>
+                    <div class="amenity-grid-item"><i class="fa-solid fa-utensils"></i> <span>Fine Dining Eatery</span></div>
+                </div>
+
+                <h2><i class="fa-solid fa-bed"></i> Available Room Configurations</h2>
+                <!-- Available Tiers Allocation List -->
+                <div class="room-tier-list-box">
+                    
+                    <!-- Variant Tier Row 1 -->
+                    <div class="room-variant-row">
+                        <div class="room-variant-meta">
+                            <h4>Deluxe Sunset King Suite</h4>
+                            <p><i class="fa-solid fa-circle-check" style="color:#16a34a;"></i> Sea Facing View &bull; Private Balcony Layout</p>
+                            <p style="color:#64748b; margin-top:4px;">Includes complimentary multi-cuisine morning buffet breakfast.</p>
+                        </div>
+                        <div class="room-booking-block">
+                            <span class="room-price-lbl">₹32,500 <small>/ night</small></span>
+                            <a href="../bookings/booking_success.html" style="text-decoration:none;">
+                                <button class="btn-room-lock" onclick="alert('Locking Deluxe Sunset King variant into your active reservation file.')">Reserve Room</button>
+                            </a>

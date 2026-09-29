@@ -1,0 +1,1008 @@
+{% extends "Travel/base.html" %}
+
+{% load static %}
+
+{% block title %}
+YatraNest | Explore India
+{% endblock %}
+
+
+{% block content %}
+
+
+<!-- =========================================================
+     HERO SECTION
+     ========================================================= -->
+
+<section
+    class="hero"
+    id="home"
+>
+
+    <!-- HERO SLIDES -->
+
+    <div class="hero-slides">
+
+        <div
+            class="slide active"
+            style="background-image:url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2000&q=90')"
+        ></div>
+
+
+        <div
+            class="slide"
+            style="background-image:url('https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=2000&q=90')"
+        ></div>
+
+
+        <div
+            class="slide"
+            style="background-image:url('https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=2000&q=90')"
+        ></div>
+
+    </div>
+
+
+    <!-- ATMOSPHERIC OVERLAY -->
+
+    <div class="sun-glow"></div>
+
+    <div class="hero-overlay"></div>
+
+
+    <!-- =====================================================
+         HERO CONTENT
+         ===================================================== -->
+
+    <div class="hero-content">
+
+        <div class="small-title">
+
+            <span></span>
+
+            DISCOVER YOUR NEXT ADVENTURE
+
+        </div>
+
+
+        <h1>
+
+            India is
+
+            <br>
+
+            <em>waiting for you.</em>
+
+        </h1>
+
+
+        <p>
+
+            Escape the ordinary and discover breathtaking places,
+            unforgettable experiences and beautiful moments with
+            the people you love.
+
+        </p>
+
+
+        <div class="hero-buttons">
+
+            <a
+                href="{% url 'destination_list' %}"
+                class="primary-btn"
+            >
+
+                Explore Destinations
+
+                <i class="fa-solid fa-arrow-right"></i>
+
+            </a>
+
+
+            <button
+                class="play-btn"
+                id="playVideo"
+                type="button"
+            >
+
+                <span>
+
+                    <i class="fa-solid fa-play"></i>
+
+                </span>
+
+                Watch Story
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         QUICK DISCOVERY NAVIGATION
+         Replaces the old Where / When / Travelers search bar
+         ===================================================== -->
+
+    <div class="home-quick-links">
+
+
+        <a
+            href="{% url 'destination_list' %}"
+            class="quick-link"
+        >
+
+            <span class="quick-link-icon">
+
+                <i class="fa-solid fa-location-dot"></i>
+
+            </span>
+
+
+            <span class="quick-link-text">
+
+                <strong>
+                    Destinations
+                </strong>
+
+                <small>
+                    Explore India
+                </small>
+
+            </span>
+
+
+            <i class="fa-solid fa-arrow-right quick-link-arrow"></i>
+
+        </a>
+
+
+        <span class="quick-link-divider"></span>
+
+
+        <a
+            href="{% url 'tour_list' %}"
+            class="quick-link"
+        >
+
+            <span class="quick-link-icon">
+
+                <i class="fa-solid fa-route"></i>
+
+            </span>
+
+
+            <span class="quick-link-text">
+
+                <strong>
+                    Experiences
+                </strong>
+
+                <small>
+                    Find your journey
+                </small>
+
+            </span>
+
+
+            <i class="fa-solid fa-arrow-right quick-link-arrow"></i>
+
+        </a>
+
+
+        <span class="quick-link-divider"></span>
+
+
+        <a
+            href="{% url 'hotel_list' %}"
+            class="quick-link"
+        >
+
+            <span class="quick-link-icon">
+
+                <i class="fa-solid fa-hotel"></i>
+
+            </span>
+
+
+            <span class="quick-link-text">
+
+                <strong>
+                    Hotels
+                </strong>
+
+                <small>
+                    Stay comfortably
+                </small>
+
+            </span>
+
+
+            <i class="fa-solid fa-arrow-right quick-link-arrow"></i>
+
+        </a>
+
+
+        <span class="quick-link-divider"></span>
+
+
+        <div class="quick-link transport-quick-link">
+
+            <span class="quick-link-icon">
+
+                <i class="fa-solid fa-plane-departure"></i>
+
+            </span>
+
+
+            <span class="quick-link-text">
+
+                <strong>
+                    Transport
+                </strong>
+
+                <small>
+                    Bus · Flight · Train
+                </small>
+
+            </span>
+
+
+            <span class="transport-mini-links">
+
+                <a href="{% url 'bus_list' %}">
+                    Bus
+                </a>
+
+                <a href="{% url 'flight_list' %}">
+                    Flight
+                </a>
+
+                <a href="{% url 'train_list' %}">
+                    Train
+                </a>
+
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SLIDER CONTROLS
+         ===================================================== -->
+
+    <div class="slider-controls">
+
+        <button
+            id="prevSlide"
+            type="button"
+            aria-label="Previous slide"
+        >
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+        </button>
+
+
+        <div class="slide-counter">
+
+            <span id="currentSlide">
+                01
+            </span>
+
+
+            <div class="counter-line"></div>
+
+
+            <span>
+                03
+            </span>
+
+        </div>
+
+
+        <button
+            id="nextSlide"
+            type="button"
+            aria-label="Next slide"
+        >
+
+            <i class="fa-solid fa-arrow-right"></i>
+
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         SCROLL INDICATOR
+         ===================================================== -->
+
+    <a
+        href="#destinations"
+        class="scroll-down"
+    >
+
+        <span>
+            Scroll to explore
+        </span>
+
+        <i class="fa-solid fa-arrow-down"></i>
+
+    </a>
+
+</section>
+
+
+
+<!-- =========================================================
+     DESTINATIONS SECTION
+     ========================================================= -->
+
+<section
+    class="destinations section"
+    id="destinations"
+>
+
+    <div class="section-heading">
+
+        <div>
+
+            <span class="section-label">
+                POPULAR PLACES
+            </span>
+
+
+            <h2>
+
+                Find your next
+
+                <span>
+                    escape.
+                </span>
+
+            </h2>
+
+        </div>
+
+
+        <p>
+
+            From peaceful mountains to tropical beaches,
+            discover destinations that turn ordinary trips
+            into unforgettable memories.
+
+        </p>
+
+    </div>
+
+
+    <div class="destination-grid">
+
+        {% for destination in destinations %}
+
+            <a
+                href="{% url 'destination_detail' destination.destination_slug %}"
+                class="destination-card-link"
+            >
+
+                <article class="destination-card">
+
+                    {% if destination.destination_image %}
+
+                        <img
+                            src="{{ destination.destination_image.url }}"
+                            alt="{{ destination.destination_name }}"
+                            loading="lazy"
+                        >
+
+                    {% else %}
+
+                        <div class="destination-image-placeholder">
+
+                            <i class="fa-solid fa-image"></i>
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <div class="card-gradient"></div>
+
+
+                    <button
+                        type="button"
+                        class="heart"
+                        aria-label="Favorite {{ destination.destination_name }}"
+                        onclick="event.preventDefault(); event.stopPropagation(); this.classList.toggle('active');"
+                    >
+
+                        <i class="fa-regular fa-heart"></i>
+
+                    </button>
+
+
+                    <div class="destination-info">
+
+                        <span>
+                            INDIA
+                        </span>
+
+
+                        <h3>
+                            {{ destination.destination_name }}
+                        </h3>
+
+
+                        <p>
+
+                            <i class="fa-solid fa-location-dot"></i>
+
+                            {{ destination.destination_location }}
+
+                        </p>
+
+                    </div>
+
+                </article>
+
+            </a>
+
+
+        {% empty %}
+
+            <div class="empty-home-state">
+
+                <i class="fa-solid fa-map-location-dot"></i>
+
+                <h3>
+                    No destinations available yet
+                </h3>
+
+                <p>
+                    Add destinations from the Django admin panel
+                    to display them here.
+                </p>
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    <div class="home-section-action">
+
+        <a
+            href="{% url 'destination_list' %}"
+            class="primary-btn"
+        >
+
+            View All Destinations
+
+            <i class="fa-solid fa-arrow-right"></i>
+
+        </a>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     EXPERIENCE SECTION
+     ========================================================= -->
+
+<section
+    class="experience-section"
+    id="experiences"
+>
+
+    <div class="experience-content">
+
+        <span class="section-label">
+            TRAVEL DIFFERENTLY
+        </span>
+
+
+        <h2>
+
+            Moments you'll
+
+            <br>
+
+            <span>
+                remember forever.
+            </span>
+
+        </h2>
+
+
+        <p>
+
+            Travel isn't only about places. It's about sunrise
+            breakfasts, mountain walks, family laughter and
+            stories you'll tell for years.
+
+        </p>
+
+
+        <a
+            href="{% url 'tour_list' %}"
+            class="outline-btn"
+        >
+
+            Discover Experiences
+
+            <i class="fa-solid fa-arrow-right"></i>
+
+        </a>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     WHY YATRANEST
+     ========================================================= -->
+
+<section class="features section">
+
+    <div class="section-heading centered">
+
+        <span class="section-label">
+            WHY YatraNest
+        </span>
+
+
+        <h2>
+
+            Everything you need for
+
+            <span>
+                better journeys.
+            </span>
+
+        </h2>
+
+    </div>
+
+
+    <div class="feature-grid">
+
+
+        <!-- DESTINATIONS -->
+
+        <a
+            href="{% url 'destination_list' %}"
+            class="feature-box"
+        >
+
+            <div class="feature-icon">
+
+                <i class="fa-solid fa-earth-americas"></i>
+
+            </div>
+
+
+            <h3>
+                Curated Destinations
+            </h3>
+
+
+            <p>
+
+                Hand-picked places designed for memorable
+                travel experiences.
+
+            </p>
+
+        </a>
+
+
+        <!-- HOTELS -->
+
+        <a
+            href="{% url 'hotel_list' %}"
+            class="feature-box"
+        >
+
+            <div class="feature-icon">
+
+                <i class="fa-solid fa-hotel"></i>
+
+            </div>
+
+
+            <h3>
+                Beautiful Stays
+            </h3>
+
+
+            <p>
+
+                Find comfortable hotels, resorts and
+                unique places to stay.
+
+            </p>
+
+        </a>
+
+
+        <!-- TOURS -->
+
+        <a
+            href="{% url 'tour_list' %}"
+            class="feature-box"
+        >
+
+            <div class="feature-icon">
+
+                <i class="fa-solid fa-route"></i>
+
+            </div>
+
+
+            <h3>
+                Smart Itineraries
+            </h3>
+
+
+            <p>
+
+                Discover experiences designed around
+                different travel interests and durations.
+
+            </p>
+
+        </a>
+
+
+        <!-- GUIDES -->
+
+        <a
+            href="{% url 'guide_list' %}"
+            class="feature-box"
+        >
+
+            <div class="feature-icon">
+
+                <i class="fa-solid fa-headset"></i>
+
+            </div>
+
+
+            <h3>
+                Travel Support
+            </h3>
+
+
+            <p>
+
+                Get assistance whenever you need it during
+                your journey.
+
+            </p>
+
+        </a>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     TRAVEL PACKAGES
+     ========================================================= -->
+
+<section
+    class="packages section"
+    id="packages"
+>
+
+    <div class="section-heading">
+
+        <div>
+
+            <span class="section-label">
+                TRAVEL PACKAGES
+            </span>
+
+
+            <h2>
+
+                Choose your
+
+                <span>
+                    adventure.
+                </span>
+
+            </h2>
+
+        </div>
+
+
+        <a
+            href="{% url 'tour_list' %}"
+            class="view-all"
+        >
+
+            View all packages
+
+            <i class="fa-solid fa-arrow-right"></i>
+
+        </a>
+
+    </div>
+
+
+    <div class="package-grid">
+
+        {% for tour in tours|slice:":3" %}
+
+            <div class="package-card">
+
+
+                {% if tour.tour_image %}
+
+                    <div class="package-image">
+
+                        <img
+                            src="{{ tour.tour_image.url }}"
+                            alt="{{ tour.tour_name }}"
+                            loading="lazy"
+                        >
+
+
+                        <span class="price">
+                            From ₹{{ tour.tour_price }}
+                        </span>
+
+                    </div>
+
+                {% else %}
+
+                    <div class="package-image package-image-placeholder">
+
+                        <i class="fa-solid fa-route"></i>
+
+                        <span class="price">
+                            From ₹{{ tour.tour_price }}
+                        </span>
+
+                    </div>
+
+                {% endif %}
+
+
+                <div class="package-info">
+
+
+                    <h3>
+                        {{ tour.tour_name }}
+                    </h3>
+
+
+                    {% if tour.destination %}
+
+                        <p>
+
+                            <i class="fa-solid fa-location-dot"></i>
+
+                            {{ tour.destination.destination_name }}
+
+                        </p>
+
+                    {% endif %}
+
+
+                    {% if tour.tour_duration %}
+
+                        <p>
+
+                            <i class="fa-regular fa-clock"></i>
+
+                            {{ tour.tour_duration }} Days
+
+                        </p>
+
+                    {% endif %}
+
+
+                    {% if tour.tour_start_date %}
+
+                        <p>
+
+                            <i class="fa-regular fa-calendar"></i>
+
+                            Starts {{ tour.tour_start_date }}
+
+                        </p>
+
+                    {% endif %}
+
+
+                    <a
+                        href="{% url 'tour_detail' tour.tour_slug %}"
+                        class="package-action"
+                    >
+
+                        Explore Package
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+        {% empty %}
+
+            <div class="empty-home-state package-empty">
+
+                <i class="fa-solid fa-suitcase-rolling"></i>
+
+                <h3>
+                    No travel packages available yet
+                </h3>
+
+                <p>
+                    Add tours from the Django admin panel
+                    to display packages here.
+                </p>
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     NEWSLETTER
+     ========================================================= -->
+
+<section
+    class="newsletter"
+    id="about"
+>
+
+    <div class="newsletter-content">
+
+        <span class="section-label">
+            GET INSPIRED
+        </span>
+
+
+        <h2>
+
+            Your next adventure
+
+            <br>
+
+            starts here.
+
+        </h2>
+
+
+        <p>
+
+            Subscribe for travel inspiration, exclusive offers
+            and beautiful destinations.
+
+        </p>
+
+
+        <form
+            id="subscribeForm"
+            novalidate
+        >
+
+            <input
+                type="email"
+                name="email"
+                id="subscribeEmail"
+                placeholder="Enter your email address"
+                autocomplete="email"
+                required
+            >
+
+
+            <button type="submit">
+
+                Subscribe
+
+                <i class="fa-solid fa-arrow-right"></i>
+
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     VIDEO MODAL
+     ========================================================= -->
+
+<div
+    class="modal"
+    id="videoModal"
+    aria-hidden="true"
+>
+
+    <div class="modal-content">
+
+        <button
+            class="close-modal"
+            id="closeModal"
+            type="button"
+            aria-label="Close video"
+        >
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+
+        <div class="video-placeholder">
+
+            <i class="fa-solid fa-play"></i>
+
+
+            <h3>
+                Your Travel Story
+            </h3>
+
+
+            <p>
+
+                Experience beautiful destinations,
+                breathtaking mountains and unforgettable
+                journeys.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     TOAST
+     ========================================================= -->
+
+<div
+    class="toast"
+    id="toast"
+>
+
+    <i class="fa-solid fa-circle-check"></i>
+
+
+    <span>
+        Welcome to YatraNest!
+    </span>
+
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,1373 @@
+{% extends "Travel/base.html" %}
+
+{% load static %}
+
+{% block title %}
+    Train Services | YatraNest
+{% endblock %}
+
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   YATRANEST - TRAIN SERVICES
+   HTML + CSS + JS IN ONE FILE
+   ========================================================= */
+
+
+/* =========================
+   PAGE
+========================= */
+
+.train-page {
+    min-height: 100vh;
+    padding: 125px 6% 80px;
+    background:
+        linear-gradient(
+            180deg,
+            #f8fafc 0%,
+            #f3f6f9 100%
+        );
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.train-header {
+    max-width: 850px;
+    margin: 0 auto 50px;
+    text-align: center;
+}
+
+.train-header-icon {
+    width: 72px;
+    height: 72px;
+
+    margin: 0 auto 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 20px;
+
+    background: #e8f1ff;
+
+    color: #172036;
+
+    font-size: 32px;
+
+    box-shadow:
+        0 8px 25px rgba(23, 32, 54, 0.08);
+}
+
+.train-header h1 {
+    margin: 0 0 12px;
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 48px;
+
+    font-weight: 700;
+
+    color: #172036;
+}
+
+.train-header h1 span {
+    color: #e8a83e;
+}
+
+.train-header p {
+    margin: 0;
+
+    color: #667085;
+
+    font-size: 17px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================
+   SEARCH / FILTER BAR
+========================= */
+
+.train-toolbar {
+    max-width: 1200px;
+
+    margin: 0 auto 35px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    flex-wrap: wrap;
+}
+
+.train-search {
+    flex: 1;
+
+    min-width: 240px;
+
+    position: relative;
+}
+
+.train-search i {
+    position: absolute;
+
+    left: 16px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #7a8499;
+}
+
+.train-search input {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 14px 18px 14px 45px;
+
+    border: 1px solid #dce2ea;
+
+    border-radius: 12px;
+
+    background: #ffffff;
+
+    color: #172036;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition: .25s ease;
+}
+
+.train-search input:focus {
+    border-color: #172036;
+
+    box-shadow:
+        0 0 0 3px rgba(23, 32, 54, 0.08);
+}
+
+.train-count {
+    padding: 12px 18px;
+
+    background: #ffffff;
+
+    border: 1px solid #e1e6ed;
+
+    border-radius: 12px;
+
+    color: #667085;
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+
+/* =========================
+   GRID
+========================= */
+
+.train-grid {
+    max-width: 1200px;
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 28px;
+}
+
+
+/* =========================
+   CARD
+========================= */
+
+.train-card {
+    position: relative;
+
+    background: #ffffff;
+
+    border: 1px solid #e3e8ef;
+
+    border-radius: 22px;
+
+    padding: 28px;
+
+    box-shadow:
+        0 10px 35px rgba(23, 32, 54, 0.07);
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease,
+        border-color .3s ease;
+
+    overflow: hidden;
+}
+
+.train-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 4px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #172036,
+            #e8a83e
+        );
+}
+
+.train-card:hover {
+    transform: translateY(-7px);
+
+    border-color: #d4dbe5;
+
+    box-shadow:
+        0 18px 45px rgba(23, 32, 54, 0.13);
+}
+
+
+/* =========================
+   CARD TOP
+========================= */
+
+.train-card-top {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 22px;
+}
+
+.train-icon {
+    width: 62px;
+    height: 62px;
+
+    border-radius: 16px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #eef3ff;
+
+    color: #172036;
+
+    font-size: 28px;
+}
+
+.train-status {
+    padding: 7px 11px;
+
+    border-radius: 30px;
+
+    background: #dcfce7;
+
+    color: #15803d;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+}
+
+.train-status i {
+    font-size: 6px;
+}
+
+
+/* =========================
+   TITLE
+========================= */
+
+.train-card h2 {
+    margin: 0 0 7px;
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 24px;
+
+    color: #172036;
+
+    line-height: 1.3;
+}
+
+.train-number {
+    color: #667085;
+
+    font-size: 13px;
+
+    margin-bottom: 20px;
+}
+
+.train-number strong {
+    color: #172036;
+}
+
+
+/* =========================
+   ROUTE
+========================= */
+
+.train-route {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 22px;
+
+    padding: 14px;
+
+    border-radius: 14px;
+
+    background: #f7f8fa;
+}
+
+.route-place {
+    flex: 1;
+
+    min-width: 0;
+}
+
+.route-label {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #8a93a3;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .5px;
+}
+
+.route-place strong {
+    display: block;
+
+    color: #273246;
+
+    font-size: 15px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.route-arrow {
+    width: 32px;
+    height: 32px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #172036;
+
+    color: #ffffff;
+
+    font-size: 12px;
+}
+
+
+/* =========================
+   INFO
+========================= */
+
+.train-info {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 12px;
+
+    margin-bottom: 22px;
+}
+
+.train-info-box {
+    padding: 13px;
+
+    border-radius: 12px;
+
+    background: #f8f9fb;
+
+    border: 1px solid #edf0f4;
+}
+
+.train-info-box span {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #7a8499;
+
+    font-size: 12px;
+}
+
+.train-info-box span i {
+    margin-right: 5px;
+
+    color: #e8a83e;
+}
+
+.train-info-box strong {
+    display: block;
+
+    color: #172036;
+
+    font-size: 14px;
+
+    line-height: 1.4;
+
+    word-break: break-word;
+}
+
+
+/* =========================
+   SEATS
+========================= */
+
+.seat-box {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 20px;
+
+    padding: 14px 16px;
+
+    border-radius: 13px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e7ebf0;
+}
+
+.seat-label {
+    color: #667085;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+.seat-value {
+    color: #15803d;
+
+    font-size: 16px;
+
+    font-weight: 800;
+}
+
+.seat-value.unavailable {
+    color: #b91c1c;
+}
+
+
+/* =========================
+   PRICE
+========================= */
+
+.train-price {
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 22px;
+}
+
+.price-label {
+    color: #7a8499;
+
+    font-size: 13px;
+}
+
+.price {
+    color: #172036;
+
+    font-size: 25px;
+
+    font-weight: 800;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.train-buttons {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 11px;
+}
+
+.train-btn {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 46px;
+
+    box-sizing: border-box;
+
+    border-radius: 11px;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    transition: .25s ease;
+
+    border: none;
+
+    cursor: pointer;
+}
+
+.details-btn {
+    background: #eef1f5;
+
+    color: #172036;
+}
+
+.details-btn:hover {
+    background: #dfe4eb;
+}
+
+.book-btn {
+    background: #172036;
+
+    color: #ffffff;
+}
+
+.book-btn:hover {
+    background: #e8a83e;
+
+    color: #172036;
+
+    transform: translateY(-1px);
+}
+
+.disabled-btn {
+    background: #dce2e9;
+
+    color: #7a8499;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty-state {
+    max-width: 650px;
+
+    margin: 40px auto;
+
+    padding: 70px 30px;
+
+    text-align: center;
+
+    background: #ffffff;
+
+    border: 1px solid #e3e8ef;
+
+    border-radius: 22px;
+
+    box-shadow:
+        0 10px 35px rgba(23, 32, 54, 0.07);
+}
+
+.empty-state-icon {
+    width: 80px;
+    height: 80px;
+
+    margin: 0 auto 20px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #eef3ff;
+
+    color: #172036;
+
+    font-size: 34px;
+}
+
+.empty-state h2 {
+    margin: 0 0 10px;
+
+    color: #172036;
+
+    font-family: "Playfair Display", serif;
+}
+
+.empty-state p {
+    margin: 0;
+
+    color: #667085;
+
+    line-height: 1.6;
+}
+
+
+/* =========================
+   NO SEARCH RESULT
+========================= */
+
+.no-results {
+    display: none;
+
+    text-align: center;
+
+    padding: 45px 20px;
+
+    color: #667085;
+}
+
+.no-results i {
+    display: block;
+
+    margin-bottom: 12px;
+
+    font-size: 30px;
+
+    color: #e8a83e;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1050px) {
+
+    .train-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .train-page {
+        padding: 110px 5% 55px;
+    }
+
+    .train-header h1 {
+        font-size: 37px;
+    }
+
+    .train-header p {
+        font-size: 15px;
+    }
+
+    .train-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .train-info {
+        grid-template-columns: 1fr;
+    }
+
+    .train-buttons {
+        grid-template-columns: 1fr;
+    }
+
+    .train-route {
+        gap: 8px;
+    }
+
+    .route-place strong {
+        font-size: 13px;
+    }
+
+    .train-toolbar {
+        align-items: stretch;
+    }
+
+    .train-count {
+        text-align: center;
+    }
+
+}
+
+</style>
+
+
+<section class="train-page">
+
+
+    <!-- =========================
+         HEADER
+    ========================= -->
+
+    <header class="train-header">
+
+        <div class="train-header-icon">
+
+            <i
+                class="fa-solid fa-train"
+                aria-hidden="true"
+            ></i>
+
+        </div>
+
+        <h1>
+            Train <span>Services</span>
+        </h1>
+
+        <p>
+            Explore comfortable and reliable train services
+            for your journey across India.
+        </p>
+
+    </header>
+
+
+    <!-- =========================
+         SEARCH TOOLBAR
+    ========================= -->
+
+    {% if trains %}
+
+        <div class="train-toolbar">
+
+            <div class="train-search">
+
+                <i
+                    class="fa-solid fa-magnifying-glass"
+                    aria-hidden="true"
+                ></i>
+
+                <input
+                    type="text"
+                    id="trainSearch"
+                    placeholder="Search train, route or train number..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+            <div class="train-count">
+
+                <span id="trainCount">
+                    {{ trains|length }}
+                </span>
+
+                train{{ trains|length|pluralize }}
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             TRAIN GRID
+        ========================= -->
+
+        <div class="train-grid" id="trainGrid">
+
+            {% for train in trains %}
+
+                <article
+                    class="train-card"
+                    data-search="
+                        {{ train.train_name }}
+                        {{ train.train_number }}
+                        {{ train.source }}
+                        {{ train.destination }}
+                    "
+                >
+
+
+                    <!-- CARD TOP -->
+
+                    <div class="train-card-top">
+
+                        <div class="train-icon">
+
+                            <i
+                                class="fa-solid fa-train"
+                                aria-hidden="true"
+                            ></i>
+
+                        </div>
+
+
+                        {% if train.active %}
+
+                            <div class="train-status">
+
+                                <i
+                                    class="fa-solid fa-circle"
+                                    aria-hidden="true"
+                                ></i>
+
+                                Active
+
+                            </div>
+
+                        {% else %}
+
+                            <div
+                                class="train-status"
+                                style="
+                                    background:#fee2e2;
+                                    color:#b91c1c;
+                                "
+                            >
+
+                                Inactive
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- TRAIN NAME -->
+
+                    <h2>
+
+                        {% if train.train_name %}
+
+                            {{ train.train_name }}
+
+                        {% else %}
+
+                            Indian Railways Service
+
+                        {% endif %}
+
+                    </h2>
+
+
+                    <!-- TRAIN NUMBER -->
+
+                    <div class="train-number">
+
+                        Train Number:
+
+                        <strong>
+                            {{ train.train_number }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- ROUTE -->
+
+                    <div class="train-route">
+
+                        <div class="route-place">
+
+                            <span class="route-label">
+                                From
+                            </span>
+
+                            <strong>
+                                {{ train.source }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="route-arrow">
+
+                            <i
+                                class="fa-solid fa-arrow-right"
+                                aria-hidden="true"
+                            ></i>
+
+                        </div>
+
+
+                        <div class="route-place">
+
+                            <span class="route-label">
+                                To
+                            </span>
+
+                            <strong>
+                                {{ train.destination }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- INFORMATION -->
+
+                    <div class="train-info">
+
+
+                        <!-- DEPARTURE -->
+
+                        <div class="train-info-box">
+
+                            <span>
+
+                                <i
+                                    class="fa-regular fa-clock"
+                                    aria-hidden="true"
+                                ></i>
+
+                                Departure
+
+                            </span>
+
+                            <strong>
+                                {{ train.departure_time|time:"h:i A" }}
+                            </strong>
+
+                        </div>
+
+
+                        <!-- ARRIVAL -->
+
+                        <div class="train-info-box">
+
+                            <span>
+
+                                <i
+                                    class="fa-regular fa-clock"
+                                    aria-hidden="true"
+                                ></i>
+
+                                Arrival
+
+                            </span>
+
+                            <strong>
+                                {{ train.arrival_time|time:"h:i A" }}
+                            </strong>
+
+                        </div>
+
+
+                        <!-- TOTAL SEATS -->
+
+                        <div class="train-info-box">
+
+                            <span>
+
+                                <i
+                                    class="fa-solid fa-chair"
+                                    aria-hidden="true"
+                                ></i>
+
+                                Total Seats
+
+                            </span>
+
+                            <strong>
+                                {{ train.total_seats }}
+                            </strong>
+
+                        </div>
+
+
+                        <!-- PRICE -->
+
+                        <div class="train-info-box">
+
+                            <span>
+
+                                <i
+                                    class="fa-solid fa-indian-rupee-sign"
+                                    aria-hidden="true"
+                                ></i>
+
+                                Fare
+
+                            </span>
+
+                            <strong>
+                                ₹{{ train.price|floatformat:2 }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- AVAILABLE SEATS -->
+
+                    <div class="seat-box">
+
+                        <span class="seat-label">
+
+                            <i
+                                class="fa-solid fa-chair"
+                                aria-hidden="true"
+                            ></i>
+
+                            Available Seats
+
+                        </span>
+
+
+                        {% if train.available_seats > 0 %}
+
+                            <span class="seat-value">
+
+                                {{ train.available_seats }}
+
+                                available
+
+                            </span>
+
+                        {% else %}
+
+                            <span class="seat-value unavailable">
+
+                                Sold Out
+
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- PRICE -->
+
+                    <div class="train-price">
+
+                        <span class="price-label">
+                            Fare per passenger
+                        </span>
+
+                        <span class="price">
+
+                            ₹{{ train.price|floatformat:2 }}
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- BUTTONS -->
+
+                    <div class="train-buttons">
+
+
+                        <!-- DETAILS -->
+
+                        <a
+                            href="{% url 'train_detail' train.pk %}"
+                            class="train-btn details-btn"
+                        >
+
+                            <i
+                                class="fa-solid fa-circle-info"
+                                aria-hidden="true"
+                            ></i>
+
+                            &nbsp;View Details
+
+                        </a>
+
+
+                        <!-- BOOK -->
+
+                        {% if train.active and train.available_seats > 0 %}
+
+                            <a
+                                href="{% url 'train_coach_selection' train.pk %}"
+                                class="train-btn book-btn"
+                            >
+
+                                <i
+                                    class="fa-solid fa-chair"
+                                    aria-hidden="true"
+                                ></i>
+
+                                &nbsp;Select Coach
+
+                            </a>
+
+                        {% else %}
+
+                            <span class="train-btn disabled-btn">
+
+                                <i
+                                    class="fa-solid fa-ban"
+                                    aria-hidden="true"
+                                ></i>
+
+                                &nbsp;Unavailable
+
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                </article>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- NO SEARCH RESULT -->
+
+        <div
+            class="no-results"
+            id="noTrainResults"
+        >
+
+            <i
+                class="fa-solid fa-train"
+                aria-hidden="true"
+            ></i>
+
+            <strong>
+                No matching trains found.
+            </strong>
+
+        </div>
+
+
+    {% else %}
+
+
+        <!-- =========================
+             EMPTY STATE
+        ========================= -->
+
+        <div class="empty-state">
+
+            <div class="empty-state-icon">
+
+                <i
+                    class="fa-solid fa-train"
+                    aria-hidden="true"
+                ></i>
+
+            </div>
+
+            <h2>
+                No Trains Available
+            </h2>
+
+            <p>
+                There are currently no train services available.
+                Please check again later.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+
+</section>
+
+
+<script>
+
+/* =========================================================
+   YATRANEST - TRAIN LIST JAVASCRIPT
+   Search + card interaction
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const searchInput =
+        document.getElementById("trainSearch");
+
+    const trainGrid =
+        document.getElementById("trainGrid");
+
+    const trainCount =
+        document.getElementById("trainCount");
+
+    const noResults =
+        document.getElementById("noTrainResults");
+
+
+    if (!searchInput || !trainGrid) {
+        return;
+    }
+
+
+    const cards =
+        Array.from(
+            trainGrid.querySelectorAll(".train-card")
+        );
+
+
+    function filterTrains() {
+
+        const searchValue =
+            searchInput.value
+                .toLowerCase()
+                .trim();
+
+
+        let visibleCount = 0;
+
+
+        cards.forEach(function (card) {
+
+            const searchText =
+                (
+                    card.dataset.search || ""
+                ).toLowerCase();
+
+
+            if (
+                searchText.includes(searchValue)
+            ) {
+
+                card.style.display = "";
+
+                visibleCount++;
+
+            } else {
+
+                card.style.display = "none";
+
+            }
+
+        });
+
+
+        if (trainCount) {
+
+            trainCount.textContent =
+                visibleCount;
+
+        }
+
+
+        if (noResults) {
+
+            if (visibleCount === 0) {
+
+                noResults.style.display = "block";
+
+            } else {
+
+                noResults.style.display = "none";
+
+            }
+
+        }
+
+    }
+
+
+    searchInput.addEventListener(
+        "input",
+        filterTrains
+    );
+
+
+    /* Enter key */
+
+    searchInput.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (event.key === "Escape") {
+
+                searchInput.value = "";
+
+                filterTrains();
+
+                searchInput.blur();
+
+            }
+
+        }
+    );
+
+
+});
+
+</script>
+
+{% endblock %}

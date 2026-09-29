@@ -1,0 +1,752 @@
+{% extends "Travel/base.html" %}
+
+{% load static %}
+
+{% block title %}
+
+Tour Categories | YatraNest
+
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   TOUR CATEGORY PAGE
+========================================================= */
+
+.category-page {
+
+    max-width: 1200px;
+
+    margin: 110px auto 70px;
+
+    padding: 0 24px;
+
+}
+
+
+/* =========================================================
+   CATEGORY HEADER
+========================================================= */
+
+.category-header {
+
+    margin-bottom: 42px;
+
+    text-align: center;
+
+}
+
+
+.category-kicker {
+
+    display: inline-block;
+
+    margin-bottom: 10px;
+
+    color: #b47a28;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+
+}
+
+
+.category-header h1 {
+
+    margin: 0 0 12px;
+
+    color: #192921;
+
+    font-family: "Playfair Display", serif;
+
+    font-size: clamp(36px, 5vw, 52px);
+
+    font-weight: 800;
+
+    line-height: 1.1;
+
+}
+
+
+.category-header p {
+
+    max-width: 680px;
+
+    margin: 0 auto;
+
+    color: #68766e;
+
+    font-size: 16px;
+
+    line-height: 1.75;
+
+}
+
+
+/* =========================================================
+   CATEGORY GRID
+========================================================= */
+
+.category-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(260px, 1fr)
+        );
+
+    gap: 28px;
+
+}
+
+
+/* =========================================================
+   CATEGORY CARD
+========================================================= */
+
+.category-card {
+
+    display: flex;
+
+    flex-direction: column;
+
+    overflow: hidden;
+
+    min-height: 100%;
+
+    background: #ffffff;
+
+    border: 1px solid rgba(25, 41, 33, 0.09);
+
+    border-radius: 20px;
+
+    color: inherit;
+
+    text-decoration: none;
+
+    box-shadow:
+        0 8px 25px rgba(25, 41, 33, 0.06);
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
+
+}
+
+
+.category-card:hover {
+
+    transform: translateY(-8px);
+
+    border-color: rgba(228, 168, 76, 0.5);
+
+    box-shadow:
+        0 18px 42px rgba(25, 41, 33, 0.14);
+
+}
+
+
+/* =========================================================
+   CATEGORY IMAGE
+========================================================= */
+
+.category-image-wrapper {
+
+    position: relative;
+
+    overflow: hidden;
+
+    width: 100%;
+
+    height: 220px;
+
+    background: #e8eee9;
+
+}
+
+
+.category-image {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    transition:
+        transform 0.5s ease;
+
+}
+
+
+.category-card:hover .category-image {
+
+    transform: scale(1.07);
+
+}
+
+
+/* =========================================================
+   IMAGE OVERLAY
+========================================================= */
+
+.category-image-overlay {
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        linear-gradient(
+            to top,
+            rgba(0, 0, 0, 0.45),
+            rgba(0, 0, 0, 0.02) 65%
+        );
+
+    pointer-events: none;
+
+}
+
+
+/* =========================================================
+   CATEGORY ICON
+========================================================= */
+
+.category-icon {
+
+    position: absolute;
+
+    top: 16px;
+
+    right: 16px;
+
+    width: 42px;
+
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.94);
+
+    color: #2e6046;
+
+    font-size: 16px;
+
+    box-shadow:
+        0 6px 18px rgba(0, 0, 0, 0.13);
+
+    backdrop-filter: blur(8px);
+
+}
+
+
+/* =========================================================
+   IMAGE PLACEHOLDER
+========================================================= */
+
+.category-image-placeholder {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eef3ef,
+            #dce7df
+        );
+
+    color: #6f8377;
+
+    font-size: 46px;
+
+}
+
+
+/* =========================================================
+   CATEGORY CONTENT
+========================================================= */
+
+.category-content {
+
+    display: flex;
+
+    flex: 1;
+
+    flex-direction: column;
+
+    padding: 23px 23px 25px;
+
+}
+
+
+.category-content h2 {
+
+    margin: 0 0 10px;
+
+    color: #192921;
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 23px;
+
+    font-weight: 700;
+
+    line-height: 1.25;
+
+}
+
+
+.category-content p {
+
+    margin: 0;
+
+    color: #68766e;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+
+}
+
+
+/* =========================================================
+   EXPLORE LINK
+========================================================= */
+
+.category-explore {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: auto;
+
+    padding-top: 20px;
+
+    color: #2e6046;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    transition:
+        gap 0.25s ease;
+
+}
+
+
+.category-card:hover .category-explore {
+
+    gap: 12px;
+
+}
+
+
+.category-explore i {
+
+    color: #d2963c;
+
+    font-size: 12px;
+
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.empty-category {
+
+    max-width: 650px;
+
+    margin: 30px auto 0;
+
+    padding: 60px 30px;
+
+    text-align: center;
+
+    background: #f7f5ef;
+
+    border: 1px dashed rgba(46, 96, 70, 0.28);
+
+    border-radius: 20px;
+
+}
+
+
+.empty-category-icon {
+
+    width: 70px;
+
+    height: 70px;
+
+    margin: 0 auto 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #e8efe9;
+
+    color: #2e6046;
+
+    font-size: 28px;
+
+}
+
+
+.empty-category h2 {
+
+    margin: 0 0 8px;
+
+    color: #192921;
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 25px;
+
+}
+
+
+.empty-category p {
+
+    margin: 0;
+
+    color: #68766e;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .category-page {
+
+        margin-top: 95px;
+
+        padding: 0 18px;
+
+    }
+
+
+    .category-header {
+
+        margin-bottom: 30px;
+
+    }
+
+
+    .category-image-wrapper {
+
+        height: 205px;
+
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .category-page {
+
+        margin-top: 90px;
+
+        padding: 0 14px;
+
+    }
+
+
+    .category-grid {
+
+        grid-template-columns: 1fr;
+
+        gap: 20px;
+
+    }
+
+
+    .category-image-wrapper {
+
+        height: 210px;
+
+    }
+
+
+    .category-content {
+
+        padding: 20px;
+
+    }
+
+
+    .category-header h1 {
+
+        font-size: 34px;
+
+    }
+
+
+    .category-header p {
+
+        font-size: 14px;
+
+    }
+
+}
+
+</style>
+
+<div class="category-page">
+
+<!-- =====================================================
+     CATEGORY HEADER
+====================================================== -->
+
+<div class="category-header">
+
+    <span class="category-kicker">
+
+        Discover Your Journey
+
+    </span>
+
+
+    <h1>
+
+        Tour Categories
+
+    </h1>
+
+
+    <p>
+
+        Explore India through different kinds of travel
+        experiences. Choose a category and discover the
+        journeys waiting for you.
+
+    </p>
+
+</div>
+
+
+<!-- =====================================================
+     CATEGORY LIST
+====================================================== -->
+
+{% if categories %}
+
+
+    <div class="category-grid">
+
+
+        {% for category in categories %}
+
+
+            <a
+                href="{% url 'category_detail' category.category_slug %}"
+                class="category-card"
+            >
+
+
+                <!-- =====================================
+                     CATEGORY IMAGE
+                ====================================== -->
+
+                <div class="category-image-wrapper">
+
+
+                    {% if category.category_image %}
+
+
+                        <img
+                            src="{{ category.category_image.url }}"
+                            alt="{{ category.category_name }}"
+                            class="category-image"
+                            loading="lazy"
+                        >
+
+
+                        <div
+                            class="category-image-overlay"
+                            aria-hidden="true"
+                        ></div>
+
+
+                    {% else %}
+
+
+                        <div
+                            class="category-image-placeholder"
+                        >
+
+                            <i
+                                class="fa-solid fa-tags"
+                                aria-hidden="true"
+                            ></i>
+
+                        </div>
+
+
+                    {% endif %}
+
+
+                    <!-- CATEGORY ICON -->
+
+                    <span
+                        class="category-icon"
+                        aria-hidden="true"
+                    >
+
+                        <i class="fa-solid fa-compass"></i>
+
+                    </span>
+
+
+                </div>
+
+
+                <!-- =====================================
+                     CATEGORY CONTENT
+                ====================================== -->
+
+                <div class="category-content">
+
+
+                    <h2>
+
+                        {{ category.category_name }}
+
+                    </h2>
+
+
+                    {% if category.category_desc %}
+
+
+                        <p>
+
+                            {{ category.category_desc|truncatewords:25 }}
+
+                        </p>
+
+
+                    {% else %}
+
+
+                        <p>
+
+                            Explore tours and experiences
+                            in this category.
+
+                        </p>
+
+
+                    {% endif %}
+
+
+                    <span class="category-explore">
+
+                        Explore Category
+
+                        <i
+                            class="fa-solid fa-arrow-right"
+                            aria-hidden="true"
+                        ></i>
+
+                    </span>
+
+
+                </div>
+
+
+            </a>
+
+
+        {% endfor %}
+
+
+    </div>
+
+
+{% else %}
+
+
+    <!-- =================================================
+         EMPTY STATE
+    ================================================== -->
+
+    <div class="empty-category">
+
+
+        <div
+            class="empty-category-icon"
+            aria-hidden="true"
+        >
+
+            <i class="fa-solid fa-tags"></i>
+
+        </div>
+
+
+        <h2>
+
+            No Tour Categories Yet
+
+        </h2>
+
+
+        <p>
+
+            Tour categories will appear here once they
+            are added to YatraNest.
+
+        </p>
+
+
+    </div>
+
+
+{% endif %}
+
+</div>
+
+{% endblock %}

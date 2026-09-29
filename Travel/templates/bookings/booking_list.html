@@ -1,0 +1,937 @@
+{% extends "Travel/base.html" %}
+
+{% block title %}
+YatraNest | My Bookings
+{% endblock %}
+
+{% block extra_css %}
+<style>
+
+/* =========================================================
+   BOOKING PAGE
+   ========================================================= */
+
+.booking-page-wrapper {
+    max-width: 1100px;
+    margin: 120px auto 60px;
+    padding: 0 20px;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.booking-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.booking-page-header h1 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.booking-page-header p {
+    margin: 8px 0 0;
+    color: #64748b;
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   NEW BOOKING BUTTON
+   ========================================================= */
+
+.new-booking-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    background: #0f172a;
+    color: #ffffff;
+
+    text-decoration: none;
+
+    padding: 12px 18px;
+    border-radius: 7px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.new-booking-btn:hover {
+    background: #0284c7;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   BOOKING LIST CARD
+   ========================================================= */
+
+.booking-list-card {
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 4px 15px rgba(15, 23, 42, 0.05);
+}
+
+
+/* =========================================================
+   BOOKING ROW
+   ========================================================= */
+
+.booking-card-row {
+    display: grid;
+
+    grid-template-columns:
+        1.5fr
+        1.2fr
+        1fr
+        1fr
+        1fr
+        auto;
+
+    gap: 20px;
+
+    align-items: center;
+
+    padding: 20px 24px;
+
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.booking-card-row:last-child {
+    border-bottom: none;
+}
+
+
+/* =========================================================
+   HEADER ROW
+   ========================================================= */
+
+.booking-header-row {
+    background: #f8fafc;
+
+    color: #64748b;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+
+/* =========================================================
+   BOOKING INFORMATION
+   ========================================================= */
+
+.booking-info {
+    min-width: 0;
+}
+
+.booking-info strong {
+    display: block;
+
+    color: #0f172a;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    margin-bottom: 5px;
+
+    overflow-wrap: anywhere;
+}
+
+.booking-info span {
+    color: #64748b;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   TRAVEL DATE
+   ========================================================= */
+
+.booking-date {
+    color: #334155;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   TRAVELERS
+   ========================================================= */
+
+.booking-travelers {
+    color: #475569;
+
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.booking-travelers i {
+    margin-right: 4px;
+}
+
+
+/* =========================================================
+   PRICE
+   ========================================================= */
+
+.booking-price {
+    color: #0284c7;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   STATUS BADGE
+   ========================================================= */
+
+.status-badge {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    padding: 6px 10px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    white-space: nowrap;
+}
+
+.status-confirmed {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.status-pending {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.status-cancelled {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.status-default {
+    background: #e2e8f0;
+    color: #475569;
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.booking-actions {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-start;
+
+    gap: 8px;
+
+    flex-wrap: wrap;
+}
+
+
+/* =========================================================
+   NORMAL ACTION BUTTON
+   ========================================================= */
+
+.booking-action-btn {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 36px;
+    height: 36px;
+
+    padding: 0;
+
+    border-radius: 6px;
+
+    border: 1px solid #cbd5e1;
+
+    color: #475569;
+    background: #ffffff;
+
+    text-decoration: none;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+
+    cursor: pointer;
+}
+
+.booking-action-btn:hover {
+    background: #0284c7;
+    color: #ffffff;
+    border-color: #0284c7;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   CANCEL BOOKING FORM
+   ========================================================= */
+
+.cancel-booking-form {
+    display: inline-flex;
+
+    margin: 0;
+    padding: 0;
+}
+
+
+/* =========================================================
+   CANCELLATION RECEIPT BUTTON
+   ========================================================= */
+
+.cancellation-receipt-btn {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    min-height: 36px;
+
+    padding: 0 12px;
+
+    border-radius: 6px;
+
+    border: 1px solid #efb8b8;
+
+    background: #fff5f5;
+
+    color: #b91c1c;
+
+    text-decoration: none;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.cancellation-receipt-btn:hover {
+    background: #fee2e2;
+
+    border-color: #dc2626;
+
+    color: #991b1b;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   EMPTY BOOKING
+   ========================================================= */
+
+.empty-booking {
+    text-align: center;
+
+    padding: 70px 20px;
+}
+
+.empty-booking i {
+    display: block;
+
+    font-size: 45px;
+
+    color: #94a3b8;
+
+    margin-bottom: 18px;
+}
+
+.empty-booking h2 {
+    color: #0f172a;
+
+    margin: 0 0 8px;
+
+    font-size: 24px;
+}
+
+.empty-booking p {
+    color: #64748b;
+
+    margin: 0 0 22px;
+}
+
+.empty-booking a {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    background: #0284c7;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    padding: 12px 20px;
+
+    border-radius: 7px;
+
+    font-weight: 600;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.empty-booking a:hover {
+    background: #0369a1;
+
+    color: #ffffff;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+    .booking-card-row {
+        grid-template-columns:
+            1.4fr
+            1.1fr
+            0.9fr
+            0.9fr
+            0.9fr
+            auto;
+
+        gap: 12px;
+
+        padding: 18px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 850px) {
+
+    .booking-page-header {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+    .booking-header-row {
+        display: none;
+    }
+
+    .booking-card-row {
+        display: grid;
+
+        grid-template-columns: 1fr;
+
+        gap: 12px;
+
+        padding: 20px;
+    }
+
+    .booking-actions {
+        width: 100%;
+
+        margin-top: 5px;
+    }
+
+    .booking-actions .booking-action-btn {
+        width: 38px;
+        height: 38px;
+    }
+
+    .cancellation-receipt-btn {
+        width: auto;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+    .booking-page-wrapper {
+        margin-top: 100px;
+
+        padding: 0 12px;
+    }
+
+    .booking-page-header {
+        margin-bottom: 22px;
+    }
+
+    .booking-page-header h1 {
+        font-size: 27px;
+    }
+
+    .booking-page-header p {
+        font-size: 13px;
+    }
+
+    .new-booking-btn {
+        width: 100%;
+    }
+
+    .booking-card-row {
+        padding: 18px;
+    }
+
+    .booking-info strong {
+        font-size: 14px;
+    }
+
+    .booking-date,
+    .booking-travelers {
+        font-size: 13px;
+    }
+
+    .booking-price {
+        font-size: 15px;
+    }
+
+    .cancellation-receipt-btn {
+        width: 100%;
+    }
+
+}
+
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<main class="booking-page-wrapper">
+
+    <!-- =====================================================
+         PAGE HEADER
+         ===================================================== -->
+
+    <div class="booking-page-header">
+
+        <div>
+
+            <h1>
+                My Bookings
+            </h1>
+
+            <p>
+                View and manage your travel reservations.
+            </p>
+
+        </div>
+
+
+        <!-- NEW BOOKING -->
+
+        <a
+            href="{% url 'tour_list' %}"
+            class="new-booking-btn"
+        >
+
+            <i class="fa-solid fa-plus"></i>
+
+            New Booking
+
+        </a>
+
+    </div>
+
+
+    <!-- =====================================================
+         BOOKING LIST
+         ===================================================== -->
+
+    <div class="booking-list-card">
+
+
+        <!-- =================================================
+             TABLE HEADER
+             ================================================= -->
+
+        <div class="booking-card-row booking-header-row">
+
+            <div>
+                Tour
+            </div>
+
+            <div>
+                Travel Date
+            </div>
+
+            <div>
+                Travelers
+            </div>
+
+            <div>
+                Amount
+            </div>
+
+            <div>
+                Status
+            </div>
+
+            <div>
+                Action
+            </div>
+
+        </div>
+
+
+        {% if bookings %}
+
+            <!-- =================================================
+                 LOOP THROUGH BOOKINGS
+                 ================================================= -->
+
+            {% for booking in bookings %}
+
+                <div class="booking-card-row">
+
+
+                    <!-- =========================================
+                         TOUR / SERVICE
+                         ========================================= -->
+
+                    <div class="booking-info">
+
+                        <strong>
+
+                            {% if booking.tour %}
+
+                                {{ booking.tour.tour_name }}
+
+                            {% elif booking.hotel %}
+
+                                {{ booking.hotel.hotel_name }}
+
+                            {% elif booking.bus %}
+
+                                Bus Booking
+
+                            {% elif booking.flight %}
+
+                                Flight Booking
+
+                            {% elif booking.train %}
+
+                                Train Booking
+
+                            {% else %}
+
+                                Travel Booking
+
+                            {% endif %}
+
+                        </strong>
+
+                        <span>
+                            Booking #{{ booking.id }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         TRAVEL DATE
+                         ========================================= -->
+
+                    <div class="booking-date">
+
+                        {% if booking.travel_date %}
+
+                            {{ booking.travel_date|date:"d M Y" }}
+
+                        {% else %}
+
+                            Not Available
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- =========================================
+                         TRAVELERS
+                         ========================================= -->
+
+                    <div class="booking-travelers">
+
+                        <i class="fa-solid fa-user-group"></i>
+
+                        {{ booking.number_of_people }}
+
+                        {% if booking.number_of_people == 1 %}
+
+                            Traveler
+
+                        {% else %}
+
+                            Travelers
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- =========================================
+                         AMOUNT
+                         ========================================= -->
+
+                    <div class="booking-price">
+
+                        ₹{{ booking.total_amount|default:"0"|floatformat:2 }}
+
+                    </div>
+
+
+                    <!-- =========================================
+                         STATUS
+                         ========================================= -->
+
+                    <div>
+
+                        {% if booking.booking_status == "CONFIRMED" %}
+
+                            <span class="status-badge status-confirmed">
+
+                                <i class="fa-solid fa-circle-check"></i>
+
+                                Confirmed
+
+                            </span>
+
+                        {% elif booking.booking_status == "PENDING" %}
+
+                            <span class="status-badge status-pending">
+
+                                <i class="fa-solid fa-clock"></i>
+
+                                Pending
+
+                            </span>
+
+                        {% elif booking.booking_status == "CANCELLED" %}
+
+                            <span class="status-badge status-cancelled">
+
+                                <i class="fa-solid fa-circle-xmark"></i>
+
+                                Cancelled
+
+                            </span>
+
+                        {% else %}
+
+                            <span class="status-badge status-default">
+
+                                {{ booking.booking_status }}
+
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- =========================================
+                         ACTIONS
+                         ========================================= -->
+
+                    <div class="booking-actions">
+
+
+                        <!-- VIEW BOOKING -->
+
+                        <a
+                            href="{% url 'booking_detail' booking.pk %}"
+                            class="booking-action-btn"
+                            title="View Booking"
+                            aria-label="View Booking"
+                        >
+
+                            <i class="fa-solid fa-eye"></i>
+
+                        </a>
+
+
+                        <!-- CANCEL ACTIVE BOOKING -->
+
+                        {% if booking.booking_status == "PENDING" or booking.booking_status == "CONFIRMED" %}
+
+                            <form
+                                method="POST"
+                                action="{% url 'cancel_booking' booking.pk %}"
+                                class="cancel-booking-form"
+                                onsubmit="return confirm('Are you sure you want to cancel this booking?');"
+                            >
+
+                                {% csrf_token %}
+
+                                <button
+                                    type="submit"
+                                    class="booking-action-btn"
+                                    title="Cancel Booking"
+                                    aria-label="Cancel Booking"
+                                >
+
+                                    <i class="fa-solid fa-xmark"></i>
+
+                                </button>
+
+                            </form>
+
+                        {% endif %}
+
+
+                        <!-- PAYMENT RECEIPT -->
+
+                        {% if booking.booking_status == "CONFIRMED" %}
+
+                            <a
+                                href="{% url 'payment_return_receipt' booking.id %}"
+                                class="booking-action-btn"
+                                title="View Payment Receipt"
+                                aria-label="View Payment Receipt"
+                            >
+
+                                <i class="fa-solid fa-receipt"></i>
+
+                            </a>
+
+                        {% endif %}
+
+
+                        <!-- CANCELLATION RECEIPT -->
+
+                        {% if booking.booking_status == "CANCELLED" %}
+
+                            <a
+                                href="{% url 'cancellation_receipt' booking.id %}"
+                                class="cancellation-receipt-btn"
+                                title="View Cancellation Receipt"
+                            >
+
+                                <i class="fa-solid fa-receipt"></i>
+
+                                <span>
+                                    Cancellation Receipt
+                                </span>
+
+                            </a>
+
+                        {% endif %}
+
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+
+        {% else %}
+
+
+            <!-- =================================================
+                 NO BOOKINGS
+                 ================================================= -->
+
+            <div class="empty-booking">
+
+                <i class="fa-regular fa-calendar-xmark"></i>
+
+                <h2>
+                    No bookings yet
+                </h2>
+
+                <p>
+                    You haven't made any travel bookings yet.
+                </p>
+
+                <a
+                    href="{% url 'tour_list' %}"
+                >
+
+                    <i class="fa-solid fa-compass"></i>
+
+                    Explore Tours
+
+                </a>
+
+            </div>
+
+        {% endif %}
+
+
+    </div>
+
+</main>
+
+{% endblock %}
+

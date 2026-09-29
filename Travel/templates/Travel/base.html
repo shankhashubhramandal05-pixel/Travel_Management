@@ -1,0 +1,1392 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<meta
+    name="theme-color"
+    content="#192921"
+>
+
+<meta
+    name="description"
+    content="YatraNest — Explore India, discover destinations, tour categories, packages, hotels and transport."
+>
+
+<title>
+    {% block title %}
+        YatraNest | Explore India
+    {% endblock %}
+</title>
+
+
+<!-- =====================================================
+     GOOGLE FONTS
+====================================================== -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+    crossorigin
+>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap"
+    rel="stylesheet"
+>
+
+
+<!-- =====================================================
+     FONT AWESOME
+====================================================== -->
+
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+>
+
+
+<!-- =====================================================
+     MAIN WEBSITE CSS
+====================================================== -->
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/style.css' %}"
+>
+
+
+<!-- =====================================================
+     YATRANEST AI CSS
+====================================================== -->
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/ai_assistant.css' %}"
+>
+
+
+{% block extra_css %}
+{% endblock %}
+
+</head>
+
+<body>
+
+
+<!-- =========================================================
+     NAVBAR
+========================================================= -->
+
+<header
+    class="navbar"
+    role="banner"
+>
+
+
+<!-- =====================================================
+     LOGO
+====================================================== -->
+
+<a
+    href="{% url 'home' %}"
+    class="logo"
+    aria-label="YatraNest Home"
+>
+
+    <span
+        class="logo-icon"
+        aria-hidden="true"
+    >
+
+        <i class="fa-solid fa-compass"></i>
+
+    </span>
+
+    Yatra<span>Nest</span>
+
+</a>
+
+
+<!-- =====================================================
+     MAIN NAVIGATION
+====================================================== -->
+
+<nav
+    id="navMenu"
+    aria-label="Main navigation"
+>
+
+
+    <!-- =================================================
+         HOME
+    ================================================== -->
+
+    <a
+        href="{% url 'home' %}"
+        data-nav-link
+    >
+
+        <i
+            class="fa-solid fa-house"
+            aria-hidden="true"
+        ></i>
+
+        <span>
+            Home
+        </span>
+
+    </a>
+
+
+    <!-- =================================================
+         DESTINATIONS
+    ================================================== -->
+
+    <a
+        href="{% url 'destination_list' %}"
+        data-nav-link
+    >
+
+        <i
+            class="fa-solid fa-location-dot"
+            aria-hidden="true"
+        ></i>
+
+        <span>
+            Destinations
+        </span>
+
+    </a>
+
+
+    <!-- =================================================
+         EXPERIENCES
+    ================================================== -->
+
+    <a
+        href="{% url 'home' %}#experiences"
+        data-nav-link
+    >
+
+        <i
+            class="fa-solid fa-camera"
+            aria-hidden="true"
+        ></i>
+
+        <span>
+            Experiences
+        </span>
+
+    </a>
+
+
+    <!-- =================================================
+         BOOKINGS
+    ================================================== -->
+
+    {% if user.is_authenticated %}
+
+        <a
+            href="{% url 'booking_list' %}"
+            data-nav-link
+        >
+
+            <i
+                class="fa-solid fa-calendar-check"
+                aria-hidden="true"
+            ></i>
+
+            <span>
+                My Bookings
+            </span>
+
+        </a>
+
+    {% else %}
+
+        <a
+            href="{% url 'login' %}?next={% url 'booking_list' %}"
+            data-nav-link
+        >
+
+            <i
+                class="fa-solid fa-calendar-check"
+                aria-hidden="true"
+            ></i>
+
+            <span>
+                My Bookings
+            </span>
+
+        </a>
+
+    {% endif %}
+
+
+    <!-- =================================================
+         PACKAGES
+    ================================================== -->
+
+    <a
+        href="{% url 'tour_list' %}"
+        data-nav-link
+    >
+
+        <i
+            class="fa-solid fa-suitcase-rolling"
+            aria-hidden="true"
+        ></i>
+
+        <span>
+            Packages
+        </span>
+
+    </a>
+
+
+    <!-- =================================================
+         TRANSPORT DROPDOWN
+    ================================================== -->
+
+    <div class="nav-dropdown">
+
+
+        <button
+            type="button"
+            class="nav-dropdown-btn"
+            id="transportDropdownBtn"
+            aria-expanded="false"
+            aria-haspopup="true"
+            aria-controls="transportDropdownMenu"
+        >
+
+            <i
+                class="fa-solid fa-route"
+                aria-hidden="true"
+            ></i>
+
+            <span>
+                Transport
+            </span>
+
+            <i
+                class="fa-solid fa-chevron-down"
+                aria-hidden="true"
+            ></i>
+
+        </button>
+
+
+        <div
+            class="nav-dropdown-menu"
+            id="transportDropdownMenu"
+            role="menu"
+            aria-hidden="true"
+        >
+
+
+            <!-- BUSES -->
+
+            <a
+                href="{% url 'bus_list' %}"
+                role="menuitem"
+            >
+
+                <i
+                    class="fa-solid fa-bus"
+                    aria-hidden="true"
+                ></i>
+
+                <span>
+                    Buses
+                </span>
+
+            </a>
+
+
+            <!-- FLIGHTS -->
+
+            <a
+                href="{% url 'flight_list' %}"
+                role="menuitem"
+            >
+
+                <i
+                    class="fa-solid fa-plane"
+                    aria-hidden="true"
+                ></i>
+
+                <span>
+                    Flights
+                </span>
+
+            </a>
+
+
+            <!-- TRAINS -->
+
+            <a
+                href="{% url 'train_list' %}"
+                role="menuitem"
+            >
+
+                <i
+                    class="fa-solid fa-train"
+                    aria-hidden="true"
+                ></i>
+
+                <span>
+                    Trains
+                </span>
+
+            </a>
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =================================================
+         ABOUT
+    ================================================== -->
+
+    <a
+        href="{% url 'home' %}#about"
+        data-nav-link
+    >
+
+        <i
+            class="fa-solid fa-circle-info"
+            aria-hidden="true"
+        ></i>
+
+        <span>
+            About
+        </span>
+
+    </a>
+
+
+</nav>
+
+
+<!-- =====================================================
+     NAV RIGHT
+====================================================== -->
+
+<div class="nav-right">
+
+
+    <!-- =================================================
+         SEARCH BUTTON
+    ================================================== -->
+
+    <button
+        type="button"
+        class="icon-btn"
+        id="navSearchBtn"
+        title="Search YatraNest"
+        aria-label="Search YatraNest"
+        aria-controls="searchOverlay"
+        aria-expanded="false"
+    >
+
+        <i
+            class="fa-solid fa-magnifying-glass"
+            aria-hidden="true"
+        ></i>
+
+    </button>
+
+
+    <!-- =================================================
+         AUTHENTICATED USER
+    ================================================== -->
+
+    {% if user.is_authenticated %}
+
+
+        <!-- PROFILE -->
+
+        <a
+            href="{% url 'profile' %}"
+            class="login-btn"
+            title="Open your profile"
+        >
+
+            <i
+                class="fa-regular fa-user"
+                aria-hidden="true"
+            ></i>
+
+            <span>
+
+                {% if user.first_name %}
+                    {{ user.first_name }}
+                {% else %}
+                    {{ user.username }}
+                {% endif %}
+
+            </span>
+
+        </a>
+
+
+        <!-- DASHBOARD -->
+
+        <a
+            href="{% url 'dashboard' %}"
+            class="register-btn"
+            title="Open dashboard"
+        >
+
+            <i
+                class="fa-solid fa-gauge-high"
+                aria-hidden="true"
+            ></i>
+
+            <span>
+                Dashboard
+            </span>
+
+        </a>
+
+
+        <!-- LOGOUT -->
+
+        <a
+            href="{% url 'logout' %}"
+            class="register-btn"
+            title="Logout"
+        >
+
+            <i
+                class="fa-solid fa-right-from-bracket"
+                aria-hidden="true"
+            ></i>
+
+            <span>
+                Logout
+            </span>
+
+        </a>
+
+
+    {% else %}
+
+
+        <!-- LOGIN -->
+
+        <a
+            href="{% url 'login' %}"
+            class="login-btn"
+        >
+
+            <i
+                class="fa-regular fa-user"
+                aria-hidden="true"
+            ></i>
+
+            <span>
+                Login
+            </span>
+
+        </a>
+
+
+        <!-- REGISTER -->
+
+        <a
+            href="{% url 'register' %}"
+            class="register-btn"
+        >
+
+            <i
+                class="fa-solid fa-user-plus"
+                aria-hidden="true"
+            ></i>
+
+            <span>
+                Register
+            </span>
+
+        </a>
+
+
+    {% endif %}
+
+
+    <!-- =================================================
+         MOBILE MENU BUTTON
+    ================================================== -->
+
+    <button
+        class="menu-btn"
+        id="menuBtn"
+        type="button"
+        aria-label="Open navigation menu"
+        aria-expanded="false"
+        aria-controls="navMenu"
+    >
+
+        <i
+            class="fa-solid fa-bars"
+            aria-hidden="true"
+        ></i>
+
+    </button>
+
+
+</div>
+
+</header>
+
+
+<!-- =========================================================
+     SEARCH OVERLAY
+========================================================= -->
+
+<div
+    class="search-overlay"
+    id="searchOverlay"
+    hidden
+>
+
+<div
+    class="search-overlay-backdrop"
+    data-close-search
+    aria-hidden="true"
+></div>
+
+
+<section
+    class="search-panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="searchTitle"
+>
+
+
+    <!-- CLOSE SEARCH -->
+
+    <button
+        type="button"
+        class="search-close"
+        id="searchClose"
+        data-close-search
+        aria-label="Close Search"
+        title="Close Search"
+    >
+
+        <i
+            class="fa-solid fa-xmark"
+            aria-hidden="true"
+        ></i>
+
+    </button>
+
+
+    <div class="search-content">
+
+
+        <p class="search-kicker">
+            EXPLORE INDIA
+        </p>
+
+
+        <h2 id="searchTitle">
+            Where will you go next?
+        </h2>
+
+
+        <!-- SEARCH FORM -->
+
+        <form
+            method="get"
+            action="{% url 'search' %}"
+            class="search-form"
+            role="search"
+        >
+
+            <label
+                for="globalSearchInput"
+                class="sr-only"
+            >
+                Search YatraNest
+            </label>
+
+
+            <input
+                type="search"
+                id="globalSearchInput"
+                name="q"
+                value="{{ request.GET.q|default:'' }}"
+                placeholder="Search Goa, Kashmir, Jaipur..."
+                autocomplete="off"
+                enterkeyhint="search"
+                aria-label="Search destinations, tours, hotels, buses, flights and trains"
+            >
+
+
+            <button
+                type="submit"
+                class="search-submit"
+                aria-label="Search"
+                title="Search"
+            >
+
+                <i
+                    class="fa-solid fa-arrow-right"
+                    aria-hidden="true"
+                ></i>
+
+            </button>
+
+
+        </form>
+
+
+        <!-- POPULAR SEARCHES -->
+
+        <div
+            class="search-suggestions"
+            aria-label="Popular destinations"
+        >
+
+            <a href="{% url 'search' %}?q=Goa">
+                Goa
+            </a>
+
+            <a href="{% url 'search' %}?q=Kashmir">
+                Kashmir
+            </a>
+
+            <a href="{% url 'search' %}?q=Rajasthan">
+                Rajasthan
+            </a>
+
+            <a href="{% url 'search' %}?q=Himachal">
+                Himachal
+            </a>
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+</div>
+
+
+<!-- =========================================================
+     DJANGO MESSAGES
+========================================================= -->
+
+{% if messages %}
+
+<div
+    class="django-messages"
+    role="status"
+    aria-live="polite"
+>
+
+    {% for message in messages %}
+
+        <div class="message {{ message.tags }}">
+            {{ message }}
+        </div>
+
+    {% endfor %}
+
+</div>
+
+{% endif %}
+
+
+<!-- =========================================================
+     MAIN CONTENT
+========================================================= -->
+
+<main id="main-content">
+
+{% block content %}
+{% endblock %}
+
+</main>
+
+
+<!-- =========================================================
+     YATRANEST AI TRAVEL ASSISTANT
+========================================================= -->
+
+<div
+    id="yatraAI"
+    class="yatra-ai"
+>
+
+
+<!-- =====================================================
+     FLOATING AI BUTTON
+====================================================== -->
+
+<button
+    type="button"
+    id="yatraAIButton"
+    class="yatra-ai-button"
+    aria-label="Open YatraNest AI Travel Assistant"
+    aria-controls="yatraAIChat"
+    aria-expanded="false"
+>
+
+    <span
+        class="yatra-ai-button-icon"
+        aria-hidden="true"
+    >
+
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+
+    </span>
+
+    <span class="yatra-ai-button-text">
+        AI Assistant
+    </span>
+
+</button>
+
+
+<!-- =====================================================
+     CHAT WINDOW
+====================================================== -->
+
+<section
+    id="yatraAIChat"
+    class="yatra-ai-chat"
+    role="dialog"
+    aria-modal="false"
+    aria-labelledby="yatraAITitle"
+    hidden
+>
+
+
+    <!-- CHAT HEADER -->
+
+    <div class="yatra-ai-header">
+
+
+        <div class="yatra-ai-header-info">
+
+
+            <div
+                class="yatra-ai-avatar"
+                aria-hidden="true"
+            >
+
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+
+            </div>
+
+
+            <div>
+
+                <h3 id="yatraAITitle">
+                    YatraNest AI
+                </h3>
+
+                <p>
+                    Your personal travel assistant
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- CLOSE -->
+
+        <button
+            type="button"
+            id="yatraAIClose"
+            class="yatra-ai-close"
+            aria-label="Close YatraNest AI"
+            title="Close"
+        >
+
+            <i
+                class="fa-solid fa-xmark"
+                aria-hidden="true"
+            ></i>
+
+        </button>
+
+
+    </div>
+
+
+    <!-- AI STATUS -->
+
+    <div class="yatra-ai-status">
+
+        <span
+            class="yatra-ai-status-dot"
+            aria-hidden="true"
+        ></span>
+
+        <span>
+            Gemini AI • Ready to help
+        </span>
+
+    </div>
+
+
+    <!-- =================================================
+         MESSAGE AREA
+    ================================================== -->
+
+    <div
+        id="yatraAIMessages"
+        class="yatra-ai-messages"
+        aria-live="polite"
+        aria-label="AI conversation"
+    >
+
+
+        <!-- INITIAL AI MESSAGE -->
+
+        <div class="yatra-ai-message ai-message">
+
+
+            <div
+                class="yatra-ai-message-avatar"
+                aria-hidden="true"
+            >
+
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+
+            </div>
+
+
+            <div class="yatra-ai-message-content">
+
+
+                <div class="yatra-ai-message-name">
+                    YatraNest AI
+                </div>
+
+
+                <div class="yatra-ai-bubble">
+
+                    Namaste! 👋
+
+                    I'm your YatraNest travel assistant.
+
+                    I can help you discover destinations,
+                    find tours and hotels, create itineraries,
+                    suggest travel plans, and answer questions
+                    about travelling in India.
+
+                    <br><br>
+
+                    Where would you like to go ? ✈️
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =================================================
+         TYPING INDICATOR
+    ================================================== -->
+
+    <div
+        id="yatraAITyping"
+        class="yatra-ai-typing"
+        hidden
+    >
+
+        <div
+            class="yatra-ai-message-avatar"
+            aria-hidden="true"
+        >
+
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+
+        </div>
+
+
+        <div class="yatra-ai-typing-bubble">
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         SUGGESTED QUESTIONS
+    ================================================== -->
+
+    <div
+        id="yatraAISuggestions"
+        class="yatra-ai-suggestions"
+    >
+
+        <button
+            type="button"
+            data-ai-prompt="Suggest a 5-day trip to Kashmir."
+        >
+            🏔️ Kashmir trip
+        </button>
+
+
+        <button
+            type="button"
+            data-ai-prompt="Suggest a romantic trip for two people in India."
+        >
+            ❤️ Romantic trip
+        </button>
+
+
+        <button
+            type="button"
+            data-ai-prompt="Plan a budget trip under ₹25000."
+        >
+            💰 Budget trip
+        </button>
+
+
+        <button
+            type="button"
+            data-ai-prompt="What destinations are available on YatraNest?"
+        >
+            🗺️ Destinations
+        </button>
+
+    </div>
+
+
+    <!-- =================================================
+         MESSAGE INPUT
+    ================================================== -->
+
+    <form
+        id="yatraAIForm"
+        class="yatra-ai-form"
+        autocomplete="off"
+    >
+
+        {% csrf_token %}
+
+
+        <div class="yatra-ai-input-wrapper">
+
+
+            <textarea
+                id="yatraAIInput"
+                name="message"
+                rows="1"
+                maxlength="2000"
+                placeholder="Ask me anything about travel..."
+                aria-label="Ask YatraNest AI"
+            ></textarea>
+
+
+            <button
+                type="submit"
+                id="yatraAISend"
+                class="yatra-ai-send"
+                aria-label="Send message"
+                title="Send message"
+            >
+
+                <i
+                    class="fa-solid fa-paper-plane"
+                    aria-hidden="true"
+                ></i>
+
+            </button>
+
+
+        </div>
+
+
+        <div class="yatra-ai-disclaimer">
+
+            AI-generated travel guidance.
+            Verify important booking and travel details.
+
+        </div>
+
+
+    </form>
+
+
+</section>
+
+</div>
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer>
+
+<div class="footer-top">
+
+
+    <!-- =================================================
+         FOOTER BRAND
+    ================================================== -->
+
+    <div class="footer-brand">
+
+
+        <a
+            href="{% url 'home' %}"
+            class="logo"
+            aria-label="YatraNest Home"
+        >
+
+            <span
+                class="logo-icon"
+                aria-hidden="true"
+            >
+
+                <i class="fa-solid fa-compass"></i>
+
+            </span>
+
+            Yatra<span>Nest</span>
+
+        </a>
+
+
+        <p>
+
+            Making it easy to explore India —
+            through every unforgettable journey.
+
+        </p>
+
+
+        <!-- SOCIAL LINKS -->
+
+        <div
+            class="socials"
+            aria-label="Social media"
+        >
+
+
+            <a
+                href="https://www.instagram.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                title="Instagram"
+            >
+
+                <i
+                    class="fa-brands fa-instagram"
+                    aria-hidden="true"
+                ></i>
+
+            </a>
+
+
+            <a
+                href="https://www.facebook.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                title="Facebook"
+            >
+
+                <i
+                    class="fa-brands fa-facebook-f"
+                    aria-hidden="true"
+                ></i>
+
+            </a>
+
+
+            <a
+                href="https://x.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="X"
+                title="X"
+            >
+
+                <i
+                    class="fa-brands fa-x-twitter"
+                    aria-hidden="true"
+                ></i>
+
+            </a>
+
+
+            <a
+                href="https://www.youtube.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="YouTube"
+                title="YouTube"
+            >
+
+                <i
+                    class="fa-brands fa-youtube"
+                    aria-hidden="true"
+                ></i>
+
+            </a>
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =================================================
+         FOOTER LINKS
+    ================================================== -->
+
+    <div class="footer-links">
+
+
+        <!-- =================================================
+             EXPLORE
+        ================================================== -->
+
+        <div>
+
+            <h4>
+                Explore
+            </h4>
+
+
+            <a href="{% url 'destination_list' %}">
+                Destinations
+            </a>
+
+
+            <!-- TOUR CATEGORIES -->
+
+            <a href="{% url 'category_list' %}">
+                Tour Categories
+            </a>
+
+
+            <a href="{% url 'home' %}#experiences">
+                Experiences
+            </a>
+
+
+            <a href="{% url 'tour_list' %}">
+                Packages
+            </a>
+
+
+            <a href="{% url 'guide_list' %}">
+                Travel Guides
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             TRANSPORT
+        ================================================== -->
+
+        <div>
+
+            <h4>
+                Transport
+            </h4>
+
+
+            <a href="{% url 'bus_list' %}">
+
+                <i
+                    class="fa-solid fa-bus"
+                    aria-hidden="true"
+                ></i>
+
+                Buses
+
+            </a>
+
+
+            <a href="{% url 'flight_list' %}">
+
+                <i
+                    class="fa-solid fa-plane"
+                    aria-hidden="true"
+                ></i>
+
+                Flights
+
+            </a>
+
+
+            <a href="{% url 'train_list' %}">
+
+                <i
+                    class="fa-solid fa-train"
+                    aria-hidden="true"
+                ></i>
+
+                Trains
+
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             COMPANY
+        ================================================== -->
+
+        <div>
+
+            <h4>
+                Company
+            </h4>
+
+
+            <a href="{% url 'home' %}#about">
+                About Us
+            </a>
+
+
+            <a href="{% url 'home' %}#about">
+                Contact
+            </a>
+
+
+            <a href="{% url 'home' %}#about">
+                Careers
+            </a>
+
+
+            <a href="{% url 'home' %}#about">
+                FAQ
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             SUPPORT
+        ================================================== -->
+
+        <div>
+
+            <h4>
+                Support
+            </h4>
+
+
+            <a href="{% url 'home' %}#about">
+                Help Center
+            </a>
+
+
+            <a href="{% url 'home' %}#about">
+                Privacy
+            </a>
+
+
+            <a href="{% url 'home' %}#about">
+                Terms
+            </a>
+
+
+            <a href="{% url 'home' %}#about">
+                Booking Policy
+            </a>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+<!-- =========================================================
+     FOOTER BOTTOM
+========================================================= -->
+
+<div class="footer-bottom">
+
+
+    <p>
+
+        © 2026 YatraNest Tourism Management System.
+        All rights reserved.
+
+    </p>
+
+
+    <p>
+        Made for travelers ❤️
+    </p>
+
+
+</div>
+
+
+</footer>
+
+
+<!-- =========================================================
+     MAIN WEBSITE JAVASCRIPT
+========================================================= -->
+
+<script src="{% static 'js/script.js' %}"></script>
+
+
+<!-- =========================================================
+     YATRANEST AI JAVASCRIPT
+========================================================= -->
+
+<script src="{% static 'js/ai_assistant.js' %}"></script>
+
+
+{% block extra_js %}
+{% endblock %}
+
+
+</body>
+
+</html>

@@ -1,0 +1,803 @@
+{% extends "Travel/base.html" %}
+{% load static %}
+
+{% block title %}YatraNest - Booking Confirmed{% endblock %}
+
+{% block content %}
+
+<style>
+    .success-page {
+        max-width: 820px;
+        margin: 120px auto 70px;
+        padding: 0 24px;
+        text-align: center;
+    }
+
+    .success-icon {
+        width: 88px;
+        height: 88px;
+        margin: 0 auto 25px;
+        border-radius: 50%;
+        background: #dcfce7;
+        color: #16a34a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 42px;
+        box-shadow: 0 0 0 9px rgba(220, 252, 231, 0.55);
+        animation: successPulse 1.6s ease-in-out infinite;
+    }
+
+    .success-title {
+        margin: 0 0 12px;
+        color: #0f172a;
+        font-size: 34px;
+        font-weight: 800;
+        line-height: 1.2;
+    }
+
+    .success-description {
+        max-width: 650px;
+        margin: 0 auto 40px;
+        color: #64748b;
+        font-size: 15px;
+        line-height: 1.8;
+    }
+
+    .receipt {
+        position: relative;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 34px;
+        text-align: left;
+        box-shadow: 0 12px 35px rgba(15, 23, 42, 0.07);
+        margin-bottom: 35px;
+    }
+
+    .receipt-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 25px;
+        padding-bottom: 20px;
+        margin-bottom: 25px;
+        border-bottom: 1px dashed #cbd5e1;
+    }
+
+    .receipt-header h3 {
+        margin: 0 0 8px;
+        color: #0f172a;
+        font-size: 19px;
+    }
+
+    .receipt-header p {
+        margin: 4px 0;
+        color: #64748b;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .status-confirmed {
+        color: #16a34a !important;
+        font-weight: 800 !important;
+    }
+
+    .status-pending {
+        color: #d97706 !important;
+        font-weight: 800 !important;
+    }
+
+    .status-cancelled {
+        color: #dc2626 !important;
+        font-weight: 800 !important;
+    }
+
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 25px;
+        margin-bottom: 17px;
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    .detail-row strong {
+        color: #0f172a;
+        text-align: right;
+        font-weight: 600;
+        overflow-wrap: anywhere;
+    }
+
+    .booking-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: #eff6ff;
+        color: #0369a1;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .section-divider {
+        border: 0;
+        border-top: 1px solid #e2e8f0;
+        margin: 25px 0;
+    }
+
+    .total-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        border-top: 1px solid #e2e8f0;
+        padding-top: 20px;
+        margin-top: 22px;
+        color: #0284c7;
+        font-size: 19px;
+        font-weight: 800;
+    }
+
+    .total-row span:last-child {
+        white-space: nowrap;
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 14px;
+        flex-wrap: wrap;
+    }
+
+    .action-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 44px;
+        padding: 12px 24px;
+        border-radius: 9px;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-sizing: border-box;
+    }
+
+    .button-outline {
+        background: #ffffff;
+        border: 1px solid #cbd5e1;
+        color: #475569;
+    }
+
+    .button-outline:hover {
+        background: #f8fafc;
+        border-color: #94a3b8;
+        color: #0f172a;
+        transform: translateY(-1px);
+    }
+
+    .button-primary {
+        background: #0f172a;
+        border: 1px solid #0f172a;
+        color: #ffffff;
+    }
+
+    .button-primary:hover {
+        background: #0284c7;
+        border-color: #0284c7;
+        transform: translateY(-1px);
+    }
+
+    @keyframes successPulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(220, 252, 231, 0.8);
+        }
+
+        70% {
+            box-shadow: 0 0 0 14px rgba(220, 252, 231, 0);
+        }
+
+        100% {
+            box-shadow: 0 0 0 0 rgba(220, 252, 231, 0);
+        }
+    }
+
+    @media (max-width: 600px) {
+        .success-page {
+            margin-top: 90px;
+            padding: 0 16px;
+        }
+
+        .success-title {
+            font-size: 27px;
+        }
+
+        .success-description {
+            font-size: 14px;
+        }
+
+        .receipt {
+            padding: 25px 20px;
+        }
+
+        .receipt-header {
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .receipt-header > div:last-child {
+            text-align: left !important;
+        }
+
+        .detail-row {
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .detail-row strong {
+            text-align: left;
+        }
+
+        .total-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .action-button {
+            width: 100%;
+        }
+    }
+
+    @media print {
+        body {
+            background: #ffffff !important;
+        }
+
+        .success-icon,
+        .success-title,
+        .success-description,
+        .action-buttons {
+            display: none !important;
+        }
+
+        .success-page {
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .receipt {
+            border: none;
+            box-shadow: none;
+            padding: 0;
+            margin: 0;
+        }
+    }
+</style>
+
+<main class="success-page">
+
+    <div class="success-icon">
+        <i class="fa-solid fa-circle-check"></i>
+    </div>
+
+    <h1 class="success-title">
+        Your Escape is Locked In!
+    </h1>
+
+    <p class="success-description">
+        Thank you for choosing YatraNest.
+        Your booking has been successfully created.
+        Your booking details are safely recorded in your account.
+    </p>
+
+    <section class="receipt">
+
+        <div class="receipt-header">
+
+            <div>
+                <h3>
+                    Booking Confirmation Receipt
+                </h3>
+
+                <p>
+                    Booking ID:
+                    <strong>#{{ booking.id }}</strong>
+                </p>
+
+                {% if payment and payment.transaction_id %}
+                    <p>
+                        Transaction ID:
+                        <strong>{{ payment.transaction_id }}</strong>
+                    </p>
+                {% endif %}
+            </div>
+
+            <div style="text-align: right;">
+
+                <p>
+                    Booking Status:
+
+                    {% if booking.booking_status == "CONFIRMED" %}
+                        <strong class="status-confirmed">
+                            CONFIRMED
+                        </strong>
+
+                    {% elif booking.booking_status == "CANCELLED" %}
+                        <strong class="status-cancelled">
+                            CANCELLED
+                        </strong>
+
+                    {% else %}
+                        <strong class="status-pending">
+                            {{ booking.get_booking_status_display|upper }}
+                        </strong>
+                    {% endif %}
+                </p>
+
+                <p>
+                    Booked On:
+                    {{ booking.booking_date|date:"d M Y, h:i A" }}
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="detail-row">
+            <span>
+                Account Holder
+            </span>
+
+            <strong>
+                {% if booking.user.get_full_name %}
+                    {{ booking.user.get_full_name }}
+                {% else %}
+                    {{ booking.user.username }}
+                {% endif %}
+            </strong>
+        </div>
+
+        <div class="detail-row">
+            <span>
+                Booking Type
+            </span>
+
+            <strong>
+
+                {% if booking.tour %}
+                    <span class="booking-badge">
+                        <i class="fa-solid fa-map-location-dot"></i>
+                        Tour
+                    </span>
+
+                {% elif booking.hotel %}
+                    <span class="booking-badge">
+                        <i class="fa-solid fa-hotel"></i>
+                        Hotel
+                    </span>
+
+                {% elif booking.bus %}
+                    <span class="booking-badge">
+                        <i class="fa-solid fa-bus"></i>
+                        Bus
+                    </span>
+
+                {% elif booking.flight %}
+                    <span class="booking-badge">
+                        <i class="fa-solid fa-plane"></i>
+                        Flight
+                    </span>
+
+                {% elif booking.train %}
+                    <span class="booking-badge">
+                        <i class="fa-solid fa-train"></i>
+                        Train
+                    </span>
+
+                {% else %}
+                    <span class="booking-badge">
+                        <i class="fa-solid fa-ticket"></i>
+                        Booking
+                    </span>
+                {% endif %}
+
+            </strong>
+        </div>
+
+        <hr class="section-divider">
+
+        {% if booking.tour %}
+
+            <div class="detail-row">
+                <span>
+                    Tour Package
+                </span>
+
+                <strong>
+                    {{ booking.tour }}
+                </strong>
+            </div>
+
+            {% if booking.tour.destination %}
+                <div class="detail-row">
+                    <span>
+                        Destination
+                    </span>
+
+                    <strong>
+                        {{ booking.tour.destination }}
+                    </strong>
+                </div>
+            {% endif %}
+
+        {% elif booking.hotel %}
+
+            <div class="detail-row">
+                <span>
+                    Hotel
+                </span>
+
+                <strong>
+                    {{ booking.hotel.hotel_name }}
+                </strong>
+            </div>
+
+            {% if booking.hotel.destination %}
+                <div class="detail-row">
+                    <span>
+                        Destination
+                    </span>
+
+                    <strong>
+                        {{ booking.hotel.destination }}
+                    </strong>
+                </div>
+            {% endif %}
+
+        {% elif booking.bus %}
+
+            <div class="detail-row">
+                <span>
+                    Bus Operator
+                </span>
+
+                <strong>
+                    {{ booking.bus.bus_operator }}
+                </strong>
+            </div>
+
+            <div class="detail-row">
+                <span>
+                    Bus Number
+                </span>
+
+                <strong>
+                    {{ booking.bus.bus_number }}
+                </strong>
+            </div>
+
+            <div class="detail-row">
+                <span>
+                    Route
+                </span>
+
+                <strong>
+                    {{ booking.bus.source }}
+                    →
+                    {{ booking.bus.destination }}
+                </strong>
+            </div>
+
+            <div class="detail-row">
+                <span>
+                    Departure
+                </span>
+
+                <strong>
+                    {{ booking.bus.departure_time|date:"d M Y, h:i A" }}
+                </strong>
+            </div>
+
+            <div class="detail-row">
+                <span>
+                    Arrival
+                </span>
+
+                <strong>
+                    {{ booking.bus.arrival_time|date:"d M Y, h:i A" }}
+                </strong>
+            </div>
+
+            {% if booking.selected_seats %}
+                <div class="detail-row">
+                    <span>
+                        Selected Seats
+                    </span>
+
+                    <strong>
+                        {{ booking.selected_seats }}
+                    </strong>
+                </div>
+            {% endif %}
+
+        {% elif booking.flight %}
+
+            <div class="detail-row">
+                <span>
+                    Airline
+                </span>
+
+                <strong>
+                    {{ booking.flight.airline }}
+                </strong>
+            </div>
+
+            <div class="detail-row">
+                <span>
+                    Flight Number
+                </span>
+
+                <strong>
+                    {{ booking.flight.flight_number }}
+                </strong>
+            </div>
+
+            <div class="detail-row">
+                <span>
+                    Route
+                </span>
+
+                <strong>
+                    {{ booking.flight.source }}
+                    →
+                    {{ booking.flight.destination }}
+                </strong>
+            </div>
+
+            <div class="detail-row">
+                <span>
+                    Departure
+                </span>
+
+                <strong>
+                    {{ booking.flight.departure_time|date:"d M Y, h:i A" }}
+                </strong>
+            </div>
+
+            {% if booking.selected_seats %}
+                <div class="detail-row">
+                    <span>
+                        Selected Seats
+                    </span>
+
+                    <strong>
+                        {{ booking.selected_seats }}
+                    </strong>
+                </div>
+            {% endif %}
+
+        {% elif booking.train %}
+
+            <div class="detail-row">
+                <span>
+                    Train
+                </span>
+
+                <strong>
+                    {{ booking.train }}
+                </strong>
+            </div>
+
+            <div class="detail-row">
+                <span>
+                    Route
+                </span>
+
+                <strong>
+                    {{ booking.train.source }}
+                    →
+                    {{ booking.train.destination }}
+                </strong>
+            </div>
+
+            <div class="detail-row">
+                <span>
+                    Departure
+                </span>
+
+                <strong>
+                    {{ booking.train.departure_time|date:"d M Y, h:i A" }}
+                </strong>
+            </div>
+
+            {% if booking.selected_coach %}
+                <div class="detail-row">
+                    <span>
+                        Coach
+                    </span>
+
+                    <strong>
+                        {{ booking.selected_coach }}
+                    </strong>
+                </div>
+            {% endif %}
+
+            {% if booking.selected_seats %}
+                <div class="detail-row">
+                    <span>
+                        Selected Seats
+                    </span>
+
+                    <strong>
+                        {{ booking.selected_seats }}
+                    </strong>
+                </div>
+            {% endif %}
+
+        {% endif %}
+
+        {% if booking.travel_date %}
+
+            <div class="detail-row">
+                <span>
+                    Travel Date
+                </span>
+
+                <strong>
+                    {{ booking.travel_date|date:"d M Y" }}
+                </strong>
+            </div>
+
+        {% endif %}
+
+        <div class="detail-row">
+            <span>
+                Number of People
+            </span>
+
+            <strong>
+                {{ booking.number_of_people }}
+                Person{{ booking.number_of_people|pluralize }}
+            </strong>
+        </div>
+
+        {% if payment %}
+
+            <div class="detail-row">
+                <span>
+                    Payment Method
+                </span>
+
+                <strong>
+                    {{ payment.get_payment_method_display }}
+                </strong>
+            </div>
+
+            {% if payment.payment_date %}
+
+                <div class="detail-row">
+                    <span>
+                        Payment Date
+                    </span>
+
+                    <strong>
+                        {{ payment.payment_date|date:"d M Y, h:i A" }}
+                    </strong>
+                </div>
+
+            {% endif %}
+
+            <div class="detail-row">
+                <span>
+                    Payment Status
+                </span>
+
+                <strong>
+
+                    {% if payment.payment_status == "SUCCESS" %}
+
+                        <span class="status-confirmed">
+                            PAID
+                        </span>
+
+                    {% elif payment.payment_status == "FAILED" %}
+
+                        <span class="status-cancelled">
+                            FAILED
+                        </span>
+
+                    {% elif payment.payment_status == "REFUNDED" %}
+
+                        <span style="color:#7c3aed;">
+                            REFUNDED
+                        </span>
+
+                    {% else %}
+
+                        <span class="status-pending">
+                            {{ payment.get_payment_status_display|upper }}
+                        </span>
+
+                    {% endif %}
+
+                </strong>
+            </div>
+
+        {% endif %}
+
+        {% if booking.special_request %}
+
+            <div class="detail-row">
+                <span>
+                    Special Request
+                </span>
+
+                <strong>
+                    {{ booking.special_request }}
+                </strong>
+            </div>
+
+        {% endif %}
+
+        <div class="total-row">
+
+            <span>
+                Total Amount Charged
+            </span>
+
+            <span>
+                ₹{{ booking.total_amount|floatformat:2 }}
+            </span>
+
+        </div>
+
+    </section>
+
+    <div class="action-buttons">
+
+        <button
+            type="button"
+            class="action-button button-outline"
+            onclick="window.print()"
+        >
+            <i class="fa-solid fa-print"></i>
+            Print Receipt
+        </button>
+
+        <a
+            href="{% url 'booking_detail' pk=booking.id %}"
+            class="action-button button-outline"
+        >
+            <i class="fa-solid fa-eye"></i>
+            View Booking
+        </a>
+
+        <a
+            href="{% url 'booking_list' %}"
+            class="action-button button-outline"
+        >
+            <i class="fa-solid fa-list-check"></i>
+            My Bookings
+        </a>
+
+        <a
+            href="{% url 'home' %}"
+            class="action-button button-primary"
+        >
+            <i class="fa-solid fa-house"></i>
+            Return Home
+        </a>
+
+    </div>
+
+</main>
+
+{% endblock %}

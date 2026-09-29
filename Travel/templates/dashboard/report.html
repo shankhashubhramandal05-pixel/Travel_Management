@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yatranest Operations - Income & Sales Statements</title>
+    <!-- Relative navigation step tracking path back onto your single root custom styling sheet -->
+    <link rel="stylesheet" href="../style.css">
+    <!-- Font Awesome for clean administrative data visual anchors -->
+    <link rel="stylesheet" href="https://cloudflare.com">
+    
+    <style>
+        /* Standalone Core Administrative Dashboard Layout Structure */
+        .admin-layout-wrapper {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            min-height: 100vh;
+            background-color: #f1f5f9;
+        }
+
+        /* Fixed Side Dashboard Control Navigation Deck */
+        .admin-sidebar {
+            background-color: #0f172a;
+            color: #ffffff;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .admin-brand {
+            font-size: 22px;
+            font-weight: 800;
+            color: #0284c7;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-menu-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #94a3b8;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-link:hover, .sidebar-link.active {
+            background-color: #1e293b;
+            color: #ffffff;
+        }
+
+        .sidebar-link.active {
+            border-left: 4px solid #0284c7;
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* Main Workspace Reporting Panel Viewport */
+        .admin-viewport {
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .viewport-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 36px;
+        }
+
+        .viewport-header h1 {
+            font-size: 26px;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        /* Analytical Accounting Overview Cards Matrix */
+        .financial-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .revenue-metric-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.01);
+        }
+
+        .revenue-metric-card span {
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .revenue-metric-card h2 {
+            font-size: 26px;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .growth-indicator {
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .text-up { color: #16a34a; }
+
+        /* Report Segment Layout Matrix Cards */
+        .reports-data-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+
+        .admin-data-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.02);
+        }
+
+        .admin-data-card h3 {
+            font-size: 18px;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .admin-data-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .admin-data-table th {
+            font-size: 11px;
+            font-weight: 700;
+            color: #475569;
+            text-transform: uppercase;
+            padding: 12px 14px;
+            background-color: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .admin-data-table td {
+            padding: 14px;
+            font-size: 14px;
+            color: #334155;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .text-right { text-align: right important; }
+
+        /* Progress Performance Meter Bars */
+        .stream-performance-box {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 10px;
+        }
+
+        .stream-progress-row {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .stream-meta-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .progress-track-bg {
+            width: 100%;
+            height: 8px;
+            background-color: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill-bar {
+            height: 100%;
+            background-color: #0284c7;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 1100px) {
+            .reports-data-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 900px) {
+            .admin-layout-wrapper { grid-template-columns: 1fr; }
+            .admin-sidebar { display: none; }
+            .admin-viewport { padding: 24px; }
+        }
+
+        @media print {
+            .admin-sidebar, .viewport-header button { display: none important; }
+            .admin-layout-wrapper { grid-template-columns: 1fr; }
+            .admin-viewport { padding: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= UNIFIED EXECUTIVE OPERATIONAL LAYER ================= -->
+    <main class="admin-layout-wrapper">
+        
+        <!-- Left Side Control Panel Sidebar Drawer -->
+        <aside class="admin-sidebar">
+            <div class="admin-brand">
+                <i class="fa-solid fa-gauge-high"></i> Yatranest Ops
+            </div>
+            <nav>
+                <ul class="sidebar-menu-list">
+                    <li><a href="dashboard.html" class="sidebar-link"><i class="fa-solid fa-chart-pie"></i> Overview Hub</a></li>
+                    <li><a href="bookings.html" class="sidebar-link"><i class="fa-solid fa-receipt"></i> User Bookings</a></li>
+                    <li><a href="customers.html" class="sidebar-link"><i class="fa-solid fa-users"></i> Registered Guests</a></li>
+                    <li><a href="reports.html" class="sidebar-link active"><i class="fa-solid fa-wallet"></i> Revenue Statements</a></li>
+                    <li style="margin-top: 40px;"><a href="../index.html" class="sidebar-link" style="color: #f87171;"><i class="fa-solid fa-house"></i> Exit Dashboard</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Right Side Reporting Area Viewport -->
+        <section class="admin-viewport">
+            
+            <div class="viewport-header">
+                <div>
+                    <h1>Business Revenue & Sales Audits</h1>
+                    <p style="color: #64748b; font-size: 14px; margin-top: 4px;">Monitor structural bottom-lines, gross package income sheets, and volume allocations.</p>
+                </div>
+                <button class="sidebar-link" style="background: white; border: 1px solid #cbd5e1; color: #334155;" onclick="window.print()">
+                    <i class="fa-solid fa-print"></i> Print Audit Record
+                </button>
+            </div>
+
+            <!-- ================= EXECUTIVE FINANCIAL STATEMENTS SUMMARY ================= -->
+            <div class="financial-summary-grid">
+                <div class="revenue-metric-card">
+                    <span>Gross Revenue (YTD)</span>
+                    <h2>₹24,89,600</h2>
+                    <div class="growth-indicator text-up"><i class="fa-solid fa-arrow-trend-up"></i> +14.2% vs Last Quarter</div>
+                </div>
+                <div class="revenue-metric-card">
+                    <span>Operational Margins</span>
+                    <h2>₹18,42,100</h2>
+                    <div class="growth-indicator text-up"><i class="fa-solid fa-chart-line"></i> 74% Net Operating Margin</div>
+                </div>
+                <div class="revenue-metric-card">
+                    <span>Average Transaction Value</span>
+                    <h2>₹7,928</h2>
+                    <div class="growth-indicator text-up" style="color:#0284c7;"><i class="fa-solid fa-tags"></i> Per Ticket Valuation</div>
+                </div>
+            </div>
+
+            <!-- ================= DETAILED LEDGER GRID SPLIT ================= -->
+            <div class="reports-data-grid">
+                
+                <!-- Left Block: Sales Ledger by Month -->
+                <div class="admin-data-card">
+                    <h3><i class="fa-solid fa-list-ol"></i> Monthly Accounting Performance</h3>
+                    <table class="admin-data-table">
+                        <thead>
+                            <tr>
+                                <th>Fiscal Month</th>
+                                <th class="text-right">Completed Bookings</th>

@@ -1,0 +1,944 @@
+{% extends "Travel/base.html" %}
+
+{% block title %}Flight Details - {{ flight.flight_number }}{% endblock %}
+
+{% block content %}
+
+<main class="booking-workspace-wrapper"
+      style="max-width: 1200px; margin: 130px auto 80px; padding: 0 20px;">
+
+    <!-- =========================================================
+         BACK NAVIGATION
+    ========================================================== -->
+
+    <div style="margin-bottom: 24px;">
+
+        <a href="{% url 'flight_list' %}"
+           style="
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                text-decoration: none;
+                color: #475569;
+                border: 1px solid #cbd5e1;
+                padding: 9px 16px;
+                border-radius: 7px;
+                font-size: 13px;
+                font-weight: 600;
+                background: #ffffff;
+           ">
+
+            <i class="fa-solid fa-arrow-left"></i>
+            Return to Flight Search
+
+        </a>
+
+    </div>
+
+
+    <!-- =========================================================
+         MAIN GRID
+    ========================================================== -->
+
+    <div class="flight-details-grid"
+         style="
+            display: grid;
+            grid-template-columns: minmax(0, 1.8fr) minmax(300px, 1fr);
+            gap: 32px;
+            align-items: start;
+         ">
+
+
+        <!-- =====================================================
+             LEFT: FLIGHT INFORMATION
+        ====================================================== -->
+
+        <section style="
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: var(--shadow, 0 4px 15px rgba(0,0,0,0.06));
+        ">
+
+
+            <!-- HEADER -->
+
+            <div style="
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                gap: 20px;
+                border-bottom: 2px solid #f1f5f9;
+                padding-bottom: 20px;
+                margin-bottom: 24px;
+            ">
+
+                <div>
+
+                    <span style="
+                        display: block;
+                        font-size: 12px;
+                        font-weight: 700;
+                        color: #0284c7;
+                        text-transform: uppercase;
+                        letter-spacing: 0.5px;
+                        margin-bottom: 5px;
+                    ">
+                        {{ flight.airline }}
+                    </span>
+
+                    <h1 style="
+                        font-size: 26px;
+                        font-weight: 800;
+                        color: #0f172a;
+                        margin: 0;
+                    ">
+                        {{ flight.flight_number }}
+                    </h1>
+
+                    <p style="
+                        margin: 7px 0 0;
+                        color: #64748b;
+                        font-size: 14px;
+                    ">
+                        Flight Route Details
+                    </p>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                {% if flight.is_active %}
+
+                    <span style="
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 6px;
+                        background: #dcfce7;
+                        color: #15803d;
+                        padding: 6px 12px;
+                        border-radius: 20px;
+                        font-size: 11px;
+                        font-weight: 700;
+                        text-transform: uppercase;
+                        white-space: nowrap;
+                    ">
+
+                        <i class="fa-solid fa-circle"
+                           style="font-size: 7px;"></i>
+
+                        Active
+
+                    </span>
+
+                {% else %}
+
+                    <span style="
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 6px;
+                        background: #fee2e2;
+                        color: #b91c1c;
+                        padding: 6px 12px;
+                        border-radius: 20px;
+                        font-size: 11px;
+                        font-weight: 700;
+                        text-transform: uppercase;
+                        white-space: nowrap;
+                    ">
+
+                        <i class="fa-solid fa-circle"
+                           style="font-size: 7px;"></i>
+
+                        Inactive
+
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- =================================================
+                 ROUTE
+            ================================================== -->
+
+            <div style="
+                background: #f8fafc;
+                border: 1px solid #f1f5f9;
+                border-radius: 9px;
+                padding: 25px;
+                margin-bottom: 30px;
+            ">
+
+                <div class="flight-route"
+                     style="
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        gap: 20px;
+                     ">
+
+
+                    <!-- DEPARTURE -->
+
+                    <div style="text-align: left;">
+
+                        <span style="
+                            display: block;
+                            font-size: 11px;
+                            color: #94a3b8;
+                            font-weight: 700;
+                            text-transform: uppercase;
+                            margin-bottom: 5px;
+                        ">
+                            Departure
+                        </span>
+
+                        <h2 style="
+                            font-size: 21px;
+                            font-weight: 800;
+                            color: #0f172a;
+                            margin: 0;
+                        ">
+                            {{ flight.source }}
+                        </h2>
+
+                        <p style="
+                            margin: 6px 0 0;
+                            font-size: 14px;
+                            font-weight: 700;
+                            color: #0284c7;
+                        ">
+
+                            <i class="fa-regular fa-clock"></i>
+
+                            {{ flight.departure_time|date:"d M Y, h:i A" }}
+
+                        </p>
+
+                    </div>
+
+
+                    <!-- FLIGHT LINE -->
+
+                    <div class="flight-line"
+                         style="
+                            flex: 1;
+                            min-width: 80px;
+                            text-align: center;
+                         ">
+
+                        <div style="
+                            font-size: 11px;
+                            color: #94a3b8;
+                            font-weight: 700;
+                            text-transform: uppercase;
+                            margin-bottom: 8px;
+                        ">
+                            Direct Flight
+                        </div>
+
+                        <div style="
+                            position: relative;
+                            height: 2px;
+                            background: #cbd5e1;
+                        ">
+
+                            <i class="fa-solid fa-plane"
+                               style="
+                                    position: absolute;
+                                    left: 50%;
+                                    top: 50%;
+                                    transform: translate(-50%, -50%);
+                                    background: #f8fafc;
+                                    padding: 0 8px;
+                                    color: #0284c7;
+                                    font-size: 15px;
+                               ">
+                            </i>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ARRIVAL -->
+
+                    <div style="text-align: right;">
+
+                        <span style="
+                            display: block;
+                            font-size: 11px;
+                            color: #94a3b8;
+                            font-weight: 700;
+                            text-transform: uppercase;
+                            margin-bottom: 5px;
+                        ">
+                            Arrival
+                        </span>
+
+                        <h2 style="
+                            font-size: 21px;
+                            font-weight: 800;
+                            color: #0f172a;
+                            margin: 0;
+                        ">
+                            {{ flight.destination }}
+                        </h2>
+
+                        <p style="
+                            margin: 6px 0 0;
+                            font-size: 14px;
+                            font-weight: 700;
+                            color: #0284c7;
+                        ">
+
+                            <i class="fa-regular fa-clock"></i>
+
+                            {{ flight.arrival_time|date:"d M Y, h:i A" }}
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 FLIGHT SPECIFICATIONS
+            ================================================== -->
+
+            <div class="flight-specifications"
+                 style="
+                    display: grid;
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                    gap: 22px;
+                 ">
+
+
+                <!-- AIRLINE -->
+
+                <div style="
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 13px;
+                ">
+
+                    <div style="
+                        width: 42px;
+                        height: 42px;
+                        flex-shrink: 0;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 8px;
+                        background: rgba(2,132,199,0.08);
+                        color: #0284c7;
+                        font-size: 18px;
+                    ">
+
+                        <i class="fa-solid fa-plane-departure"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h3 style="
+                            font-size: 12px;
+                            font-weight: 700;
+                            text-transform: uppercase;
+                            color: #64748b;
+                            margin: 0 0 4px;
+                        ">
+                            Airline
+                        </h3>
+
+                        <p style="
+                            font-size: 15px;
+                            font-weight: 600;
+                            color: #1e293b;
+                            margin: 0;
+                        ">
+                            {{ flight.airline }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FLIGHT NUMBER -->
+
+                <div style="
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 13px;
+                ">
+
+                    <div style="
+                        width: 42px;
+                        height: 42px;
+                        flex-shrink: 0;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 8px;
+                        background: rgba(16,185,129,0.08);
+                        color: #10b981;
+                        font-size: 18px;
+                    ">
+
+                        <i class="fa-solid fa-ticket"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h3 style="
+                            font-size: 12px;
+                            font-weight: 700;
+                            text-transform: uppercase;
+                            color: #64748b;
+                            margin: 0 0 4px;
+                        ">
+                            Flight Number
+                        </h3>
+
+                        <p style="
+                            font-size: 15px;
+                            font-weight: 600;
+                            color: #1e293b;
+                            margin: 0;
+                        ">
+                            {{ flight.flight_number }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- TOTAL SEATS -->
+
+                <div style="
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 13px;
+                ">
+
+                    <div style="
+                        width: 42px;
+                        height: 42px;
+                        flex-shrink: 0;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 8px;
+                        background: rgba(245,158,11,0.08);
+                        color: #f59e0b;
+                        font-size: 18px;
+                    ">
+
+                        <i class="fa-solid fa-chair"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h3 style="
+                            font-size: 12px;
+                            font-weight: 700;
+                            text-transform: uppercase;
+                            color: #64748b;
+                            margin: 0 0 4px;
+                        ">
+                            Total Seats
+                        </h3>
+
+                        <p style="
+                            font-size: 15px;
+                            font-weight: 600;
+                            color: #1e293b;
+                            margin: 0;
+                        ">
+                            {{ flight.total_seats }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- AVAILABLE SEATS -->
+
+                <div style="
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 13px;
+                ">
+
+                    <div style="
+                        width: 42px;
+                        height: 42px;
+                        flex-shrink: 0;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 8px;
+                        background: rgba(139,92,246,0.08);
+                        color: #8b5cf6;
+                        font-size: 18px;
+                    ">
+
+                        <i class="fa-solid fa-users"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h3 style="
+                            font-size: 12px;
+                            font-weight: 700;
+                            text-transform: uppercase;
+                            color: #64748b;
+                            margin: 0 0 4px;
+                        ">
+                            Available Seats
+                        </h3>
+
+                        <p style="
+                            font-size: 15px;
+                            font-weight: 600;
+                            color: #1e293b;
+                            margin: 0;
+                        ">
+                            {{ flight.available_seats }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DEPARTURE -->
+
+                <div style="
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 13px;
+                ">
+
+                    <div style="
+                        width: 42px;
+                        height: 42px;
+                        flex-shrink: 0;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 8px;
+                        background: rgba(14,165,233,0.08);
+                        color: #0ea5e9;
+                        font-size: 18px;
+                    ">
+
+                        <i class="fa-solid fa-clock"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h3 style="
+                            font-size: 12px;
+                            font-weight: 700;
+                            text-transform: uppercase;
+                            color: #64748b;
+                            margin: 0 0 4px;
+                        ">
+                            Departure
+                        </h3>
+
+                        <p style="
+                            font-size: 15px;
+                            font-weight: 600;
+                            color: #1e293b;
+                            margin: 0;
+                        ">
+                            {{ flight.departure_time|date:"d M Y, h:i A" }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ARRIVAL -->
+
+                <div style="
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 13px;
+                ">
+
+                    <div style="
+                        width: 42px;
+                        height: 42px;
+                        flex-shrink: 0;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 8px;
+                        background: rgba(236,72,153,0.08);
+                        color: #ec4899;
+                        font-size: 18px;
+                    ">
+
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h3 style="
+                            font-size: 12px;
+                            font-weight: 700;
+                            text-transform: uppercase;
+                            color: #64748b;
+                            margin: 0 0 4px;
+                        ">
+                            Arrival
+                        </h3>
+
+                        <p style="
+                            font-size: 15px;
+                            font-weight: 600;
+                            color: #1e293b;
+                            margin: 0;
+                        ">
+                            {{ flight.arrival_time|date:"d M Y, h:i A" }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             RIGHT: PRICE CARD
+        ====================================================== -->
+
+        <aside style="
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--shadow, 0 4px 15px rgba(0,0,0,0.06));
+            height: fit-content;
+            position: sticky;
+            top: 110px;
+        ">
+
+            <h2 style="
+                font-size: 18px;
+                font-weight: 800;
+                color: #0f172a;
+                margin: 0 0 20px;
+            ">
+
+                <i class="fa-solid fa-receipt"></i>
+
+                Booking Summary
+
+            </h2>
+
+
+            <!-- ROUTE SUMMARY -->
+
+            <div style="
+                background: #f8fafc;
+                border-radius: 8px;
+                padding: 15px;
+                margin-bottom: 20px;
+            ">
+
+                <div style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    gap: 10px;
+                    font-size: 14px;
+                    font-weight: 700;
+                    color: #1e293b;
+                ">
+
+                    <span>
+                        {{ flight.source }}
+                    </span>
+
+                    <i class="fa-solid fa-arrow-right"
+                       style="color:#0284c7;">
+                    </i>
+
+                    <span>
+                        {{ flight.destination }}
+                    </span>
+
+                </div>
+
+                <p style="
+                    margin: 8px 0 0;
+                    color: #64748b;
+                    font-size: 12px;
+                ">
+                    {{ flight.airline }} · {{ flight.flight_number }}
+                </p>
+
+            </div>
+
+
+            <!-- TICKET PRICE -->
+
+            <div style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 14px;
+                color: #475569;
+                margin-bottom: 13px;
+            ">
+
+                <span>
+                    Ticket Price
+                </span>
+
+                <strong style="color:#1e293b;">
+                    ₹{{ flight.price|floatformat:2 }}
+                </strong>
+
+            </div>
+
+
+            <!-- PROCESSING FEE -->
+
+            <div style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 14px;
+                color: #475569;
+                margin-bottom: 15px;
+            ">
+
+                <span>
+                    Processing Fee
+                </span>
+
+                <strong style="color:#1e293b;">
+                    ₹750.00
+                </strong>
+
+            </div>
+
+
+            <!-- TOTAL -->
+
+            <div style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-top: 1px solid #e2e8f0;
+                padding-top: 16px;
+                margin-top: 8px;
+                font-size: 18px;
+                font-weight: 800;
+                color: #0284c7;
+            ">
+
+                <span>
+                    Total
+                </span>
+
+                <span>
+                    ₹{{ flight.price|add:"750"|floatformat:2 }}
+                </span>
+
+            </div>
+
+
+            <!-- AVAILABILITY -->
+
+            {% if flight.available_seats > 0 %}
+
+                <div style="
+                    margin-top: 20px;
+                    padding: 12px;
+                    border-radius: 7px;
+                    background: #f0fdf4;
+                    color: #15803d;
+                    font-size: 13px;
+                    font-weight: 600;
+                ">
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                    {{ flight.available_seats }} seats currently available
+
+                </div>
+
+            {% else %}
+
+                <div style="
+                    margin-top: 20px;
+                    padding: 12px;
+                    border-radius: 7px;
+                    background: #fef2f2;
+                    color: #b91c1c;
+                    font-size: 13px;
+                    font-weight: 600;
+                ">
+
+                    <i class="fa-solid fa-circle-xmark"></i>
+
+                    No seats currently available
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- BOOKING BUTTON -->
+
+            {% if flight.is_active and flight.available_seats > 0 %}
+
+                <a href="{% url 'flight_booking_create' flight.id %}"
+                   style="
+                        width: 100%;
+                        margin-top: 22px;
+                        background: #0f172a;
+                        color: #ffffff;
+                        border: none;
+                        padding: 14px;
+                        border-radius: 7px;
+                        font-size: 15px;
+                        font-weight: 700;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 8px;
+                        text-decoration: none;
+                        box-sizing: border-box;
+                   ">
+
+                    Continue to Booking
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </a>
+
+            {% else %}
+
+                <button type="button"
+                        disabled
+                        style="
+                            width: 100%;
+                            margin-top: 22px;
+                            background: #94a3b8;
+                            color: #ffffff;
+                            border: none;
+                            padding: 14px;
+                            border-radius: 7px;
+                            font-size: 15px;
+                            font-weight: 700;
+                            cursor: not-allowed;
+                        ">
+
+                    Flight Unavailable
+
+                </button>
+
+            {% endif %}
+
+        </aside>
+
+    </div>
+
+</main>
+
+
+<!-- =========================================================
+     RESPONSIVE CSS
+========================================================== -->
+
+<style>
+
+@media (max-width: 850px) {
+
+    .flight-details-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .booking-workspace-wrapper aside {
+        position: static !important;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .booking-workspace-wrapper {
+        margin-top: 100px !important;
+    }
+
+    .booking-workspace-wrapper section {
+        padding: 20px !important;
+    }
+
+    .flight-route {
+        flex-direction: column !important;
+        text-align: center !important;
+    }
+
+    .flight-route > div {
+        width: 100%;
+        text-align: center !important;
+    }
+
+    .flight-line {
+        width: 80%;
+        flex: none !important;
+        margin: 10px auto;
+    }
+
+    .flight-specifications {
+        grid-template-columns: 1fr !important;
+    }
+
+}
+
+
+@media (max-width: 400px) {
+
+    .booking-workspace-wrapper {
+        padding: 0 12px !important;
+    }
+
+    .booking-workspace-wrapper section,
+    .booking-workspace-wrapper aside {
+        padding: 16px !important;
+    }
+
+}
+
+</style>
+
+{% endblock %}

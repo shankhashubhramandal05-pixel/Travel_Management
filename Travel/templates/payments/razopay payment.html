@@ -1,0 +1,413 @@
+{% extends "Travel/base.html" %}
+
+{% block title %}
+Payment - Booking #{{ booking.id }}
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .payment-page {
+        min-height: 75vh;
+        padding: 130px 20px 80px;
+        background: #f5f7fb;
+    }
+
+    .payment-container {
+        max-width: 850px;
+        margin: 0 auto;
+    }
+
+    .payment-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 18px;
+        padding: 40px;
+        box-shadow: 0 10px 35px rgba(15, 23, 42, 0.08);
+    }
+
+    .payment-header {
+        text-align: center;
+        margin-bottom: 35px;
+    }
+
+    .payment-header h1 {
+        margin: 0 0 10px;
+        font-family: "Playfair Display", serif;
+        font-size: 38px;
+        color: #0f172a;
+    }
+
+    .payment-header p {
+        margin: 0;
+        color: #64748b;
+        font-size: 15px;
+    }
+
+    .booking-summary {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 25px;
+        margin-bottom: 30px;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 10px 0;
+        color: #475569;
+        font-size: 15px;
+    }
+
+    .summary-row strong {
+        color: #0f172a;
+    }
+
+    .summary-total {
+        border-top: 1px solid #cbd5e1;
+        margin-top: 12px;
+        padding-top: 18px;
+        font-size: 20px;
+        font-weight: 800;
+        color: #0284c7;
+    }
+
+    .secure-payment {
+        text-align: center;
+        margin: 25px 0;
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    .secure-payment i {
+        margin-right: 6px;
+    }
+
+    .razorpay-button {
+        width: 100%;
+        border: none;
+        border-radius: 10px;
+        padding: 16px 25px;
+        background: #0f172a;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.2s ease;
+    }
+
+    .razorpay-button:hover {
+        background: #0284c7;
+    }
+
+    .razorpay-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .payment-message {
+        min-height: 24px;
+        margin-top: 18px;
+        text-align: center;
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    .payment-note {
+        margin-top: 25px;
+        padding: 15px;
+        border-radius: 10px;
+        background: #eff6ff;
+        color: #475569;
+        font-size: 13px;
+        line-height: 1.6;
+        text-align: center;
+    }
+
+    @media (max-width: 600px) {
+        .payment-page {
+            padding-top: 100px;
+        }
+
+        .payment-card {
+            padding: 25px 18px;
+        }
+
+        .payment-header h1 {
+            font-size: 30px;
+        }
+
+        .summary-row {
+            font-size: 14px;
+        }
+    }
+</style>
+
+<main class="payment-page">
+
+```
+<div class="payment-container">
+
+    <div class="payment-card">
+
+        <div class="payment-header">
+
+            <h1>Complete Your Payment</h1>
+
+            <p>
+                Secure payment for Booking #{{ booking.id }}
+            </p>
+
+        </div>
+
+
+        <div class="booking-summary">
+
+            <div class="summary-row">
+                <span>Booking ID</span>
+                <strong>#{{ booking.id }}</strong>
+            </div>
+
+            <div class="summary-row">
+                <span>Booking Status</span>
+                <strong>{{ booking.get_booking_status_display }}</strong>
+            </div>
+
+            {% if booking.travel_date %}
+            <div class="summary-row">
+                <span>Travel Date</span>
+                <strong>{{ booking.travel_date }}</strong>
+            </div>
+            {% endif %}
+
+            <div class="summary-row">
+                <span>Number of People</span>
+                <strong>{{ booking.number_of_people }}</strong>
+            </div>
+
+            <div class="summary-row summary-total">
+                <span>Total Amount</span>
+                <strong>₹{{ booking.total_amount }}</strong>
+            </div>
+
+        </div>
+
+
+        <div class="secure-payment">
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+            You will be redirected to Razorpay's secure checkout.
+
+        </div>
+
+
+        <button
+            type="button"
+            id="rzp-button"
+            class="razorpay-button"
+        >
+            Pay ₹{{ booking.total_amount }} Securely
+        </button>
+
+
+        <div
+            id="payment-message"
+            class="payment-message"
+        ></div>
+
+
+        <div class="payment-note">
+
+            Your card, UPI, net banking and other supported
+            payment details are entered securely inside Razorpay Checkout.
+            This website does not directly collect your card number,
+            CVV or UPI PIN.
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</main>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+
+(function () {
+
+    const button = document.getElementById("rzp-button");
+
+    const message = document.getElementById("payment-message");
+
+
+    const options = {
+
+        key: "{{ razorpay_key_id }}",
+
+        amount: "{{ amount_paise }}",
+
+        currency: "{{ currency }}",
+
+        name: "Travel Management",
+
+        description: "Travel Booking #{{ booking.id }}",
+
+        order_id: "{{ razorpay_order_id }}",
+
+
+        handler: function (response) {
+
+            button.disabled = true;
+
+            button.textContent = "Verifying Payment...";
+
+            message.textContent =
+                "Payment received. Verifying with the server...";
+
+
+            fetch(
+                "{% url 'payment_verify' booking.id %}",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": "{{ csrf_token }}"
+                    },
+
+                    body: JSON.stringify({
+
+                        razorpay_payment_id:
+                            response.razorpay_payment_id,
+
+                        razorpay_order_id:
+                            response.razorpay_order_id,
+
+                        razorpay_signature:
+                            response.razorpay_signature
+
+                    })
+                }
+            )
+
+            .then(function (response) {
+
+                return response.json();
+
+            })
+
+            .then(function (data) {
+
+                if (data.success) {
+
+                    message.textContent =
+                        "Payment verified successfully.";
+
+                    window.location.href =
+                        data.redirect_url;
+
+                    return;
+                }
+
+
+                button.disabled = false;
+
+                button.textContent =
+                    "Pay ₹{{ booking.total_amount }} Securely";
+
+                message.textContent =
+                    data.message ||
+                    "Payment verification failed.";
+
+            })
+
+            .catch(function (error) {
+
+                console.error(
+                    "Payment verification error:",
+                    error
+                );
+
+                button.disabled = false;
+
+                button.textContent =
+                    "Pay ₹{{ booking.total_amount }} Securely";
+
+                message.textContent =
+                    "Unable to verify the payment. Please try again.";
+
+            });
+
+        },
+
+
+        modal: {
+
+            ondismiss: function () {
+
+                button.disabled = false;
+
+                button.textContent =
+                    "Pay ₹{{ booking.total_amount }} Securely";
+
+                message.textContent =
+                    "Payment window was closed.";
+
+            }
+
+        },
+
+
+        theme: {
+
+            color: "#0284c7"
+
+        }
+
+    };
+
+
+    const razorpay =
+        new Razorpay(options);
+
+
+    razorpay.on(
+        "payment.failed",
+        function (response) {
+
+            console.error(
+                "Razorpay payment failed:",
+                response.error
+            );
+
+
+            message.textContent =
+                response.error.description ||
+                "Payment failed. Please try again.";
+
+        }
+    );
+
+
+    button.addEventListener(
+        "click",
+        function () {
+
+            message.textContent = "";
+
+            razorpay.open();
+
+        }
+    );
+
+})();
+
+</script>
+
+{% endblock %}

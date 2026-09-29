@@ -1,0 +1,1094 @@
+{% extends "Travel/base.html" %}
+
+{% block title %}
+    YatraNest | Tour Booking
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+/* =====================================================
+   TOUR BOOKING PAGE
+===================================================== */
+
+.booking-workspace-wrapper {
+    max-width: 1000px;
+
+    margin: 120px auto 60px;
+
+    padding: 0 20px;
+}
+
+
+.booking-grid-split {
+    display: grid;
+
+    grid-template-columns: 1.8fr 1fr;
+
+    gap: 32px;
+}
+
+
+.form-main-card,
+.price-sticky-summary {
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 12px;
+
+    padding: 32px;
+
+    box-shadow:
+        0 4px 12px rgba(15, 23, 42, 0.05);
+
+    height: fit-content;
+}
+
+
+/* =====================================================
+   BACK BUTTON
+===================================================== */
+
+.back-nav-link {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    text-decoration: none;
+
+    color: #64748b;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    margin-bottom: 20px;
+
+    transition: 0.2s ease;
+}
+
+.back-nav-link:hover {
+    color: #0284c7;
+}
+
+
+/* =====================================================
+   HEADINGS
+===================================================== */
+
+.form-main-card h2,
+.price-sticky-summary h3 {
+    font-size: 20px;
+
+    font-weight: 800;
+
+    color: #0f172a;
+
+    margin: 0 0 22px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+.form-main-card h2 i,
+.price-sticky-summary h3 i {
+    color: #0284c7;
+}
+
+
+/* =====================================================
+   SELECTED TOUR
+===================================================== */
+
+.selected-tour-info {
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 8px;
+
+    padding: 15px;
+
+    margin-bottom: 24px;
+}
+
+.selected-tour-info strong {
+    display: block;
+
+    color: #0f172a;
+
+    font-size: 15px;
+
+    margin-bottom: 5px;
+}
+
+.selected-tour-info span {
+    color: #64748b;
+
+    font-size: 13px;
+}
+
+
+/* =====================================================
+   FORM
+===================================================== */
+
+.form-input-row {
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 18px;
+
+    margin-bottom: 18px;
+}
+
+.form-input-row.split-2 {
+    grid-template-columns: 1fr 1fr;
+}
+
+
+.field-block-group {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+.field-block-group label {
+    font-size: 12px;
+
+    font-weight: 700;
+
+    color: #0f172a;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
+}
+
+
+.field-block-group input,
+.field-block-group select,
+.field-block-group textarea {
+    padding: 12px 14px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 6px;
+
+    font-size: 14px;
+
+    outline: none;
+
+    background: #f8fafc;
+
+    color: #334155;
+
+    transition: 0.2s;
+}
+
+
+.field-block-group textarea {
+    min-height: 100px;
+
+    resize: vertical;
+
+    font-family: inherit;
+}
+
+
+.field-block-group input:focus,
+.field-block-group select:focus,
+.field-block-group textarea:focus {
+    border-color: #0284c7;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 0 0 3px rgba(2, 132, 199, 0.08);
+}
+
+
+.field-block-group input[readonly] {
+    background: #f1f5f9;
+
+    cursor: not-allowed;
+}
+
+
+/* =====================================================
+   TRAVELER COUNTER
+===================================================== */
+
+.guests-increment-dock {
+    display: flex;
+
+    align-items: center;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 6px;
+
+    width: fit-content;
+
+    background: #f8fafc;
+
+    overflow: hidden;
+}
+
+
+.counter-btn {
+    background: none;
+
+    border: none;
+
+    width: 42px;
+
+    height: 42px;
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    color: #475569;
+
+    transition: 0.2s ease;
+}
+
+
+.counter-btn:hover {
+    background: #e2e8f0;
+}
+
+
+.counter-btn:active {
+    background: #cbd5e1;
+}
+
+
+.counter-display-value {
+    width: 55px;
+
+    text-align: center;
+
+    font-weight: 700;
+
+    color: #0f172a;
+
+    font-size: 15px;
+}
+
+
+/* =====================================================
+   PRICE SUMMARY
+===================================================== */
+
+.invoice-line-row {
+    display: flex;
+
+    justify-content: space-between;
+
+    font-size: 14px;
+
+    color: #475569;
+
+    margin-bottom: 12px;
+
+    gap: 15px;
+}
+
+
+.invoice-net-highlight {
+    display: flex;
+
+    justify-content: space-between;
+
+    border-top: 1px solid #e2e8f0;
+
+    padding-top: 14px;
+
+    margin-top: 14px;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    color: #0284c7;
+
+    gap: 15px;
+}
+
+
+/* =====================================================
+   TOUR SUMMARY
+===================================================== */
+
+.booking-tour-summary {
+    margin-bottom: 22px;
+
+    padding-bottom: 18px;
+
+    border-bottom: 1px solid #f1f5f9;
+}
+
+
+.booking-tour-summary-title {
+    color: #0f172a;
+
+    font-size: 15px;
+
+    font-weight: 800;
+
+    margin-bottom: 6px;
+}
+
+
+.booking-tour-summary-location {
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    color: #64748b;
+
+    font-size: 13px;
+}
+
+
+.booking-tour-summary-location i {
+    color: #0284c7;
+}
+
+
+/* =====================================================
+   BOOKING BUTTON
+===================================================== */
+
+.btn-submit-booking {
+    width: 100%;
+
+    background: #0f172a;
+
+    color: #ffffff;
+
+    border: none;
+
+    padding: 14px;
+
+    border-radius: 6px;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    margin-top: 24px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    transition: 0.2s;
+}
+
+
+.btn-submit-booking:hover {
+    background: #0284c7;
+}
+
+
+.btn-submit-booking:active {
+    transform: translateY(1px);
+}
+
+
+/* =====================================================
+   ERROR MESSAGE
+===================================================== */
+
+.booking-error {
+    background: #fef2f2;
+
+    border: 1px solid #fecaca;
+
+    color: #b91c1c;
+
+    padding: 12px 14px;
+
+    border-radius: 7px;
+
+    margin-bottom: 18px;
+
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   INFO NOTE
+===================================================== */
+
+.booking-info-note {
+    margin-top: 18px;
+
+    padding: 12px 14px;
+
+    background: #eff6ff;
+
+    border: 1px solid #bfdbfe;
+
+    border-radius: 7px;
+
+    color: #1e40af;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 800px) {
+
+    .booking-grid-split {
+        grid-template-columns: 1fr;
+    }
+
+    .form-input-row.split-2 {
+        grid-template-columns: 1fr;
+    }
+
+    .booking-workspace-wrapper {
+        margin-top: 100px;
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .booking-workspace-wrapper {
+        padding: 0 15px;
+    }
+
+    .form-main-card,
+    .price-sticky-summary {
+        padding: 22px;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<main class="booking-workspace-wrapper">
+
+
+    <div class="booking-grid-split">
+
+
+        <!-- =================================================
+             LEFT SIDE
+        ================================================== -->
+
+        <div class="form-main-card">
+
+
+            <!-- BACK TO TOUR DETAILS -->
+
+            <a
+                href="{% url 'tour_detail' tour.tour_slug %}"
+                class="back-nav-link"
+            >
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                Back to Tour Details
+
+            </a>
+
+
+            <h2>
+
+                <i class="fa-regular fa-id-card"></i>
+
+                Explorer Registration Details
+
+            </h2>
+
+
+            <!-- SELECTED TOUR -->
+
+            <div
+                class="selected-tour-info"
+                data-tour-price="{{ tour.tour_price }}"
+            >
+
+                <strong>
+                    {{ tour.tour_name }}
+                </strong>
+
+                <span>
+
+                    Package Price:
+                    ₹{{ tour.tour_price }}
+                    / person
+
+                </span>
+
+            </div>
+
+
+            <!-- =================================================
+                 BOOKING FORM
+            ================================================== -->
+
+            <form
+                method="POST"
+                id="form-package-checkout"
+            >
+
+                {% csrf_token %}
+
+
+                <!-- SELECTED TOUR -->
+
+                <div class="form-input-row">
+
+                    <div class="field-block-group">
+
+                        <label for="target-tour">
+                            Target Tour Package
+                        </label>
+
+                        <input
+                            type="text"
+                            id="target-tour"
+                            value="{{ tour.tour_name }}"
+                            readonly
+                        >
+
+                        <input
+                            type="hidden"
+                            name="tour"
+                            value="{{ tour.id }}"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- GUEST INFORMATION -->
+
+                <div class="form-input-row split-2">
+
+
+                    <div class="field-block-group">
+
+                        <label for="guest-name">
+                            Primary Guest Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="guest-name"
+                            name="guest_name"
+                            placeholder="Enter your full name"
+                            value="{{ user.get_full_name }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field-block-group">
+
+                        <label for="guest-phone">
+                            Contact Phone Number
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="guest-phone"
+                            name="phone"
+                            placeholder="+91 XXXXX XXXXX"
+                            autocomplete="tel"
+                            required
+                        >
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- DATE + TRAVELERS -->
+
+                <div class="form-input-row split-2">
+
+
+                    <div class="field-block-group">
+
+                        <label for="departure-date">
+                            Expedition Departure Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="departure-date"
+                            name="travel_date"
+                            value="{{ tour.tour_start_date|date:'Y-m-d' }}"
+                            min="{{ tour.tour_start_date|date:'Y-m-d' }}"
+                            max="{{ tour.tour_end_date|date:'Y-m-d' }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field-block-group">
+
+                        <label>
+                            Total Travelers
+                        </label>
+
+
+                        <div class="guests-increment-dock">
+
+
+                            <button
+                                type="button"
+                                class="counter-btn"
+                                onclick="modifyGuestCount(-1)"
+                                aria-label="Decrease travelers"
+                            >
+                                −
+                            </button>
+
+
+                            <div
+                                class="counter-display-value"
+                                id="guest-count-lbl"
+                            >
+                                2
+                            </div>
+
+
+                            <button
+                                type="button"
+                                class="counter-btn"
+                                onclick="modifyGuestCount(1)"
+                                aria-label="Increase travelers"
+                            >
+                                +
+                            </button>
+
+
+                        </div>
+
+
+                        <input
+                            type="hidden"
+                            name="number_of_people"
+                            id="guest-count-input"
+                            value="2"
+                        >
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- SPECIAL REQUEST -->
+
+                <div class="form-input-row">
+
+                    <div class="field-block-group">
+
+                        <label for="special-request">
+                            Special Request
+                        </label>
+
+                        <textarea
+                            id="special-request"
+                            name="special_request"
+                            placeholder="Any special travel requirements or requests? (Optional)"
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SUBMIT -->
+
+                <button
+                    type="submit"
+                    class="btn-submit-booking"
+                >
+
+                    Continue Booking
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </button>
+
+
+            </form>
+
+
+            <div class="booking-info-note">
+
+                <i class="fa-solid fa-circle-info"></i>
+
+                Your booking will be created as
+                <strong>Pending</strong> first.
+                You will continue to the payment page after
+                submitting this form.
+
+            </div>
+
+
+        </div>
+
+
+        <!-- =================================================
+             RIGHT SIDE
+        ================================================== -->
+
+        <aside class="price-sticky-summary">
+
+
+            <h3>
+
+                <i class="fa-solid fa-receipt"></i>
+
+                Estimation Summary
+
+            </h3>
+
+
+            <!-- TOUR SUMMARY -->
+
+            <div class="booking-tour-summary">
+
+
+                <div class="booking-tour-summary-title">
+
+                    {{ tour.tour_name }}
+
+                </div>
+
+
+                {% if tour.destination %}
+
+                    <div class="booking-tour-summary-location">
+
+                        <i class="fa-solid fa-location-dot"></i>
+
+                        {{ tour.destination.destination_name }}
+
+                    </div>
+
+                {% endif %}
+
+
+            </div>
+
+
+            <!-- BASE PACKAGE -->
+
+            <div
+                class="invoice-line-row"
+                style="margin-top:10px;"
+            >
+
+                <span>
+                    Base Package
+                </span>
+
+                <span id="base-calc-lbl">
+                    ₹0
+                </span>
+
+            </div>
+
+
+            <!-- TAX -->
+
+            <div class="invoice-line-row">
+
+                <span>
+                    Tax &amp; Infrastructure
+                </span>
+
+                <span id="taxes-calc-lbl">
+                    ₹0
+                </span>
+
+            </div>
+
+
+            <!-- TOTAL -->
+
+            <div class="invoice-net-highlight">
+
+                <span>
+                    Gross Estimation
+                </span>
+
+                <span id="gross-total-lbl">
+                    ₹0
+                </span>
+
+            </div>
+
+
+            <!-- PRICE NOTE -->
+
+            <div
+                style="
+                    margin-top:18px;
+                    color:#94a3b8;
+                    font-size:12px;
+                    line-height:1.6;
+                "
+            >
+
+                Estimated amount is calculated based on
+                the selected number of travelers.
+
+            </div>
+
+
+        </aside>
+
+
+    </div>
+
+
+</main>
+
+
+<!-- =====================================================
+     BOOKING CALCULATION SCRIPT
+===================================================== -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+
+    /* =====================================================
+       INITIAL VALUES
+    ===================================================== */
+
+    let totalGuestsCount = 2;
+
+    const fixedTaxCoverageRate = 2100;
+
+
+    /* =====================================================
+       TOUR PRICE
+    ===================================================== */
+
+    const selectedTourInfo =
+        document.querySelector(
+            ".selected-tour-info"
+        );
+
+
+    let currentPackageUnitPrice = 0;
+
+
+    if (selectedTourInfo) {
+
+        currentPackageUnitPrice =
+            parseFloat(
+                selectedTourInfo.dataset.tourPrice
+            ) || 0;
+
+    }
+
+
+    /* =====================================================
+       ELEMENTS
+    ===================================================== */
+
+    const guestLabel =
+        document.getElementById(
+            "guest-count-lbl"
+        );
+
+
+    const guestInput =
+        document.getElementById(
+            "guest-count-input"
+        );
+
+
+    const baseLabel =
+        document.getElementById(
+            "base-calc-lbl"
+        );
+
+
+    const taxLabel =
+        document.getElementById(
+            "taxes-calc-lbl"
+        );
+
+
+    const grossLabel =
+        document.getElementById(
+            "gross-total-lbl"
+        );
+
+
+    /* =====================================================
+       CALCULATE TOTALS
+    ===================================================== */
+
+    function calculateInvoiceTotals() {
+
+
+        const baseCost =
+            currentPackageUnitPrice *
+            totalGuestsCount;
+
+
+        const taxCost =
+            fixedTaxCoverageRate *
+            totalGuestsCount;
+
+
+        const grossCost =
+            baseCost +
+            taxCost;
+
+
+        baseLabel.innerText =
+            "₹" +
+            baseCost.toLocaleString(
+                "en-IN"
+            );
+
+
+        taxLabel.innerText =
+            "₹" +
+            taxCost.toLocaleString(
+                "en-IN"
+            );
+
+
+        grossLabel.innerText =
+            "₹" +
+            grossCost.toLocaleString(
+                "en-IN"
+            );
+
+    }
+
+
+    /* =====================================================
+       TRAVELER COUNTER
+    ===================================================== */
+
+    window.modifyGuestCount =
+        function (step) {
+
+
+            totalGuestsCount += step;
+
+
+            /* Minimum */
+
+            if (totalGuestsCount < 1) {
+
+                totalGuestsCount = 1;
+
+            }
+
+
+            /* Maximum */
+
+            if (totalGuestsCount > 9) {
+
+                totalGuestsCount = 9;
+
+            }
+
+
+            /* Do not exceed available seats */
+
+            const availableSeats =
+                parseInt(
+                    "{{ tour.available_seats|default:0 }}"
+                ) || 0;
+
+
+            if (
+                availableSeats > 0 &&
+                totalGuestsCount > availableSeats
+            ) {
+
+                totalGuestsCount =
+                    availableSeats;
+
+            }
+
+
+            guestLabel.innerText =
+                totalGuestsCount;
+
+
+            guestInput.value =
+                totalGuestsCount;
+
+
+            calculateInvoiceTotals();
+
+        };
+
+
+    /* =====================================================
+       INITIAL CALCULATION
+    ===================================================== */
+
+    calculateInvoiceTotals();
+
+
+});
+
+</script>
+
+
+{% endblock %}

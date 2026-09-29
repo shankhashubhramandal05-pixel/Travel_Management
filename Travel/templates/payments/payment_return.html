@@ -1,0 +1,555 @@
+{% extends "Travel/base.html" %}
+
+{% block title %}
+YatraNest | Payment Return
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+    .payment-return-page {
+        max-width: 850px;
+        margin: 120px auto 60px auto;
+        padding: 0 20px;
+    }
+
+
+    .payment-return-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 8px 30px rgba(15, 23, 42, 0.07);
+    }
+
+
+    .payment-return-header {
+        text-align: center;
+        padding: 45px 30px 35px;
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+
+    .payment-success-icon {
+        width: 76px;
+        height: 76px;
+        margin: 0 auto 20px;
+
+        border-radius: 50%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background: #dcfce7;
+        color: #15803d;
+
+        font-size: 34px;
+    }
+
+
+    .payment-return-header h1 {
+        margin: 0 0 8px;
+
+        color: #0f172a;
+
+        font-size: 30px;
+
+        font-weight: 800;
+    }
+
+
+    .payment-return-header p {
+        margin: 0;
+
+        color: #64748b;
+
+        font-size: 15px;
+
+        line-height: 1.6;
+    }
+
+
+    .payment-details {
+        padding: 30px;
+    }
+
+
+    .payment-detail-row {
+        display: flex;
+
+        justify-content: space-between;
+
+        gap: 25px;
+
+        padding: 15px 0;
+
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+
+    .payment-detail-row:last-child {
+        border-bottom: none;
+    }
+
+
+    .payment-detail-label {
+        color: #64748b;
+
+        font-size: 14px;
+    }
+
+
+    .payment-detail-value {
+        color: #0f172a;
+
+        font-size: 14px;
+
+        font-weight: 700;
+
+        text-align: right;
+    }
+
+
+    .payment-status {
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 6px;
+
+        padding: 6px 11px;
+
+        border-radius: 20px;
+
+        background: #dcfce7;
+
+        color: #15803d;
+
+        font-size: 11px;
+
+        font-weight: 700;
+
+        text-transform: uppercase;
+    }
+
+
+    .payment-amount {
+        color: #0284c7;
+
+        font-size: 20px;
+
+        font-weight: 800;
+    }
+
+
+    .payment-return-note {
+        margin-top: 25px;
+
+        padding: 16px 18px;
+
+        border-radius: 9px;
+
+        background: #eff6ff;
+
+        border: 1px solid #bfdbfe;
+
+        color: #1e40af;
+
+        font-size: 13px;
+
+        line-height: 1.6;
+    }
+
+
+    .payment-return-actions {
+        display: flex;
+
+        justify-content: center;
+
+        gap: 12px;
+
+        padding: 0 30px 35px;
+    }
+
+
+    .payment-return-btn {
+        display: inline-flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        gap: 8px;
+
+        padding: 12px 20px;
+
+        border-radius: 7px;
+
+        text-decoration: none;
+
+        font-size: 14px;
+
+        font-weight: 700;
+
+        transition: 0.2s;
+    }
+
+
+    .payment-receipt-btn {
+        background: #0f172a;
+
+        color: #ffffff;
+    }
+
+
+    .payment-receipt-btn:hover {
+        background: #0284c7;
+    }
+
+
+    .payment-bookings-btn {
+        background: #ffffff;
+
+        color: #334155;
+
+        border: 1px solid #cbd5e1;
+    }
+
+
+    .payment-bookings-btn:hover {
+        background: #f8fafc;
+    }
+
+
+    @media (max-width: 600px) {
+
+        .payment-return-page {
+            margin-top: 100px;
+        }
+
+
+        .payment-return-header {
+            padding: 35px 20px 28px;
+        }
+
+
+        .payment-return-header h1 {
+            font-size: 25px;
+        }
+
+
+        .payment-details {
+            padding: 20px;
+        }
+
+
+        .payment-detail-row {
+            flex-direction: column;
+
+            gap: 5px;
+        }
+
+
+        .payment-detail-value {
+            text-align: left;
+        }
+
+
+        .payment-return-actions {
+            flex-direction: column;
+
+            padding:
+                0 20px 25px;
+        }
+
+
+        .payment-return-btn {
+            width: 100%;
+        }
+
+    }
+
+</style>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<main class="payment-return-page">
+
+
+    <div class="payment-return-card">
+
+
+        <!-- HEADER -->
+
+        <div class="payment-return-header">
+
+            <div class="payment-success-icon">
+
+                <i class="fa-solid fa-check"></i>
+
+            </div>
+
+
+            <h1>
+                Payment Successful
+            </h1>
+
+
+            <p>
+                Your payment has been successfully processed
+                and your booking has been recorded by YatraNest.
+            </p>
+
+        </div>
+
+
+
+        <!-- PAYMENT DETAILS -->
+
+        <div class="payment-details">
+
+
+            <!-- BOOKING -->
+
+            <div class="payment-detail-row">
+
+                <div class="payment-detail-label">
+                    Booking Reference
+                </div>
+
+                <div class="payment-detail-value">
+
+                    #YN-{{ booking.id }}
+
+                </div>
+
+            </div>
+
+
+
+            <!-- SERVICE -->
+
+            <div class="payment-detail-row">
+
+                <div class="payment-detail-label">
+                    Booking Service
+                </div>
+
+                <div class="payment-detail-value">
+
+                    {% if booking.tour %}
+
+                        {{ booking.tour.tour_name }}
+
+                    {% elif booking.hotel %}
+
+                        {{ booking.hotel.hotel_name }}
+
+                    {% elif booking.bus %}
+
+                        Bus Booking
+
+                    {% elif booking.flight %}
+
+                        Flight Booking
+
+                    {% elif booking.train %}
+
+                        Train Booking
+
+                    {% else %}
+
+                        Travel Booking
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+
+            <!-- NUMBER OF PEOPLE -->
+
+            <div class="payment-detail-row">
+
+                <div class="payment-detail-label">
+                    Travelers
+                </div>
+
+                <div class="payment-detail-value">
+
+                    {{ booking.number_of_people }}
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PAYMENT METHOD -->
+
+            <div class="payment-detail-row">
+
+                <div class="payment-detail-label">
+                    Payment Method
+                </div>
+
+                <div class="payment-detail-value">
+
+                    {% if payment and payment.payment_method %}
+
+                        {{ payment.payment_method|title }}
+
+                    {% else %}
+
+                        Razorpay
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PAYMENT STATUS -->
+
+            <div class="payment-detail-row">
+
+                <div class="payment-detail-label">
+                    Payment Status
+                </div>
+
+                <div class="payment-detail-value">
+
+                    <span class="payment-status">
+
+                        <i class="fa-solid fa-circle-check"></i>
+
+                        {% if payment %}
+                            {{ payment.payment_status|title }}
+                        {% else %}
+                            Paid
+                        {% endif %}
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- TRANSACTION -->
+
+            <div class="payment-detail-row">
+
+                <div class="payment-detail-label">
+                    Transaction ID
+                </div>
+
+                <div class="payment-detail-value">
+
+                    {% if payment and payment.transaction_id %}
+
+                        {{ payment.transaction_id }}
+
+                    {% elif payment and payment.razorpay_payment_id %}
+
+                        {{ payment.razorpay_payment_id }}
+
+                    {% else %}
+
+                        Not Available
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+
+            <!-- AMOUNT -->
+
+            <div class="payment-detail-row">
+
+                <div class="payment-detail-label">
+                    Amount Paid
+                </div>
+
+                <div class="payment-detail-value payment-amount">
+
+                    ₹{{ booking.total_amount|default:"0"|floatformat:2 }}
+
+                </div>
+
+            </div>
+
+
+
+            <!-- NOTE -->
+
+            <div class="payment-return-note">
+
+                <strong>
+                    Payment Confirmation:
+                </strong>
+
+                Your payment has been recorded against this booking.
+                Please keep the payment receipt for your records.
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ACTIONS -->
+
+        <div class="payment-return-actions">
+
+
+            <a
+                href="{% url 'payment_return_receipt' booking.id %}"
+                class="payment-return-btn payment-receipt-btn"
+            >
+
+                <i class="fa-solid fa-receipt"></i>
+
+                View Payment Receipt
+
+            </a>
+
+
+            <a
+                href="{% url 'booking_list' %}"
+                class="payment-return-btn payment-bookings-btn"
+            >
+
+                <i class="fa-solid fa-calendar-check"></i>
+
+                My Bookings
+
+            </a>
+
+
+        </div>
+
+
+    </div>
+
+
+</main>
+
+{% endblock %}

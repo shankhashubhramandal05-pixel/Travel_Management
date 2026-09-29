@@ -1,0 +1,1774 @@
+{% extends "Travel/base.html" %}
+{% load static %}
+
+{% block title %}Checkout | YatraNest{% endblock %}
+
+{% block content %}
+
+<style>
+
+    /* =========================================================
+       CHECKOUT PAGE
+    ========================================================= */
+
+    .checkout-page {
+        background: #f5f7fb;
+        min-height: 100vh;
+        padding: 45px 0 70px;
+    }
+
+    /* ---------------------------------------------------------
+       HEADER
+    --------------------------------------------------------- */
+
+    .checkout-header {
+        margin-bottom: 35px;
+    }
+
+    .checkout-header h1 {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: #172033;
+        margin-bottom: 8px;
+    }
+
+    .checkout-header p {
+        color: #7b8495;
+        margin-bottom: 0;
+    }
+
+    /* ---------------------------------------------------------
+       STEPPER
+    --------------------------------------------------------- */
+
+    .checkout-stepper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 35px;
+    }
+
+    .step {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #9aa2b1;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .step-number {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #e5e9f0;
+        color: #7d8696;
+        font-weight: 700;
+    }
+
+    .step.active {
+        color: #0d6efd;
+    }
+
+    .step.active .step-number {
+        background: #0d6efd;
+        color: white;
+        box-shadow: 0 6px 18px rgba(13, 110, 253, .25);
+    }
+
+    .step.completed {
+        color: #198754;
+    }
+
+    .step.completed .step-number {
+        background: #198754;
+        color: white;
+    }
+
+    .step-line {
+        width: 70px;
+        height: 2px;
+        background: #dee2e6;
+        margin: 0 14px;
+    }
+
+    /* ---------------------------------------------------------
+       CARD
+    --------------------------------------------------------- */
+
+    .checkout-card {
+        background: #ffffff;
+        border: 1px solid #e8ebf1;
+        border-radius: 18px;
+        padding: 28px;
+        box-shadow: 0 8px 30px rgba(22, 34, 51, .06);
+        margin-bottom: 24px;
+    }
+
+    .section-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 25px;
+    }
+
+    .section-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eef5ff;
+        color: #0d6efd;
+        font-size: 18px;
+    }
+
+    .section-title h4 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 750;
+        color: #172033;
+    }
+
+    .section-title small {
+        display: block;
+        color: #8992a3;
+        font-size: 12px;
+        margin-top: 3px;
+    }
+
+    /* ---------------------------------------------------------
+       FORM
+    --------------------------------------------------------- */
+
+    .form-label {
+        font-weight: 650;
+        font-size: 13px;
+        color: #343c4d;
+        margin-bottom: 8px;
+    }
+
+    .form-control,
+    .form-select {
+        min-height: 48px;
+        border-radius: 10px;
+        border: 1px solid #dfe3ea;
+        padding: 11px 14px;
+        font-size: 14px;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 .2rem rgba(13, 110, 253, .10);
+    }
+
+    textarea.form-control {
+        min-height: 110px;
+        resize: vertical;
+    }
+
+    /* ---------------------------------------------------------
+       INPUT ICON
+    --------------------------------------------------------- */
+
+    .input-icon {
+        position: relative;
+    }
+
+    .input-icon i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #98a1b2;
+        z-index: 3;
+    }
+
+    .input-icon .form-control {
+        padding-left: 43px;
+    }
+
+    /* ---------------------------------------------------------
+       PAYMENT METHODS
+    --------------------------------------------------------- */
+
+    .payment-option {
+        position: relative;
+        margin-bottom: 12px;
+    }
+
+    .payment-option input {
+        position: absolute;
+        opacity: 0;
+    }
+
+    .payment-label {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        border: 1px solid #dfe3ea;
+        border-radius: 13px;
+        padding: 16px;
+        cursor: pointer;
+        transition: .2s ease;
+        background: #fff;
+    }
+
+    .payment-label:hover {
+        border-color: #9fc5ff;
+        background: #f8fbff;
+    }
+
+    .payment-option input:checked + .payment-label {
+        border-color: #0d6efd;
+        background: #f2f7ff;
+        box-shadow: 0 0 0 2px rgba(13, 110, 253, .08);
+    }
+
+    .payment-icon {
+        width: 43px;
+        height: 43px;
+        border-radius: 11px;
+        background: #eef5ff;
+        color: #0d6efd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 19px;
+    }
+
+    .payment-info strong {
+        display: block;
+        color: #202838;
+        font-size: 14px;
+    }
+
+    .payment-info span {
+        color: #929aaa;
+        font-size: 12px;
+    }
+
+    .payment-check {
+        margin-left: auto;
+        color: #0d6efd;
+        display: none;
+    }
+
+    .payment-option input:checked + .payment-label .payment-check {
+        display: block;
+    }
+
+    /* ---------------------------------------------------------
+       CARD PAYMENT
+    --------------------------------------------------------- */
+
+    .card-payment-box {
+        margin-top: 18px;
+        padding: 20px;
+        background: #f8f9fc;
+        border-radius: 14px;
+        border: 1px solid #e9edf3;
+    }
+
+    /* ---------------------------------------------------------
+       ORDER SUMMARY
+    --------------------------------------------------------- */
+
+    .summary-card {
+        position: sticky;
+        top: 25px;
+    }
+
+    .booking-preview {
+        display: flex;
+        gap: 14px;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #edf0f4;
+    }
+
+    .booking-image {
+        width: 85px;
+        height: 70px;
+        border-radius: 12px;
+        object-fit: cover;
+        background: #eef1f5;
+    }
+
+    .booking-preview h5 {
+        font-size: 15px;
+        font-weight: 750;
+        margin-bottom: 5px;
+        color: #202838;
+    }
+
+    .booking-preview p {
+        margin: 0;
+        color: #8992a3;
+        font-size: 12px;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 14px;
+        font-size: 14px;
+    }
+
+    .summary-row span:first-child {
+        color: #7b8494;
+    }
+
+    .summary-row strong {
+        color: #283143;
+    }
+
+    .discount {
+        color: #198754 !important;
+    }
+
+    .total-row {
+        border-top: 1px dashed #dfe3ea;
+        margin-top: 20px;
+        padding-top: 20px;
+    }
+
+    .total-row span {
+        font-size: 15px;
+        font-weight: 700;
+        color: #263044 !important;
+    }
+
+    .total-price {
+        font-size: 25px;
+        font-weight: 850;
+        color: #0d6efd !important;
+    }
+
+    /* ---------------------------------------------------------
+       COUPON
+    --------------------------------------------------------- */
+
+    .coupon-box {
+        margin: 22px 0;
+        padding: 16px;
+        background: #f8f9fc;
+        border-radius: 13px;
+        border: 1px solid #edf0f4;
+    }
+
+    .coupon-box .input-group .form-control {
+        border-radius: 9px 0 0 9px;
+    }
+
+    .coupon-box .btn {
+        border-radius: 0 9px 9px 0;
+        font-weight: 650;
+    }
+
+    #couponMessage {
+        font-size: 12px;
+        margin-top: 8px;
+        display: none;
+    }
+
+    /* ---------------------------------------------------------
+       SECURE BOX
+    --------------------------------------------------------- */
+
+    .secure-box {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 15px;
+        border-radius: 12px;
+        background: #f0faf5;
+        border: 1px solid #d7f0e2;
+        margin-top: 20px;
+    }
+
+    .secure-box i {
+        color: #198754;
+        font-size: 20px;
+    }
+
+    .secure-box strong {
+        display: block;
+        color: #23714b;
+        font-size: 13px;
+    }
+
+    .secure-box span {
+        color: #6f8d7d;
+        font-size: 11px;
+    }
+
+    /* ---------------------------------------------------------
+       PAY BUTTON
+    --------------------------------------------------------- */
+
+    .pay-btn {
+        width: 100%;
+        min-height: 54px;
+        border: 0;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #0d6efd, #084298);
+        color: white;
+        font-size: 15px;
+        font-weight: 750;
+        transition: .25s ease;
+        box-shadow: 0 8px 20px rgba(13, 110, 253, .20);
+    }
+
+    .pay-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 25px rgba(13, 110, 253, .28);
+    }
+
+    .pay-btn:disabled {
+        opacity: .65;
+        transform: none;
+    }
+
+    /* ---------------------------------------------------------
+       COUNTDOWN
+    --------------------------------------------------------- */
+
+    .reservation-timer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px;
+        border-radius: 11px;
+        background: #fff8e8;
+        color: #9a6b00;
+        font-size: 13px;
+        margin-bottom: 20px;
+    }
+
+    .reservation-timer strong {
+        color: #7d5700;
+    }
+
+    /* ---------------------------------------------------------
+       TRUST BADGES
+    --------------------------------------------------------- */
+
+    .trust-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .trust-item {
+        flex: 1;
+        text-align: center;
+        color: #8b94a4;
+        font-size: 10px;
+    }
+
+    .trust-item i {
+        display: block;
+        color: #657083;
+        font-size: 16px;
+        margin-bottom: 5px;
+    }
+
+    /* ---------------------------------------------------------
+       RESPONSIVE
+    --------------------------------------------------------- */
+
+    @media (max-width: 991px) {
+
+        .summary-card {
+            position: static;
+        }
+
+        .checkout-stepper {
+            justify-content: flex-start;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .step-line {
+            width: 35px;
+        }
+
+    }
+
+    @media (max-width: 575px) {
+
+        .checkout-page {
+            padding: 25px 0 50px;
+        }
+
+        .checkout-card {
+            padding: 20px;
+            border-radius: 14px;
+        }
+
+        .checkout-header h1 {
+            font-size: 1.7rem;
+        }
+
+        .step span:not(.step-number) {
+            display: none;
+        }
+
+        .step-line {
+            width: 25px;
+            margin: 0 8px;
+        }
+
+    }
+
+</style>
+
+
+<div class="checkout-page">
+
+    <div class="container">
+
+        <!-- =====================================================
+             HEADER
+        ====================================================== -->
+
+        <div class="checkout-header text-center">
+
+            <h1>Complete Your Booking</h1>
+
+            <p>
+                Review your trip details and securely complete your payment.
+            </p>
+
+        </div>
+
+
+        <!-- =====================================================
+             STEPPER
+        ====================================================== -->
+
+        <div class="checkout-stepper">
+
+            <div class="step completed">
+                <span class="step-number">
+                    <i class="fa-solid fa-check"></i>
+                </span>
+
+                <span>Selection</span>
+            </div>
+
+            <div class="step-line"></div>
+
+            <div class="step active">
+                <span class="step-number">2</span>
+                <span>Checkout</span>
+            </div>
+
+            <div class="step-line"></div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                <span>Confirmation</span>
+            </div>
+
+        </div>
+
+
+        <form method="POST"
+              action=""
+              class="needs-validation"
+              novalidate>
+
+            {% csrf_token %}
+
+
+            <div class="row g-4">
+
+
+                <!-- =================================================
+                     LEFT COLUMN
+                ================================================== -->
+
+                <div class="col-lg-7">
+
+
+                    <!-- =============================================
+                         CONTACT INFORMATION
+                    ============================================== -->
+
+                    <div class="checkout-card">
+
+                        <div class="section-title">
+
+                            <div class="section-icon">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+
+                            <div>
+                                <h4>Contact Information</h4>
+                                <small>
+                                    We'll send your booking confirmation here.
+                                </small>
+                            </div>
+
+                        </div>
+
+
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    First Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="first_name"
+                                    class="form-control"
+                                    placeholder="Enter first name"
+                                    value="{{ request.user.first_name }}"
+                                    required
+                                >
+
+                                <div class="invalid-feedback">
+                                    Please enter your first name.
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Last Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="last_name"
+                                    class="form-control"
+                                    placeholder="Enter last name"
+                                    value="{{ request.user.last_name }}"
+                                    required
+                                >
+
+                                <div class="invalid-feedback">
+                                    Please enter your last name.
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Email Address
+                                </label>
+
+                                <div class="input-icon">
+
+                                    <i class="fa-solid fa-envelope"></i>
+
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        class="form-control"
+                                        placeholder="you@gmail.com"
+                                        value="{{ request.user.email }}"
+                                        required
+                                    >
+
+                                </div>
+
+                                <div class="invalid-feedback">
+                                    Please enter a valid email address.
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Phone Number
+                                </label>
+
+                                <div class="input-icon">
+
+                                    <i class="fa-solid fa-phone"></i>
+
+                                    <input
+                                        type="tel"
+                                        name="phone"
+                                        class="form-control"
+                                        placeholder="+91 XXXXX XXXXX"
+                                        required
+                                    >
+
+                                </div>
+
+                                <div class="invalid-feedback">
+                                    Please enter your valid phone number.
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =============================================
+                         PASSENGER INFORMATION
+                    ============================================== -->
+
+                    <div class="checkout-card">
+
+                        <div class="section-title">
+
+                            <div class="section-icon">
+                                <i class="fa-solid fa-users"></i>
+                            </div>
+
+                            <div>
+                                <h4>Passenger Information</h4>
+                                <small>
+                                    Details required for your booking.
+                                </small>
+                            </div>
+
+                        </div>
+
+
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Passenger Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="passenger_name"
+                                    class="form-control"
+                                    placeholder="Full name as on ID"
+                                    required
+                                >
+
+                                <div class="invalid-feedback">
+                                    Please enter passenger name.
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Date of Birth
+                                </label>
+
+                                <input
+                                    type="date"
+                                    name="date_of_birth"
+                                    class="form-control"
+                                    required
+                                >
+
+                                <div class="invalid-feedback">
+                                    Please select date of birth.
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Gender
+                                </label>
+
+                                <select
+                                    name="gender"
+                                    class="form-select"
+                                    required>
+
+                                    <option value="" selected disabled>
+                                        Select gender
+                                    </option>
+
+                                    <option value="male">
+                                        Male
+                                    </option>
+
+                                    <option value="female">
+                                        Female
+                                    </option>
+
+                                    <option value="other">
+                                        Other
+                                    </option>
+
+                                </select>
+
+                                <div class="invalid-feedback">
+                                    Please select gender.
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    ID Type
+                                </label>
+
+                                <select
+                                    name="id_type"
+                                    class="form-select"
+                                    required>
+
+                                    <option value="" selected disabled>
+                                        Select ID
+                                    </option>
+
+                                    <option value="passport">
+                                        Passport
+                                    </option>
+
+                                    <option value="aadhaar">
+                                        Aadhaar Card
+                                    </option>
+
+                                    <option value="driving_license">
+                                        Driving Licence
+                                    </option>
+
+                                    <option value="voter">
+                                        Voter ID
+                                    </option>
+
+                                </select>
+
+                                <div class="invalid-feedback">
+                                    Please select an ID type.
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =============================================
+                         SPECIAL REQUEST
+                    ============================================== -->
+
+                    <div class="checkout-card">
+
+                        <div class="section-title">
+
+                            <div class="section-icon">
+                                <i class="fa-solid fa-comment-dots"></i>
+                            </div>
+
+                            <div>
+                                <h4>Special Request</h4>
+                                <small>
+                                    Optional information for your trip.
+                                </small>
+                            </div>
+
+                        </div>
+
+
+                        <textarea
+                            name="special_request"
+                            class="form-control"
+                            placeholder="Any special request or additional information..."
+                        ></textarea>
+
+                    </div>
+
+
+
+                    <!-- =============================================
+                         PAYMENT METHOD
+                    ============================================== -->
+
+                    <div class="checkout-card">
+
+                        <div class="section-title">
+
+                            <div class="section-icon">
+                                <i class="fa-solid fa-credit-card"></i>
+                            </div>
+
+                            <div>
+                                <h4>Payment Method</h4>
+                                <small>
+                                    Choose your preferred payment option.
+                                </small>
+                            </div>
+
+                        </div>
+
+
+                        <!-- CARD -->
+
+                        <div class="payment-option">
+
+                            <input
+                                type="radio"
+                                name="payment_method"
+                                value="card"
+                                id="paymentCard"
+                                checked
+                            >
+
+                            <label
+                                for="paymentCard"
+                                class="payment-label">
+
+                                <div class="payment-icon">
+                                    <i class="fa-solid fa-credit-card"></i>
+                                </div>
+
+                                <div class="payment-info">
+
+                                    <strong>
+                                        Credit / Debit Card
+                                    </strong>
+
+                                    <span>
+                                        Visa, Mastercard, RuPay
+                                    </span>
+
+                                </div>
+
+                                <i class="fa-solid fa-circle-check payment-check"></i>
+
+                            </label>
+
+                        </div>
+
+
+                        <!-- UPI -->
+
+                        <div class="payment-option">
+
+                            <input
+                                type="radio"
+                                name="payment_method"
+                                value="upi"
+                                id="paymentUPI"
+                            >
+
+                            <label
+                                for="paymentUPI"
+                                class="payment-label">
+
+                                <div class="payment-icon">
+                                    <i class="fa-solid fa-mobile-screen-button"></i>
+                                </div>
+
+                                <div class="payment-info">
+
+                                    <strong>
+                                        UPI
+                                    </strong>
+
+                                    <span>
+                                        Google Pay, PhonePe, Paytm, BHIM
+                                    </span>
+
+                                </div>
+
+                                <i class="fa-solid fa-circle-check payment-check"></i>
+
+                            </label>
+
+                        </div>
+
+
+                        <!-- NET BANKING -->
+
+                        <div class="payment-option">
+
+                            <input
+                                type="radio"
+                                name="payment_method"
+                                value="netbanking"
+                                id="paymentNetbanking"
+                            >
+
+                            <label
+                                for="paymentNetbanking"
+                                class="payment-label">
+
+                                <div class="payment-icon">
+                                    <i class="fa-solid fa-building-columns"></i>
+                                </div>
+
+                                <div class="payment-info">
+
+                                    <strong>
+                                        Net Banking
+                                    </strong>
+
+                                    <span>
+                                        All major Indian banks
+                                    </span>
+
+                                </div>
+
+                                <i class="fa-solid fa-circle-check payment-check"></i>
+
+                            </label>
+
+                        </div>
+
+
+                        <!-- CARD DETAILS -->
+
+                        <div
+                            id="cardDetails"
+                            class="card-payment-box">
+
+                            <div class="row g-3">
+
+                                <div class="col-12">
+
+                                    <label class="form-label">
+                                        Card Number
+                                    </label>
+
+                                    <div class="input-icon">
+
+                                        <i class="fa-solid fa-credit-card"></i>
+
+                                        <input
+                                            type="text"
+                                            name="card_number"
+                                            class="form-control"
+                                            placeholder="1234 5678 9012 3456"
+                                            maxlength="19"
+                                        >
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="col-md-6">
+
+                                    <label class="form-label">
+                                        Expiry Date
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="card_expiry"
+                                        class="form-control"
+                                        placeholder="MM / YY"
+                                        maxlength="5"
+                                    >
+
+                                </div>
+
+
+                                <div class="col-md-6">
+
+                                    <label class="form-label">
+                                        CVV
+                                    </label>
+
+                                    <input
+                                        type="password"
+                                        name="card_cvv"
+                                        class="form-control"
+                                        placeholder="•••"
+                                        maxlength="4"
+                                    >
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- TERMS -->
+
+                        <div class="form-check mt-4">
+
+                            <input
+                                class="form-check-input"
+                                type="checkbox"
+                                id="terms"
+                                required
+                            >
+
+                            <label
+                                class="form-check-label"
+                                for="terms">
+
+                                I agree to the
+                                <a href="#" class="text-decoration-none">
+                                    Terms & Conditions
+                                </a>
+                                and
+                                <a href="#" class="text-decoration-none">
+                                    Cancellation Policy
+                                </a>.
+
+                            </label>
+
+                            <div class="invalid-feedback">
+                                You must agree before continuing.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     RIGHT COLUMN
+                ================================================== -->
+
+                <div class="col-lg-5">
+
+
+                    <div class="checkout-card summary-card">
+
+
+                        <!-- TIMER -->
+
+                        <div class="reservation-timer">
+
+                            <i class="fa-solid fa-clock"></i>
+
+                            <span>
+                                Your reservation is held for
+                                <strong id="timer">
+                                    09:59
+                                </strong>
+                            </span>
+
+                        </div>
+
+
+                        <!-- BOOKING PREVIEW -->
+
+                        <div class="booking-preview">
+
+                            {% if booking.image %}
+
+                                <img
+                                    src="{{ booking.image.url }}"
+                                    class="booking-image"
+                                    alt="Booking"
+                                >
+
+                            {% else %}
+
+                                <div
+                                    class="booking-image d-flex align-items-center justify-content-center">
+
+                                    <i class="fa-solid fa-plane fa-xl text-primary"></i>
+
+                                </div>
+
+                            {% endif %}
+
+
+                            <div>
+
+                                <h5>
+                                    {{ booking.title|default:"Your Travel Booking" }}
+                                </h5>
+
+                                <p>
+                                    <i class="fa-solid fa-location-dot me-1"></i>
+
+                                    {{ booking.destination|default:"Travel Destination" }}
+                                </p>
+
+                                <p class="mt-1">
+
+                                    <i class="fa-regular fa-calendar me-1"></i>
+
+                                    {{ booking.travel_date|default:"Travel Date" }}
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- BOOKING DETAILS -->
+
+                        <h6 class="fw-bold mb-3">
+                            Booking Details
+                        </h6>
+
+
+                        <div class="summary-row">
+
+                            <span>Base Fare</span>
+
+                            <strong>
+                                ₹<span id="baseFare">
+                                    {{ booking.total_amount|default:"0.00" }}
+                                </span>
+                            </strong>
+
+                        </div>
+
+
+                        <div class="summary-row">
+
+                            <span>Taxes & Fees</span>
+
+                            <strong>
+                                ₹<span id="taxAmount">
+                                    0.00
+                                </span>
+                            </strong>
+
+                        </div>
+
+
+                        <div class="summary-row">
+
+                            <span>Service Fee</span>
+
+                            <strong>
+                                ₹<span id="serviceFee">
+                                    0.00
+                                </span>
+                            </strong>
+
+                        </div>
+
+
+                        <div
+                            class="summary-row"
+                            id="discountRow"
+                            style="display:none;">
+
+                            <span>
+                                Discount
+                            </span>
+
+                            <strong class="discount">
+
+                                -₹<span id="discountAmount">
+                                    0.00
+                                </span>
+
+                            </strong>
+
+                        </div>
+
+
+
+                        <!-- COUPON -->
+
+                        <div class="coupon-box">
+
+                            <label class="form-label mb-2">
+                                Have a promo code?
+                            </label>
+
+                            <div class="input-group">
+
+                                <input
+                                    type="text"
+                                    id="couponInput"
+                                    class="form-control"
+                                    placeholder="Enter coupon"
+                                >
+
+                                <button
+                                    type="button"
+                                    id="couponButton"
+                                    class="btn btn-outline-primary">
+
+                                    Apply
+
+                                </button>
+
+                            </div>
+
+                            <div id="couponMessage"></div>
+
+                        </div>
+
+
+
+                        <!-- TOTAL -->
+
+                        <div class="summary-row total-row">
+
+                            <span>
+                                Total Amount
+                            </span>
+
+                            <span class="total-price">
+
+                                ₹<span id="grandTotal">
+                                    {{ booking.total_amount|default:"0.00" }}
+                                </span>
+
+                            </span>
+
+                        </div>
+
+
+
+                        <!-- PAY -->
+
+                        <button
+                            type="submit"
+                            class="pay-btn mt-3">
+
+                            <i class="fa-solid fa-lock me-2"></i>
+
+                            Pay ₹<span id="payAmount">
+                                {{ booking.total_amount|default:"0.00" }}
+                            </span>
+
+                        </button>
+
+
+
+                        <!-- SECURE -->
+
+                        <div class="secure-box">
+
+                            <i class="fa-solid fa-shield-halved"></i>
+
+                            <div>
+
+                                <strong>
+                                    Secure & Encrypted Payment
+                                </strong>
+
+                                <span>
+                                    Your payment information is protected by YatraNest.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- TRUST -->
+
+                        <div class="trust-row">
+
+                            <div class="trust-item">
+
+                                <i class="fa-solid fa-shield"></i>
+
+                                Secure
+
+                            </div>
+
+                            <div class="trust-item">
+
+                                <i class="fa-solid fa-rotate-left"></i>
+
+                                Easy Cancellation
+
+                            </div>
+
+                            <div class="trust-item">
+
+                                <i class="fa-solid fa-headset"></i>
+
+                                24/7 Support
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+
+    /* =========================================================
+       BOOTSTRAP FORM VALIDATION
+    ========================================================= */
+
+    const forms = document.querySelectorAll(".needs-validation");
+
+    Array.from(forms).forEach(function (form) {
+
+        form.addEventListener("submit", function (event) {
+
+            if (!form.checkValidity()) {
+
+                event.preventDefault();
+                event.stopPropagation();
+
+            }
+
+            form.classList.add("was-validated");
+
+        }, false);
+
+    });
+
+
+
+    /* =========================================================
+       PAYMENT METHOD
+    ========================================================= */
+
+    const paymentMethods =
+        document.querySelectorAll(
+            'input[name="payment_method"]'
+        );
+
+    const cardDetails =
+        document.getElementById("cardDetails");
+
+
+    paymentMethods.forEach(function (method) {
+
+        method.addEventListener("change", function () {
+
+            if (this.value === "card") {
+
+                cardDetails.style.display = "block";
+
+            } else {
+
+                cardDetails.style.display = "none";
+
+            }
+
+        });
+
+    });
+
+
+
+    /* =========================================================
+       PRICE CALCULATION
+    ========================================================= */
+
+    const baseFareElement =
+        document.getElementById("baseFare");
+
+    const taxElement =
+        document.getElementById("taxAmount");
+
+    const serviceElement =
+        document.getElementById("serviceFee");
+
+    const discountElement =
+        document.getElementById("discountAmount");
+
+    const grandTotalElement =
+        document.getElementById("grandTotal");
+
+    const payAmountElement =
+        document.getElementById("payAmount");
+
+    const discountRow =
+        document.getElementById("discountRow");
+
+
+    let baseFare =
+        parseFloat(
+            baseFareElement.textContent.replace(/,/g, "")
+        ) || 0;
+
+
+    const tax =
+        baseFare * 0.05;
+
+
+    const serviceFee =
+        baseFare > 0 ? 49 : 0;
+
+
+    let discount = 0;
+
+
+    function updateTotal() {
+
+        taxElement.textContent =
+            tax.toFixed(2);
+
+
+        serviceElement.textContent =
+            serviceFee.toFixed(2);
+
+
+        discountElement.textContent =
+            discount.toFixed(2);
+
+
+        if (discount > 0) {
+
+            discountRow.style.display = "flex";
+
+        } else {
+
+            discountRow.style.display = "none";
+
+        }
+
+
+        const total =
+            baseFare +
+            tax +
+            serviceFee -
+            discount;
+
+
+        grandTotalElement.textContent =
+            total.toFixed(2);
+
+
+        payAmountElement.textContent =
+            total.toFixed(2);
+
+    }
+
+
+    updateTotal();
+
+
+
+    /* =========================================================
+       COUPON
+    ========================================================= */
+
+    const couponButton =
+        document.getElementById("couponButton");
+
+    const couponInput =
+        document.getElementById("couponInput");
+
+    const couponMessage =
+        document.getElementById("couponMessage");
+
+
+    couponButton.addEventListener("click", function () {
+
+        const coupon =
+            couponInput.value
+            .trim()
+            .toUpperCase();
+
+
+        couponMessage.style.display = "block";
+
+
+        if (coupon === "YATRA10") {
+
+            discount =
+                baseFare * 0.10;
+
+
+            couponMessage.textContent =
+                "✓ Coupon applied! You saved 10%.";
+
+            couponMessage.style.color =
+                "#198754";
+
+
+            couponInput.disabled = true;
+            couponButton.disabled = true;
+
+
+        } else {
+
+            discount = 0;
+
+
+            couponMessage.textContent =
+                "Invalid coupon code.";
+
+            couponMessage.style.color =
+                "#dc3545";
+
+        }
+
+
+        updateTotal();
+
+    });
+
+
+
+    /* =========================================================
+       CARD NUMBER FORMAT
+    ========================================================= */
+
+    const cardNumber =
+        document.querySelector(
+            'input[name="card_number"]'
+        );
+
+
+    if (cardNumber) {
+
+        cardNumber.addEventListener(
+            "input",
+            function () {
+
+                let value =
+                    this.value
+                    .replace(/\D/g, "")
+                    .substring(0, 16);
+
+
+                value =
+                    value.match(/.{1,4}/g);
+
+
+                this.value =
+                    value
+                    ? value.join(" ")
+                    : "";
+
+            }
+        );
+
+    }
+
+
+
+    /* =========================================================
+       EXPIRY FORMAT
+    ========================================================= */
+
+    const expiry =
+        document.querySelector(
+            'input[name="card_expiry"]'
+        );
+
+
+    if (expiry) {
+
+        expiry.addEventListener(
+            "input",
+            function () {
+
+                let value =
+                    this.value
+                    .replace(/\D/g, "")
+                    .substring(0, 4);
+
+
+                if (value.length >= 3) {
+
+                    value =
+                        value.substring(0, 2)
+                        + " / "
+                        + value.substring(2);
+
+                }
+
+
+                this.value = value;
+
+            }
+        );
+
+    }
+
+
+
+    /* =========================================================
+       COUNTDOWN
+    ========================================================= */
+
+    let remainingSeconds = 599;
+
+    const timer =
+        document.getElementById("timer");
+
+
+    const countdown =
+        setInterval(function () {
+
+            const minutes =
+                Math.floor(
+                    remainingSeconds / 60
+                );
+
+
+            const seconds =
+                remainingSeconds % 60;
+
+
+            timer.textContent =
+                String(minutes).padStart(2, "0")
+                + ":"
+                + String(seconds).padStart(2, "0");
+
+
+            remainingSeconds--;
+
+
+            if (remainingSeconds < 0) {
+
+                clearInterval(countdown);
+
+                timer.textContent =
+                    "Expired";
+
+            }
+
+        }, 1000);
+
+});
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,1233 @@
+{% extends "Travel/base.html" %}
+{% load static %}
+
+{% block title %}
+    {{ tour.tour_name }} | YatraNest
+{% endblock %}
+
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   TOUR DETAIL PAGE
+========================================================= */
+
+.tour-detail-wrapper {
+    max-width: 1200px;
+    margin: 110px auto 60px;
+    padding: 0 24px;
+}
+
+
+/* =========================================================
+   BACK LINK
+========================================================= */
+
+.back-catalog-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: 20px;
+
+    color: #64748b;
+
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    transition: 0.2s ease;
+}
+
+.back-catalog-link:hover {
+    color: #0284c7;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.tour-billboard-header {
+    position: relative;
+
+    height: 380px;
+
+    overflow: hidden;
+
+    border-radius: 16px;
+
+    background: #e2e8f0;
+
+    margin-bottom: 32px;
+
+    box-shadow:
+        0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+.tour-billboard-header img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+}
+
+.tour-image-placeholder {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #64748b;
+
+    font-size: 18px;
+}
+
+.tour-billboard-overlay {
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    padding: 40px;
+
+    color: white;
+
+    display: flex;
+
+    justify-content: space-between;
+    align-items: flex-end;
+
+    flex-wrap: wrap;
+
+    gap: 20px;
+
+    background:
+        linear-gradient(
+            to top,
+            rgba(15, 23, 42, 0.95),
+            rgba(15, 23, 42, 0)
+        );
+}
+
+.tour-title-meta h1 {
+    margin: 0 0 8px;
+
+    font-size: 34px;
+
+    font-weight: 800;
+}
+
+.tour-title-meta p {
+    margin: 0;
+
+    font-size: 15px;
+
+    opacity: 0.9;
+}
+
+.tour-price {
+    color: #38bdf8;
+
+    font-size: 26px;
+
+    font-weight: 800;
+}
+
+.tour-price small {
+    color: #cbd5e1;
+
+    font-size: 13px;
+
+    font-weight: 400;
+}
+
+
+/* =========================================================
+   MAIN GRID
+========================================================= */
+
+.tour-grid-split {
+    display: grid;
+
+    grid-template-columns: 2fr 1fr;
+
+    gap: 32px;
+}
+
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+.itinerary-main-card,
+.tour-pricing-widget,
+.reviews-section {
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 4px 12px rgba(15, 23, 42, 0.04);
+}
+
+.itinerary-main-card,
+.tour-pricing-widget {
+    padding: 32px;
+
+    height: fit-content;
+}
+
+
+/* =========================================================
+   HEADINGS
+========================================================= */
+
+.itinerary-main-card h2,
+.tour-pricing-widget h3,
+.reviews-section h2 {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    margin: 0 0 20px;
+
+    color: #0f172a;
+
+    font-size: 20px;
+
+    font-weight: 800;
+}
+
+.itinerary-main-card h2 i,
+.tour-pricing-widget h3 i,
+.reviews-section h2 i {
+    color: #0284c7;
+}
+
+
+/* =========================================================
+   QUICK SPECS
+========================================================= */
+
+.quick-specs-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(130px, 1fr)
+        );
+
+    gap: 16px;
+
+    margin-bottom: 32px;
+
+    padding-bottom: 24px;
+
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.spec-capsule {
+    padding: 14px 10px;
+
+    text-align: center;
+
+    background: #f8fafc;
+
+    border: 1px solid #f1f5f9;
+
+    border-radius: 8px;
+}
+
+.spec-capsule i {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #0284c7;
+
+    font-size: 17px;
+}
+
+.spec-capsule p {
+    margin: 0 0 5px;
+
+    color: #1e293b;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+.spec-capsule strong {
+    color: #0f172a;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+
+.tour-description {
+    margin-top: 30px;
+}
+
+.tour-description p {
+    margin: 0;
+
+    color: #475569;
+
+    font-size: 15px;
+
+    line-height: 1.8;
+}
+
+
+/* =========================================================
+   TIMELINE
+========================================================= */
+
+.timeline-container {
+    position: relative;
+
+    margin-top: 24px;
+
+    padding-left: 32px;
+
+    border-left: 2px solid #e2e8f0;
+}
+
+.timeline-day-node {
+    position: relative;
+
+    margin-bottom: 32px;
+}
+
+.timeline-day-node:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-day-node::before {
+    content: "";
+
+    position: absolute;
+
+    left: -41px;
+    top: 2px;
+
+    width: 16px;
+    height: 16px;
+
+    background: #0284c7;
+
+    border: 4px solid white;
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 0 0 2px #0284c7;
+}
+
+.day-title-tag {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 8px;
+
+    color: #0f172a;
+
+    font-size: 15px;
+
+    font-weight: 700;
+}
+
+.day-title-tag span {
+    padding: 3px 8px;
+
+    color: white;
+
+    background: #0f172a;
+
+    border-radius: 4px;
+
+    font-size: 11px;
+
+    text-transform: uppercase;
+}
+
+.day-description {
+    margin: 0;
+
+    color: #475569;
+
+    font-size: 14.5px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   PRICING
+========================================================= */
+
+.pricing-label {
+    margin-bottom: 6px;
+
+    color: #64748b;
+
+    font-size: 13px;
+}
+
+.pricing-amount {
+    margin-bottom: 20px;
+
+    color: #0f172a;
+
+    font-size: 30px;
+
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   TOUR INFORMATION
+========================================================= */
+
+.tour-info-list {
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+.tour-info-list li {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 10px 0;
+
+    border-bottom: 1px solid #f1f5f9;
+
+    color: #475569;
+
+    font-size: 14px;
+}
+
+.tour-info-list li:last-child {
+    border-bottom: none;
+}
+
+.tour-info-list i {
+    width: 20px;
+
+    color: #0284c7;
+}
+
+
+/* =========================================================
+   BOOK BUTTON
+========================================================= */
+
+.btn-lock-tour {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #0f172a;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.btn-lock-tour:hover {
+    background: #0284c7;
+
+    color: white;
+}
+
+.btn-lock-tour:disabled {
+    opacity: 0.6;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   REVIEWS
+========================================================= */
+
+.reviews-section {
+    margin-top: 32px;
+
+    padding: 32px;
+}
+
+.review-card {
+    padding: 18px 0;
+
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.review-card:last-child {
+    border-bottom: none;
+}
+
+.review-user {
+    color: #0f172a;
+
+    font-weight: 700;
+}
+
+.review-rating {
+    margin: 5px 0;
+
+    color: #f59e0b;
+}
+
+.review-title {
+    color: #1e293b;
+
+    font-weight: 700;
+}
+
+.review-text {
+    margin-bottom: 0;
+
+    color: #64748b;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .tour-grid-split {
+        grid-template-columns: 1fr;
+    }
+
+    .tour-billboard-header {
+        height: 280px;
+    }
+
+    .tour-billboard-overlay {
+        padding: 22px;
+    }
+
+    .tour-title-meta h1 {
+        font-size: 25px;
+    }
+
+    .tour-price {
+        font-size: 22px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .tour-detail-wrapper {
+        margin-top: 90px;
+
+        padding: 0 15px;
+    }
+
+    .tour-billboard-header {
+        height: 260px;
+    }
+
+    .itinerary-main-card,
+    .tour-pricing-widget,
+    .reviews-section {
+        padding: 20px;
+    }
+
+    .quick-specs-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .tour-billboard-overlay {
+        padding: 18px;
+    }
+
+    .tour-title-meta h1 {
+        font-size: 22px;
+    }
+
+}
+
+</style>
+
+
+<main class="tour-detail-wrapper">
+
+
+    <!-- =====================================================
+         BACK TO DESTINATION
+    ====================================================== -->
+
+    {% if tour.destination %}
+
+        <a
+            href="{% url 'destination_detail' tour.destination.destination_slug %}"
+            class="back-catalog-link"
+        >
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Back to
+            {{ tour.destination.destination_name }}
+
+        </a>
+
+    {% else %}
+
+        <a
+            href="{% url 'tour_list' %}"
+            class="back-catalog-link"
+        >
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Return to Tour Packages
+
+        </a>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <div class="tour-billboard-header">
+
+
+        {% if tour.tour_image %}
+
+            <img
+                src="{{ tour.tour_image.url }}"
+                alt="{{ tour.tour_name }}"
+            >
+
+        {% elif tour.destination and tour.destination.destination_image %}
+
+            <img
+                src="{{ tour.destination.destination_image.url }}"
+                alt="{{ tour.tour_name }}"
+            >
+
+        {% else %}
+
+            <div class="tour-image-placeholder">
+
+                <i class="fa-solid fa-image"></i>
+
+                &nbsp;
+
+                No tour image available
+
+            </div>
+
+        {% endif %}
+
+
+        <div class="tour-billboard-overlay">
+
+
+            <div class="tour-title-meta">
+
+                <h1>
+                    {{ tour.tour_name }}
+                </h1>
+
+
+                {% if tour.destination %}
+
+                    <p>
+
+                        <i class="fa-solid fa-location-dot"></i>
+
+                        {{ tour.destination.destination_name }}
+
+                        {% if tour.destination.destination_location %}
+
+                            ·
+
+                            {{ tour.destination.destination_location }}
+
+                        {% endif %}
+
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="tour-price">
+
+                ₹{{ tour.tour_price }}
+
+                <small>
+                    / person
+                </small>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <div class="tour-grid-split">
+
+
+        <!-- =================================================
+             LEFT
+        ================================================== -->
+
+        <div class="itinerary-main-card">
+
+
+            <!-- QUICK SPECS -->
+
+            <div class="quick-specs-grid">
+
+
+                {% if tour.tour_duration %}
+
+                    <div class="spec-capsule">
+
+                        <i class="fa-solid fa-hourglass-half"></i>
+
+                        <p>
+                            Duration
+                        </p>
+
+                        <strong>
+                            {{ tour.tour_duration }} Days
+                        </strong>
+
+                    </div>
+
+                {% endif %}
+
+
+                <div class="spec-capsule">
+
+                    <i class="fa-regular fa-calendar"></i>
+
+                    <p>
+                        Start Date
+                    </p>
+
+                    <strong>
+                        {{ tour.tour_start_date|date:"d M Y" }}
+                    </strong>
+
+                </div>
+
+
+                <div class="spec-capsule">
+
+                    <i class="fa-regular fa-calendar-check"></i>
+
+                    <p>
+                        End Date
+                    </p>
+
+                    <strong>
+                        {{ tour.tour_end_date|date:"d M Y" }}
+                    </strong>
+
+                </div>
+
+
+                <div class="spec-capsule">
+
+                    <i class="fa-solid fa-users"></i>
+
+                    <p>
+                        Available Seats
+                    </p>
+
+                    <strong>
+                        {{ tour.available_seats }}
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- DESCRIPTION -->
+
+            <div class="tour-description">
+
+
+                <h2>
+
+                    <i class="fa-solid fa-map-location-dot"></i>
+
+                    About This Tour
+
+                </h2>
+
+
+                {% if tour.tour_desc %}
+
+                    <p>
+                        {{ tour.tour_desc }}
+                    </p>
+
+                {% else %}
+
+                    <p>
+
+                        Discover an unforgettable travel
+                        experience with YatraNest.
+
+                    </p>
+
+                {% endif %}
+
+
+            </div>
+
+
+            <!-- JOURNEY -->
+
+            <h2 style="margin-top:35px;">
+
+                <i class="fa-solid fa-route"></i>
+
+                Your Journey
+
+            </h2>
+
+
+            <div class="timeline-container">
+
+
+                <div class="timeline-day-node">
+
+
+                    <div class="day-title-tag">
+
+                        <span>
+                            Start
+                        </span>
+
+                        Tour Begins
+
+                    </div>
+
+
+                    <p class="day-description">
+
+                        Your journey begins on
+
+                        <strong>
+                            {{ tour.tour_start_date|date:"d M Y" }}
+                        </strong>.
+
+                        Get ready for an amazing travel
+                        experience.
+
+                    </p>
+
+
+                </div>
+
+
+                <div class="timeline-day-node">
+
+
+                    <div class="day-title-tag">
+
+                        <span>
+                            Explore
+                        </span>
+
+                        Discover the Destination
+
+                    </div>
+
+
+                    <p class="day-description">
+
+                        Explore beautiful places,
+                        experience local culture and
+                        create unforgettable memories
+                        in
+                        {% if tour.destination %}
+                            {{ tour.destination.destination_name }}.
+                        {% else %}
+                            your selected destination.
+                        {% endif %}
+
+                    </p>
+
+
+                </div>
+
+
+                <div class="timeline-day-node">
+
+
+                    <div class="day-title-tag">
+
+                        <span>
+                            End
+                        </span>
+
+                        Journey Complete
+
+                    </div>
+
+
+                    <p class="day-description">
+
+                        Your tour ends on
+
+                        <strong>
+                            {{ tour.tour_end_date|date:"d M Y" }}
+                        </strong>.
+
+                        We hope you have an unforgettable
+                        journey.
+
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+        <!-- =================================================
+             RIGHT
+        ================================================== -->
+
+        <div class="tour-pricing-widget">
+
+
+            <h3>
+
+                <i class="fa-solid fa-ticket"></i>
+
+                Book This Tour
+
+            </h3>
+
+
+            <div class="pricing-label">
+
+                Starting from
+
+            </div>
+
+
+            <div class="pricing-amount">
+
+                ₹{{ tour.tour_price }}
+
+            </div>
+
+
+            <ul class="tour-info-list">
+
+
+                <li>
+
+                    <i class="fa-regular fa-calendar"></i>
+
+                    <span>
+                        {{ tour.tour_start_date|date:"d M Y" }}
+                    </span>
+
+                </li>
+
+
+                <li>
+
+                    <i class="fa-solid fa-calendar-check"></i>
+
+                    <span>
+                        {{ tour.tour_end_date|date:"d M Y" }}
+                    </span>
+
+                </li>
+
+
+                <li>
+
+                    <i class="fa-solid fa-hourglass-half"></i>
+
+                    <span>
+                        {{ tour.tour_duration }} days
+                    </span>
+
+                </li>
+
+
+                <li>
+
+                    <i class="fa-solid fa-users"></i>
+
+                    <span>
+
+                        {{ tour.available_seats }}
+
+                        seats available
+
+                    </span>
+
+                </li>
+
+
+                {% if tour.destination %}
+
+                    <li>
+
+                        <i class="fa-solid fa-location-dot"></i>
+
+                        <span>
+
+                            {{ tour.destination.destination_name }}
+
+                        </span>
+
+                    </li>
+
+                {% endif %}
+
+
+            </ul>
+
+
+            <!-- BOOKING -->
+
+            <div style="margin-top:25px;">
+
+
+                {% if tour.is_active and tour.available_seats %}
+
+                    <a
+                        href="{% url 'create_booking' tour.id %}"
+                        class="btn-lock-tour"
+                    >
+
+                        <i class="fa-solid fa-calendar-check"></i>
+
+                        Book This Tour
+
+                    </a>
+
+
+                {% elif tour.is_active %}
+
+                    <button
+                        type="button"
+                        class="btn-lock-tour"
+                        disabled
+                    >
+
+                        <i class="fa-solid fa-ban"></i>
+
+                        Fully Booked
+
+                    </button>
+
+
+                {% else %}
+
+                    <button
+                        type="button"
+                        class="btn-lock-tour"
+                        disabled
+                    >
+
+                        <i class="fa-solid fa-ban"></i>
+
+                        Tour Unavailable
+
+                    </button>
+
+                {% endif %}
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         REVIEWS
+    ====================================================== -->
+
+    <section class="reviews-section">
+
+
+        <h2>
+
+            <i class="fa-solid fa-star"></i>
+
+            Guest Reviews
+
+        </h2>
+
+
+        {% if reviews %}
+
+
+            {% for review in reviews %}
+
+
+                <div class="review-card">
+
+
+                    <div class="review-user">
+
+                        {% if review.user.first_name %}
+
+                            {{ review.user.first_name }}
+
+                        {% else %}
+
+                            {{ review.user.username }}
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="review-rating">
+
+                        {{ review.rating }}/5
+
+                    </div>
+
+
+                    {% if review.review_title %}
+
+                        <div class="review-title">
+
+                            {{ review.review_title }}
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <p class="review-text">
+
+                        {{ review.review_text }}
+
+                    </p>
+
+
+                </div>
+
+
+            {% endfor %}
+
+
+        {% else %}
+
+            <p style="color:#64748b;">
+
+                No reviews yet.
+                Be the first to share your experience!
+
+            </p>
+
+        {% endif %}
+
+
+        <!-- WRITE REVIEW -->
+
+        <div style="margin-top:25px;">
+
+            <a
+                href="{% url 'create_review' tour.id %}"
+                class="btn-lock-tour"
+            >
+
+                <i class="fa-solid fa-pen"></i>
+
+                Write a Review
+
+            </a>
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+{% endblock %}

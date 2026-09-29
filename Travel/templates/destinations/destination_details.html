@@ -1,0 +1,2097 @@
+{% extends "Travel/base.html" %}
+{% load static %}
+
+{% block title %}
+{{ destination.destination_name }} | YatraNest
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+/* =========================================================
+   YATRANEST
+   DESTINATION DETAILS / TOUR SELECTION PAGE
+   ========================================================= */
+
+.destination-page {
+
+    --cream: #f6f2e9;
+    --paper: #fffdf9;
+    --dark: #202d27;
+    --green: #304b3d;
+    --green-dark: #233a30;
+    --gold: #c18a43;
+    --gold-light: #e7c488;
+    --text: #35423b;
+    --muted: #737b75;
+    --line: #e5ded3;
+
+    min-height: 100vh;
+
+    background: var(--cream);
+
+    color: var(--text);
+
+    padding-bottom: 90px;
+}
+
+
+/* =========================================================
+   DESTINATION HERO
+========================================================= */
+
+.destination-hero {
+
+    position: relative;
+
+    min-height: 650px;
+
+    overflow: hidden;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    background: #202a25;
+}
+
+
+/* ---------------------------------------------------------
+   HERO IMAGE
+--------------------------------------------------------- */
+
+.destination-hero-image {
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    object-position: center;
+
+    transform: scale(1.01);
+
+    transition: transform 1.2s ease;
+}
+
+
+.destination-hero:hover .destination-hero-image {
+
+    transform: scale(1.035);
+
+}
+
+
+/* ---------------------------------------------------------
+   IMAGE OVERLAY
+--------------------------------------------------------- */
+
+.destination-hero-overlay {
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+
+        linear-gradient(
+            180deg,
+            rgba(16, 24, 21, 0.08) 0%,
+            rgba(16, 24, 21, 0.08) 28%,
+            rgba(16, 24, 21, 0.25) 48%,
+            rgba(16, 24, 21, 0.82) 100%
+        );
+
+}
+
+
+/* ---------------------------------------------------------
+   HERO CONTENT
+--------------------------------------------------------- */
+
+.destination-hero-content {
+
+    position: relative;
+
+    z-index: 3;
+
+    width: min(1180px, calc(100% - 40px));
+
+    margin: 0 auto;
+
+    padding: 45px 0 175px;
+
+}
+
+
+/* ---------------------------------------------------------
+   BACK BUTTON
+--------------------------------------------------------- */
+
+.destination-back {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 11px 17px;
+
+    border: 1px solid rgba(255,255,255,0.32);
+
+    border-radius: 50px;
+
+    background: rgba(255,255,255,0.12);
+
+    color: #fff;
+
+    text-decoration: none;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    backdrop-filter: blur(12px);
+
+    transition: all 0.25s ease;
+
+}
+
+
+.destination-back:hover {
+
+    background: rgba(255,255,255,0.20);
+
+    transform: translateX(-4px);
+
+    color: #fff;
+
+}
+
+
+/* ---------------------------------------------------------
+   HERO EYEBROW
+--------------------------------------------------------- */
+
+.destination-hero-eyebrow {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 58px;
+
+    margin-bottom: 14px;
+
+    color: var(--gold-light);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 2.5px;
+
+    text-transform: uppercase;
+
+}
+
+
+.destination-hero-eyebrow::before {
+
+    content: "";
+
+    width: 32px;
+
+    height: 1px;
+
+    background: var(--gold-light);
+
+}
+
+
+/* ---------------------------------------------------------
+   HERO TITLE
+--------------------------------------------------------- */
+
+.destination-hero-title {
+
+    max-width: 950px;
+
+    margin: 0;
+
+    color: #fffdf8;
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-size: clamp(52px, 8vw, 94px);
+
+    font-weight: 700;
+
+    line-height: 0.98;
+
+    letter-spacing: -2.5px;
+
+    text-shadow: 0 5px 25px rgba(0,0,0,0.22);
+
+}
+
+
+/* ---------------------------------------------------------
+   HERO LOCATION
+--------------------------------------------------------- */
+
+.destination-hero-location {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    margin-top: 22px;
+
+    color: rgba(255,255,255,0.90);
+
+    font-size: 14px;
+
+}
+
+
+.destination-hero-location i {
+
+    color: var(--gold-light);
+
+}
+
+
+/* =========================================================
+   FLOATING HERO INFO
+========================================================= */
+
+.destination-hero-info {
+
+    position: absolute;
+
+    z-index: 5;
+
+    left: 50%;
+
+    bottom: 34px;
+
+    transform: translateX(-50%);
+
+    width: min(1100px, calc(100% - 40px));
+
+    display: grid;
+
+    grid-template-columns: 1.25fr 1fr 1fr 1fr;
+
+    align-items: center;
+
+    overflow: hidden;
+
+    border: 1px solid rgba(255,255,255,0.18);
+
+    border-radius: 18px;
+
+    background: rgba(29, 40, 34, 0.86);
+
+    box-shadow:
+        0 18px 45px rgba(0,0,0,0.24);
+
+    backdrop-filter: blur(18px);
+
+}
+
+
+.destination-hero-info-item {
+
+    min-height: 76px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    padding: 14px 22px;
+
+    border-right: 1px solid rgba(255,255,255,0.12);
+
+}
+
+
+.destination-hero-info-item:last-child {
+
+    border-right: none;
+
+}
+
+
+.destination-hero-info-label {
+
+    margin-bottom: 5px;
+
+    color: rgba(255,255,255,0.50);
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.3px;
+
+    text-transform: uppercase;
+
+}
+
+
+.destination-hero-info-value {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: #fffaf1;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+
+.destination-hero-info-value i {
+
+    color: var(--gold-light);
+
+    font-size: 11px;
+
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.destination-main {
+
+    width: min(1180px, calc(100% - 40px));
+
+    margin: 0 auto;
+
+}
+
+
+/* =========================================================
+   INTRO SECTION
+========================================================= */
+
+.destination-intro {
+
+    display: grid;
+
+    grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.7fr);
+
+    gap: 80px;
+
+    padding: 82px 0 70px;
+
+    border-bottom: 1px solid var(--line);
+
+}
+
+
+.destination-intro-label {
+
+    display: block;
+
+    margin-bottom: 12px;
+
+    color: var(--gold);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+
+}
+
+
+.destination-intro-title {
+
+    max-width: 720px;
+
+    margin: 0 0 22px;
+
+    color: var(--dark);
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-size: clamp(35px, 4vw, 52px);
+
+    line-height: 1.08;
+
+    letter-spacing: -1px;
+
+}
+
+
+.destination-description {
+
+    max-width: 760px;
+
+    margin: 0;
+
+    color: var(--muted);
+
+    font-size: 14px;
+
+    line-height: 1.95;
+
+}
+
+
+/* =========================================================
+   DESTINATION DETAILS
+========================================================= */
+
+.destination-details {
+
+    align-self: center;
+
+}
+
+
+.destination-detail {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 17px 0;
+
+    border-bottom: 1px solid var(--line);
+
+}
+
+
+.destination-detail:first-child {
+
+    padding-top: 0;
+
+}
+
+
+.destination-detail:last-child {
+
+    border-bottom: none;
+
+}
+
+
+.destination-detail-label {
+
+    color: #999187;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+
+}
+
+
+.destination-detail-value {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: var(--green);
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    text-align: right;
+
+}
+
+
+.destination-detail-value i {
+
+    color: var(--gold);
+
+}
+
+
+/* =========================================================
+   TOURS SECTION
+========================================================= */
+
+.destination-tours {
+
+    padding-top: 72px;
+
+}
+
+
+.destination-tours-header {
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 30px;
+
+    margin-bottom: 34px;
+
+}
+
+
+.destination-tours-label {
+
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: var(--gold);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+
+}
+
+
+.destination-tours-title {
+
+    margin: 0;
+
+    color: var(--dark);
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-size: clamp(36px, 4vw, 52px);
+
+    line-height: 1.05;
+
+    letter-spacing: -1px;
+
+}
+
+
+.destination-tour-count {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding-bottom: 8px;
+
+    color: var(--muted);
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+}
+
+
+.destination-tour-count i {
+
+    color: var(--gold);
+
+}
+
+
+/* =========================================================
+   TOUR GRID
+========================================================= */
+
+.destination-tour-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 25px;
+
+}
+
+
+/* =========================================================
+   TOUR CARD
+========================================================= */
+
+.destination-tour-card {
+
+    overflow: hidden;
+
+    border-radius: 18px;
+
+    background: var(--paper);
+
+    border: 1px solid var(--line);
+
+    box-shadow:
+        0 8px 28px rgba(35, 48, 41, 0.05);
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+
+}
+
+
+.destination-tour-card:hover {
+
+    transform: translateY(-8px);
+
+    box-shadow:
+        0 20px 45px rgba(35, 48, 41, 0.12);
+
+}
+
+
+/* =========================================================
+   TOUR IMAGE
+========================================================= */
+
+.destination-tour-image {
+
+    position: relative;
+
+    height: 245px;
+
+    overflow: hidden;
+
+    background: #ddd6c9;
+
+}
+
+
+.destination-tour-image img {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    transition: transform 0.5s ease;
+
+}
+
+
+.destination-tour-card:hover
+.destination-tour-image img {
+
+    transform: scale(1.07);
+
+}
+
+
+.destination-tour-image::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        linear-gradient(
+            to top,
+            rgba(18,26,22,0.45),
+            transparent 55%
+        );
+
+    pointer-events: none;
+
+}
+
+
+/* =========================================================
+   TOUR BADGE
+========================================================= */
+
+.destination-tour-type {
+
+    position: absolute;
+
+    z-index: 2;
+
+    top: 15px;
+
+    left: 15px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 8px 12px;
+
+    border-radius: 50px;
+
+    background: rgba(29,40,34,0.86);
+
+    color: #fff;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.8px;
+
+    text-transform: uppercase;
+
+    backdrop-filter: blur(8px);
+
+}
+
+
+.destination-tour-status {
+
+    position: absolute;
+
+    z-index: 2;
+
+    right: 15px;
+
+    bottom: 15px;
+
+    padding: 8px 12px;
+
+    border-radius: 50px;
+
+    background: rgba(255,252,246,0.95);
+
+    color: #936125;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+}
+
+
+/* =========================================================
+   TOUR BODY
+========================================================= */
+
+.destination-tour-body {
+
+    padding: 23px;
+
+}
+
+
+.destination-tour-name {
+
+    margin: 0 0 10px;
+
+    color: var(--dark);
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-size: 23px;
+
+    line-height: 1.18;
+
+}
+
+
+.destination-tour-description {
+
+    min-height: 67px;
+
+    margin: 0 0 20px;
+
+    color: var(--muted);
+
+    font-size: 12.5px;
+
+    line-height: 1.75;
+
+}
+
+
+/* =========================================================
+   TOUR META
+========================================================= */
+
+.destination-tour-info {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 8px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.destination-tour-info-item {
+
+    padding: 11px;
+
+    border-radius: 10px;
+
+    background: #f7f4ed;
+
+}
+
+
+.destination-tour-info-item span {
+
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #9a9287;
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.7px;
+
+    text-transform: uppercase;
+
+}
+
+
+.destination-tour-info-item strong {
+
+    color: #435249;
+
+    font-size: 11px;
+
+}
+
+
+/* =========================================================
+   PRICE
+========================================================= */
+
+.destination-tour-price {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding-top: 16px;
+
+    border-top: 1px solid #ebe5db;
+
+    margin-bottom: 17px;
+
+}
+
+
+.destination-tour-price-text {
+
+    color: #948d83;
+
+    font-size: 9px;
+
+}
+
+
+.destination-tour-price-value {
+
+    color: #a66d2b;
+
+    font-size: 24px;
+
+    font-weight: 800;
+
+}
+
+
+.destination-tour-price-value small {
+
+    color: #958d82;
+
+    font-size: 9px;
+
+    font-weight: 500;
+
+}
+
+
+/* =========================================================
+   TOUR BUTTONS
+========================================================= */
+
+.destination-tour-actions {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 9px;
+
+}
+
+
+.destination-tour-button {
+
+    min-height: 44px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    font-size: 10.5px;
+
+    font-weight: 800;
+
+    transition: all 0.25s ease;
+
+}
+
+
+.destination-tour-view {
+
+    border: 1px solid #ddd5c9;
+
+    background: #fffdf9;
+
+    color: #536158;
+
+}
+
+
+.destination-tour-view:hover {
+
+    border-color: #c39a63;
+
+    color: #98682f;
+
+    background: #faf5ed;
+
+}
+
+
+.destination-tour-book {
+
+    border: 1px solid var(--green);
+
+    background: var(--green);
+
+    color: #fff;
+
+}
+
+
+.destination-tour-book:hover {
+
+    border-color: var(--green-dark);
+
+    background: var(--green-dark);
+
+    color: #fff;
+
+    transform: translateY(-2px);
+
+}
+
+
+.destination-tour-sold {
+
+    min-height: 44px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    border-radius: 10px;
+
+    background: #eeeae3;
+
+    color: #999289;
+
+    font-size: 10.5px;
+
+    font-weight: 800;
+
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.destination-empty {
+
+    padding: 75px 30px;
+
+    border: 1px dashed #d6cdbf;
+
+    border-radius: 18px;
+
+    background: rgba(255,255,255,0.45);
+
+    text-align: center;
+
+}
+
+
+.destination-empty-icon {
+
+    width: 64px;
+
+    height: 64px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin: 0 auto 18px;
+
+    border-radius: 50%;
+
+    background: #ece5d9;
+
+    color: var(--gold);
+
+    font-size: 21px;
+
+}
+
+
+.destination-empty h3 {
+
+    margin: 0 0 10px;
+
+    color: var(--dark);
+
+    font-family: "Playfair Display", Georgia, serif;
+
+    font-size: 28px;
+
+}
+
+
+.destination-empty p {
+
+    max-width: 500px;
+
+    margin: 0 auto 23px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+
+    line-height: 1.8;
+
+}
+
+
+.destination-empty-link {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 12px 19px;
+
+    border-radius: 10px;
+
+    background: var(--green);
+
+    color: #fff;
+
+    text-decoration: none;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1050px) {
+
+    .destination-hero-info {
+
+        grid-template-columns:
+            repeat(4, 1fr);
+
+    }
+
+
+    .destination-intro {
+
+        grid-template-columns: 1fr;
+
+        gap: 40px;
+
+    }
+
+
+    .destination-details {
+
+        max-width: 650px;
+
+    }
+
+
+    .destination-tour-grid {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .destination-hero {
+
+        min-height: 570px;
+
+    }
+
+
+    .destination-hero-content {
+
+        width: calc(100% - 30px);
+
+        padding:
+            30px 0 205px;
+
+    }
+
+
+    .destination-hero-eyebrow {
+
+        margin-top: 45px;
+
+    }
+
+
+    .destination-hero-title {
+
+        font-size: 49px;
+
+        letter-spacing: -1.2px;
+
+    }
+
+
+    .destination-hero-info {
+
+        bottom: 20px;
+
+        width: calc(100% - 30px);
+
+        grid-template-columns: 1fr 1fr;
+
+        border-radius: 16px;
+
+    }
+
+
+    .destination-hero-info-item {
+
+        min-height: 65px;
+
+        padding: 11px 15px;
+
+    }
+
+
+    .destination-hero-info-item:nth-child(2) {
+
+        border-right: none;
+
+    }
+
+
+    .destination-hero-info-item:nth-child(1),
+    .destination-hero-info-item:nth-child(2) {
+
+        border-bottom: 1px solid rgba(255,255,255,0.12);
+
+    }
+
+
+    .destination-main {
+
+        width: calc(100% - 30px);
+
+    }
+
+
+    .destination-intro {
+
+        padding: 55px 0 50px;
+
+    }
+
+
+    .destination-tours {
+
+        padding-top: 52px;
+
+    }
+
+
+    .destination-tours-header {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 10px;
+
+    }
+
+
+    .destination-tour-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .destination-tour-image {
+
+        height: 255px;
+
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+    .destination-hero {
+
+        min-height: 540px;
+
+    }
+
+
+    .destination-hero-title {
+
+        font-size: 41px;
+
+    }
+
+
+    .destination-hero-info {
+
+        grid-template-columns: 1fr 1fr;
+
+    }
+
+
+    .destination-hero-info-item {
+
+        padding: 10px 12px;
+
+    }
+
+
+    .destination-intro-title {
+
+        font-size: 32px;
+
+    }
+
+
+    .destination-tours-title {
+
+        font-size: 34px;
+
+    }
+
+
+    .destination-tour-actions {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="destination-page">
+
+
+    <!-- =====================================================
+         DESTINATION HERO
+    ====================================================== -->
+
+    <section class="destination-hero">
+
+
+        {% if destination.destination_image %}
+
+            <img
+                src="{{ destination.destination_image.url }}"
+                alt="{{ destination.destination_name }}"
+                class="destination-hero-image"
+            >
+
+        {% else %}
+
+            <img
+                src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2000&q=90"
+                alt="{{ destination.destination_name }}"
+                class="destination-hero-image"
+            >
+
+        {% endif %}
+
+
+        <div class="destination-hero-overlay"></div>
+
+
+        <div class="destination-hero-content">
+
+
+            <a
+                href="{% url 'destination_list' %}"
+                class="destination-back"
+            >
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                Back to Destinations
+
+            </a>
+
+
+            <div class="destination-hero-eyebrow">
+
+                Explore Destination
+
+            </div>
+
+
+            <h1 class="destination-hero-title">
+
+                {{ destination.destination_name }}
+
+            </h1>
+
+
+            {% if destination.destination_location %}
+
+                <div class="destination-hero-location">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                    <span>
+                        {{ destination.destination_location }}
+                    </span>
+
+                </div>
+
+            {% endif %}
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             FLOATING INFORMATION PANEL
+        ================================================== -->
+
+        <div class="destination-hero-info">
+
+
+            <!-- LOCATION -->
+
+            <div class="destination-hero-info-item">
+
+                <span class="destination-hero-info-label">
+                    Location
+                </span>
+
+                <strong class="destination-hero-info-value">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                    {% if destination.destination_location %}
+                        {{ destination.destination_location }}
+                    {% else %}
+                        India
+                    {% endif %}
+
+                </strong>
+
+            </div>
+
+
+            <!-- EXPERIENCE -->
+
+            <div class="destination-hero-info-item">
+
+                <span class="destination-hero-info-label">
+                    Experience
+                </span>
+
+                <strong class="destination-hero-info-value">
+
+                    <i class="fa-solid fa-compass"></i>
+
+                    {% if destination.destination_mood %}
+                        {{ destination.get_destination_mood_display }}
+                    {% else %}
+                        Travel Experience
+                    {% endif %}
+
+                </strong>
+
+            </div>
+
+
+            <!-- SEASON -->
+
+            <div class="destination-hero-info-item">
+
+                <span class="destination-hero-info-label">
+                    Best Season
+                </span>
+
+                <strong class="destination-hero-info-value">
+
+                    <i class="fa-regular fa-calendar"></i>
+
+                    {% if destination.destination_season %}
+                        {{ destination.get_destination_season_display }}
+                    {% else %}
+                        All Year
+                    {% endif %}
+
+                </strong>
+
+            </div>
+
+
+            <!-- TOURS -->
+
+            <div class="destination-hero-info-item">
+
+                <span class="destination-hero-info-label">
+                    Experiences
+                </span>
+
+                <strong class="destination-hero-info-value">
+
+                    <i class="fa-solid fa-route"></i>
+
+                    {{ tours|length }}
+
+                    {% if tours|length == 1 %}
+                        Tour
+                    {% else %}
+                        Tours
+                    {% endif %}
+
+                </strong>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <main class="destination-main">
+
+
+        <!-- =================================================
+             DESTINATION INTRO
+        ================================================== -->
+
+        <section class="destination-intro">
+
+
+            <div>
+
+                <span class="destination-intro-label">
+                    Discover {{ destination.destination_name }}
+                </span>
+
+
+                <h2 class="destination-intro-title">
+
+                    A journey worth remembering.
+
+                </h2>
+
+
+                {% if destination.destination_desc %}
+
+                    <p class="destination-description">
+
+                        {{ destination.destination_desc }}
+
+                    </p>
+
+                {% else %}
+
+                    <p class="destination-description">
+
+                        Discover the beauty, culture and experiences of
+                        {{ destination.destination_name }} through
+                        carefully planned travel experiences from YatraNest.
+
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+
+
+            <!-- DESTINATION DETAILS -->
+
+            <div class="destination-details">
+
+
+                {% if destination.destination_location %}
+
+                    <div class="destination-detail">
+
+                        <span class="destination-detail-label">
+                            Location
+                        </span>
+
+                        <strong class="destination-detail-value">
+
+                            <i class="fa-solid fa-location-dot"></i>
+
+                            {{ destination.destination_location }}
+
+                        </strong>
+
+                    </div>
+
+                {% endif %}
+
+
+
+                {% if destination.destination_mood %}
+
+                    <div class="destination-detail">
+
+                        <span class="destination-detail-label">
+                            Experience
+                        </span>
+
+                        <strong class="destination-detail-value">
+
+                            <i class="fa-solid fa-compass"></i>
+
+                            {{ destination.get_destination_mood_display }}
+
+                        </strong>
+
+                    </div>
+
+                {% endif %}
+
+
+
+                {% if destination.destination_season %}
+
+                    <div class="destination-detail">
+
+                        <span class="destination-detail-label">
+                            Best Season
+                        </span>
+
+                        <strong class="destination-detail-value">
+
+                            <i class="fa-regular fa-calendar"></i>
+
+                            {{ destination.get_destination_season_display }}
+
+                        </strong>
+
+                    </div>
+
+                {% endif %}
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             RELATED TOURS
+        ================================================== -->
+
+        <section
+            class="destination-tours"
+            id="related-tours"
+        >
+
+
+            <div class="destination-tours-header">
+
+
+                <div>
+
+                    <span class="destination-tours-label">
+                        Choose your experience
+                    </span>
+
+                    <h2 class="destination-tours-title">
+
+                        Tours in {{ destination.destination_name }}
+
+                    </h2>
+
+                </div>
+
+
+                <div class="destination-tour-count">
+
+                    <i class="fa-solid fa-route"></i>
+
+                    {{ tours|length }}
+
+                    {% if tours|length == 1 %}
+                        Available Tour
+                    {% else %}
+                        Available Tours
+                    {% endif %}
+
+                </div>
+
+
+            </div>
+
+
+
+            {% if tours %}
+
+
+                <div class="destination-tour-grid">
+
+
+                    {% for tour in tours %}
+
+
+                        <article class="destination-tour-card">
+
+
+                            <!-- =================================
+                                 TOUR IMAGE
+                            ================================== -->
+
+                            <div class="destination-tour-image">
+
+
+                                {% if tour.tour_image %}
+
+                                    <img
+                                        src="{{ tour.tour_image.url }}"
+                                        alt="{{ tour.tour_name }}"
+                                    >
+
+                                {% elif destination.destination_image %}
+
+                                    <img
+                                        src="{{ destination.destination_image.url }}"
+                                        alt="{{ tour.tour_name }}"
+                                    >
+
+                                {% else %}
+
+                                    <img
+                                        src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=1000&q=85"
+                                        alt="{{ tour.tour_name }}"
+                                    >
+
+                                {% endif %}
+
+
+                                <span class="destination-tour-type">
+
+                                    <i class="fa-solid fa-route"></i>
+
+                                    YatraNest Tour
+
+                                </span>
+
+
+                                {% if tour.available_seats > 0 %}
+
+                                    <span class="destination-tour-status">
+
+                                        {{ tour.available_seats }}
+                                        seats available
+
+                                    </span>
+
+                                {% else %}
+
+                                    <span
+                                        class="destination-tour-status"
+                                        style="color:#a4473d;"
+                                    >
+
+                                        Sold Out
+
+                                    </span>
+
+                                {% endif %}
+
+
+                            </div>
+
+
+
+                            <!-- =================================
+                                 TOUR CONTENT
+                            ================================== -->
+
+                            <div class="destination-tour-body">
+
+
+                                <h3 class="destination-tour-name">
+
+                                    {{ tour.tour_name }}
+
+                                </h3>
+
+
+                                {% if tour.tour_desc %}
+
+                                    <p class="destination-tour-description">
+
+                                        {{ tour.tour_desc }}
+
+                                    </p>
+
+                                {% else %}
+
+                                    <p class="destination-tour-description">
+
+                                        Experience
+                                        {{ destination.destination_name }}
+                                        through this carefully planned
+                                        YatraNest tour.
+
+                                    </p>
+
+                                {% endif %}
+
+
+
+                                <!-- TOUR INFORMATION -->
+
+                                <div class="destination-tour-info">
+
+
+                                    <div class="destination-tour-info-item">
+
+                                        <span>
+                                            Duration
+                                        </span>
+
+                                        <strong>
+
+                                            {{ tour.tour_duration }}
+                                            Days
+
+                                        </strong>
+
+                                    </div>
+
+
+                                    <div class="destination-tour-info-item">
+
+                                        <span>
+                                            Start
+                                        </span>
+
+                                        <strong>
+
+                                            {{ tour.tour_start_date|date:"d M Y" }}
+
+                                        </strong>
+
+                                    </div>
+
+
+                                    <div class="destination-tour-info-item">
+
+                                        <span>
+                                            End
+                                        </span>
+
+                                        <strong>
+
+                                            {{ tour.tour_end_date|date:"d M Y" }}
+
+                                        </strong>
+
+                                    </div>
+
+
+                                    <div class="destination-tour-info-item">
+
+                                        <span>
+                                            Seats
+                                        </span>
+
+                                        <strong>
+
+                                            {% if tour.available_seats > 0 %}
+
+                                                {{ tour.available_seats }}
+                                                Available
+
+                                            {% else %}
+
+                                                Sold Out
+
+                                            {% endif %}
+
+                                        </strong>
+
+                                    </div>
+
+
+                                </div>
+
+
+
+                                <!-- PRICE -->
+
+                                <div class="destination-tour-price">
+
+
+                                    <span class="destination-tour-price-text">
+
+                                        Price per person
+
+                                    </span>
+
+
+                                    <strong class="destination-tour-price-value">
+
+                                        ₹{{ tour.tour_price }}
+
+                                    </strong>
+
+
+                                </div>
+
+
+
+                                <!-- ACTION BUTTONS -->
+
+                                <div class="destination-tour-actions">
+
+
+                                    <a
+                                        href="{% url 'tour_detail' tour.tour_slug %}"
+                                        class="destination-tour-button destination-tour-view"
+                                    >
+
+                                        <i class="fa-regular fa-eye"></i>
+
+                                        View Tour
+
+                                    </a>
+
+
+                                    {% if tour.available_seats > 0 %}
+
+                                        <a
+                                            href="{% url 'create_booking' tour.id %}"
+                                            class="destination-tour-button destination-tour-book"
+                                        >
+
+                                            <i class="fa-solid fa-calendar-check"></i>
+
+                                            Book Now
+
+                                        </a>
+
+                                    {% else %}
+
+                                        <span class="destination-tour-sold">
+
+                                            <i class="fa-solid fa-ban"></i>
+
+                                            Sold Out
+
+                                        </span>
+
+                                    {% endif %}
+
+
+                                </div>
+
+
+                            </div>
+
+
+                        </article>
+
+
+                    {% endfor %}
+
+
+                </div>
+
+
+            {% else %}
+
+
+                <!-- =============================================
+                     EMPTY TOUR STATE
+                ============================================== -->
+
+                <div class="destination-empty">
+
+
+                    <div class="destination-empty-icon">
+
+                        <i class="fa-solid fa-map-location-dot"></i>
+
+                    </div>
+
+
+                    <h3>
+
+                        No tours available yet
+
+                    </h3>
+
+
+                    <p>
+
+                        There are currently no active tours available
+                        for {{ destination.destination_name }}.
+
+                    </p>
+
+
+                    <a
+                        href="{% url 'destination_list' %}"
+                        class="destination-empty-link"
+                    >
+
+                        <i class="fa-solid fa-arrow-left"></i>
+
+                        Explore Other Destinations
+
+                    </a>
+
+
+                </div>
+
+
+            {% endif %}
+
+
+        </section>
+
+
+    </main>
+
+
+</div>
+
+{% endblock %}

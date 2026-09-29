@@ -1,0 +1,552 @@
+{% extends "Travel/base.html" %}
+{% load static %}
+
+{% block title %}
+    YatraNest - Verified Tour Guides
+{% endblock %}
+
+{% block content %}
+
+<style>
+    /* =========================================================
+       TOUR GUIDE DIRECTORY
+    ========================================================= */
+
+    .guide-workspace-wrapper {
+        max-width: 1200px;
+        margin: 120px auto 60px auto;
+        padding: 0 24px;
+    }
+
+    .guide-header-block {
+        text-align: center;
+        margin-bottom: 48px;
+    }
+
+    .guide-header-block h1 {
+        font-size: 30px;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 8px;
+    }
+
+    .guide-header-block p {
+        font-size: 15px;
+        color: #64748b;
+        max-width: 700px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+
+    /* =========================================================
+       GUIDE GRID
+    ========================================================= */
+
+    .guide-grid-matrix {
+        display: grid;
+        grid-template-columns: repeat(
+            auto-fit,
+            minmax(340px, 1fr)
+        );
+        gap: 30px;
+    }
+
+    /* =========================================================
+       GUIDE CARD
+    ========================================================= */
+
+    .guide-profile-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 28px;
+
+        box-shadow:
+            0 4px 15px -3px rgba(15, 23, 42, 0.04);
+
+        transition:
+            transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+            box-shadow 0.25s;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .guide-profile-card:hover {
+        transform: translateY(-6px);
+
+        box-shadow:
+            0 12px 24px -6px rgba(15, 23, 42, 0.08);
+    }
+
+    /* =========================================================
+       GUIDE BIO
+    ========================================================= */
+
+    .guide-bio-row {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .guide-avatar-frame {
+        width: 80px;
+        height: 80px;
+        min-width: 80px;
+
+        border-radius: 50%;
+        object-fit: cover;
+
+        border: 3px solid #e2e8f0;
+        background-color: #f1f5f9;
+    }
+
+    .guide-title-block {
+        min-width: 0;
+    }
+
+    .guide-title-block h3 {
+        font-size: 18px;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 6px;
+    }
+
+    .guide-badge-pill {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+
+        padding: 4px 10px;
+
+        border-radius: 12px;
+
+        background-color: #e0f2fe;
+        color: #0369a1;
+
+        display: inline-block;
+    }
+
+    /* =========================================================
+       GUIDE DETAILS
+    ========================================================= */
+
+    .guide-specs-box {
+        border-top: 1px solid #f1f5f9;
+        border-bottom: 1px solid #f1f5f9;
+
+        padding: 16px 0;
+        margin-bottom: 24px;
+
+        font-size: 14px;
+        color: #475569;
+
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .spec-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+
+        line-height: 1.5;
+    }
+
+    .spec-item i {
+        color: #0284c7;
+        width: 16px;
+        min-width: 16px;
+        margin-top: 3px;
+    }
+
+    .text-amber {
+        color: #f59e0b !important;
+    }
+
+    /* =========================================================
+       HIRE BUTTON
+    ========================================================= */
+
+    .btn-hire-guide {
+        width: 100%;
+
+        background-color: #0f172a;
+        color: #ffffff;
+
+        border: none;
+
+        padding: 12px;
+
+        border-radius: 8px;
+
+        font-size: 14px;
+        font-weight: 600;
+
+        cursor: pointer;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        gap: 8px;
+
+        text-decoration: none;
+
+        transition:
+            background-color 0.2s ease,
+            transform 0.2s ease;
+    }
+
+    .btn-hire-guide:hover {
+        background-color: #0284c7;
+        transform: translateY(-1px);
+    }
+
+    /* =========================================================
+       BACK BUTTON
+    ========================================================= */
+
+    .back-home-shortcut {
+        display: inline-flex;
+        align-items: center;
+
+        gap: 6px;
+
+        text-decoration: none;
+
+        color: #64748b;
+
+        font-size: 14px;
+        font-weight: 600;
+
+        margin-bottom: 24px;
+
+        transition: color 0.2s;
+    }
+
+    .back-home-shortcut:hover {
+        color: #0284c7;
+    }
+
+    /* =========================================================
+       EMPTY STATE
+    ========================================================= */
+
+    .no-guides-message {
+        text-align: center;
+
+        background: #ffffff;
+
+        border: 1px solid #e2e8f0;
+
+        border-radius: 16px;
+
+        padding: 60px 30px;
+
+        color: #64748b;
+    }
+
+    .no-guides-message i {
+        font-size: 42px;
+        color: #94a3b8;
+        margin-bottom: 15px;
+    }
+
+    .no-guides-message h3 {
+        color: #0f172a;
+        margin-bottom: 8px;
+    }
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
+
+    @media (max-width: 700px) {
+
+        .guide-workspace-wrapper {
+            margin-top: 100px;
+            padding: 0 16px;
+        }
+
+        .guide-header-block h1 {
+            font-size: 25px;
+        }
+
+        .guide-grid-matrix {
+            grid-template-columns: 1fr;
+        }
+
+        .guide-profile-card {
+            padding: 22px;
+        }
+    }
+</style>
+
+
+<!-- =========================================================
+     GUIDE DIRECTORY
+========================================================= -->
+
+<main class="guide-workspace-wrapper">
+
+
+    <!-- BACK TO HOME -->
+
+    <a
+        href="{% url 'home' %}"
+        class="back-home-shortcut"
+    >
+        <i class="fa-solid fa-arrow-left"></i>
+
+        Return to Homepage
+    </a>
+
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="guide-header-block">
+
+        <h1>
+            Our Elite Verified Tour Guides
+        </h1>
+
+        <p>
+            Connect with accredited local specialists to
+            coordinate immersive custom itinerary tracks globally.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         GUIDE CATALOG
+    ====================================================== -->
+
+    {% if guides %}
+
+        <div class="guide-grid-matrix">
+
+            {% for guide in guides %}
+
+
+                <!-- =================================================
+                     GUIDE CARD
+                ================================================== -->
+
+                <div class="guide-profile-card">
+
+
+                    <div>
+
+
+                        <!-- GUIDE PROFILE -->
+
+                        <div class="guide-bio-row">
+
+
+                            <!-- GUIDE IMAGE -->
+
+                            {% if guide.image %}
+
+                                <img
+                                    src="{{ guide.image.url }}"
+                                    alt="{{ guide.name }}"
+                                    class="guide-avatar-frame"
+                                >
+
+                            {% else %}
+
+                                <img
+                                    src="{% static 'images/default-guide.jpg' %}"
+                                    alt="Guide"
+                                    class="guide-avatar-frame"
+                                >
+
+                            {% endif %}
+
+
+                            <!-- GUIDE NAME -->
+
+                            <div class="guide-title-block">
+
+                                <h3>
+                                    {{ guide.name }}
+                                </h3>
+
+
+                                {% if guide.specialization %}
+
+                                    <span class="guide-badge-pill">
+                                        {{ guide.specialization }}
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="guide-badge-pill">
+                                        Verified Guide
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =================================================
+                             GUIDE SPECIFICATIONS
+                        ================================================== -->
+
+                        <div class="guide-specs-box">
+
+
+                            <!-- LOCATION -->
+
+                            {% if guide.location %}
+
+                                <div class="spec-item">
+
+                                    <i class="fa-solid fa-earth-americas"></i>
+
+                                    <span>
+                                        Core Zone:
+                                        {{ guide.location }}
+                                    </span>
+
+                                </div>
+
+                            {% elif guide.destination %}
+
+                                <div class="spec-item">
+
+                                    <i class="fa-solid fa-earth-americas"></i>
+
+                                    <span>
+                                        Core Zone:
+                                        {{ guide.destination }}
+                                    </span>
+
+                                </div>
+
+                            {% endif %}
+
+
+                            <!-- LANGUAGE -->
+
+                            {% if guide.languages %}
+
+                                <div class="spec-item">
+
+                                    <i class="fa-solid fa-language"></i>
+
+                                    <span>
+                                        Languages:
+                                        {{ guide.languages }}
+                                    </span>
+
+                                </div>
+
+                            {% endif %}
+
+
+                            <!-- RATING -->
+
+                            {% if guide.rating %}
+
+                                <div class="spec-item">
+
+                                    <i
+                                        class="fa-solid fa-star text-amber"
+                                    ></i>
+
+                                    <strong>
+                                        {{ guide.rating }} Rating
+                                    </strong>
+
+                                    {% if guide.review_count %}
+
+                                        <span
+                                            style="color:#94a3b8;"
+                                        >
+                                            ({{ guide.review_count }}
+                                            reviews)
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+                            {% endif %}
+
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         HIRE GUIDE
+                    ================================================== -->
+
+                    {% if guide.id %}
+
+                        <a
+                            href="{% url 'guide_detail' guide.id %}"
+                            class="btn-hire-guide"
+                        >
+
+                            View / Hire Guide
+
+                            <i
+                                class="fa-solid fa-user-check"
+                            ></i>
+
+                        </a>
+
+                    {% endif %}
+
+
+                </div>
+
+
+            {% endfor %}
+
+        </div>
+
+
+    {% else %}
+
+
+        <!-- =====================================================
+             EMPTY GUIDE STATE
+        ====================================================== -->
+
+        <div class="no-guides-message">
+
+            <i class="fa-solid fa-user-group"></i>
+
+            <h3>
+                No Verified Guides Available
+            </h3>
+
+            <p>
+                We currently don't have any guides listed.
+                Please check again later.
+            </p>
+
+        </div>
+
+
+    {% endif %}
+
+
+</main>
+
+{% endblock %}
+

@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>YatraNest Gateway - Create Account</title>
+
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+
+
+    <style>
+
+        .auth-viewport-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 95vh;
+            padding: 40px 20px;
+        }
+
+
+        .auth-card {
+            background: #ffffff;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 480px;
+            padding: 40px;
+            box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+
+        .nav-back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: #0284c7;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 28px;
+            transition: all 0.2s ease;
+        }
+
+
+        .nav-back-home:hover {
+            color: #0369a1;
+            transform: translateX(-4px);
+        }
+
+
+        .auth-header {
+            margin-bottom: 32px;
+        }
+
+
+        .auth-header h2 {
+            font-size: 26px;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+
+
+        .auth-header p {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+
+        .form-name-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+
+        .input-group-field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+
+        .input-group-field label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #0f172a;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+
+        .input-icon-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+
+        .input-icon-wrapper i {
+            position: absolute;
+            left: 14px;
+            color: #94a3b8;
+            font-size: 16px;
+            z-index: 1;
+        }
+
+
+        .input-icon-wrapper input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px 16px 12px 42px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            color: #334155;
+            background: #f8fafc;
+            transition: all 0.2s ease;
+        }
+
+
+        .input-icon-wrapper input:focus {
+            border-color: #0284c7;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+        }
+
+
+        .form-policy-row {
+            display: flex;
+            align-items: flex-start;
+            margin-top: 4px;
+            margin-bottom: 28px;
+        }
+
+
+        .policy-checkbox-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 14px;
+            color: #475569;
+            cursor: pointer;
+            line-height: 1.4;
+        }
+
+
+        .policy-checkbox-label input {
+            accent-color: #0284c7;
+            width: 16px;
+            height: 16px;
+            margin-top: 2px;
+        }
+
+
+        .policy-checkbox-label a {
+            color: #0284c7;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+
+        .policy-checkbox-label a:hover {
+            text-decoration: underline;
+        }
+
+
+        .btn-auth-submit {
+            background-color: #0f172a;
+            color: #ffffff;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.25s ease;
+        }
+
+
+        .btn-auth-submit:hover {
+            background-color: #0284c7;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+        }
+
+
+        .auth-footer-prompt {
+            text-align: center;
+            margin-top: 28px;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+
+        .auth-footer-prompt a {
+            color: #0284c7;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+
+        .auth-footer-prompt a:hover {
+            text-decoration: underline;
+        }
+
+
+        .error-box {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+
+        .error-list {
+            margin: 5px 0 0 20px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<main class="auth-viewport-wrapper">
+
+    <div class="auth-card">
+
+
+        <!-- BACK TO HOME -->
+
+        <a
+            href="{% url 'home' %}"
+            class="nav-back-home"
+        >
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Return to Homepage
+
+        </a>
+
+
+        <!-- HEADER -->
+
+        <div class="auth-header">
+            
+
+            <h2>Create Your Account</h2>
+
+            <p>
+                Join Yatranest today to unlock
+                high-speed custom trip plan boards.
+            </p>
+
+        </div>
+
+
+        <!-- DJANGO MESSAGES -->
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <div class="error-box">
+
+                    {{ message }}
+
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+
+        <!-- FORM ERRORS -->
+
+        {% if form.non_field_errors %}
+
+            <div class="error-box">
+
+                {{ form.non_field_errors }}
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- REAL DJANGO REGISTRATION FORM -->
+
+        <form
+            method="POST"
+            action="{% url 'register' %}"
+        >
+
+            {% csrf_token %}
+
+
+            <!-- FIRST NAME / LAST NAME -->
+
+            <div class="form-name-row">
+
+
+                <!-- FIRST NAME -->
+
+                <div class="input-group-field">
+
+                    <label for="id_first_name">
+                        First Name
+                    </label>
+
+                    <div class="input-icon-wrapper">
+
+                        <i class="fa-regular fa-user"></i>
+
+                        <input
+                            type="text"
+                            id="id_first_name"
+                            name="first_name"
+                            placeholder="John"
+                            value="{{ form.first_name.value|default:'' }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    {% if form.first_name.errors %}
+
+                        <div class="error-box">
+
+                            {{ form.first_name.errors }}
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- LAST NAME -->
+
+                <div class="input-group-field">
+
+                    <label for="id_last_name">
+                        Last Name
+                    </label>
+
+                    <div class="input-icon-wrapper">
+
+                        <i class="fa-regular fa-user"></i>
+
+                        <input
+                            type="text"
+                            id="id_last_name"
+                            name="last_name"
+                            placeholder="Doe"
+                            value="{{ form.last_name.value|default:'' }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    {% if form.last_name.errors %}
+
+                        <div class="error-box">
+
+                            {{ form.last_name.errors }}
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+            </div>
+
+
+            <!-- USERNAME -->
+
+            <div class="input-group-field">
+
+                <label for="id_username">
+                    Username
+                </label>
+
+                <div class="input-icon-wrapper">
+
+                    <i class="fa-solid fa-user"></i>
+
+                    <input
+                        type="text"
+                        id="id_username"
+                        name="username"
+                        placeholder="Choose a username"
+                        value="{{ form.username.value|default:'' }}"
+                        autocomplete="username"
+                        required
+                    >
+
+                </div>
+
+
+                {% if form.username.errors %}
+
+                    <div class="error-box">
+
+                        {{ form.username.errors }}
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- EMAIL -->
+
+            <div class="input-group-field">
+
+                <label for="id_email">
+                    Email Address
+                </label>
+
+                <div class="input-icon-wrapper">
+
+                    <i class="fa-regular fa-envelope"></i>
+
+                    <input
+                        type="email"
+                        id="id_email"
+                        name="email"
+                        placeholder="explorer@domain.com"
+                        value="{{ form.email.value|default:'' }}"
+                        autocomplete="email"
+                        required
+                    >
+
+                </div>
+
+
+                {% if form.email.errors %}
+
+                    <div class="error-box">
+
+                        {{ form.email.errors }}
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div class="input-group-field">
+
+                <label for="id_password1">
+                    Create Account Password
+                </label>
+
+                <div class="input-icon-wrapper">
+
+                    <i class="fa-solid fa-lock"></i>
+
+                    <input
+                        type="password"
+                        id="id_password1"
+                        name="password1"
+                        placeholder="Min. 8 characters"
+                        autocomplete="new-password"
+                        required
+                    >
+
+                </div>
+
+
+                {% if form.password1.errors %}
+
+                    <div class="error-box">
+
+                        {{ form.password1.errors }}
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- CONFIRM PASSWORD -->
+
+            <div class="input-group-field">
+
+                <label for="id_password2">
+                    Confirm Password
+                </label>
+
+                <div class="input-icon-wrapper">
+
+                    <i class="fa-solid fa-lock"></i>
+
+                    <input
+                        type="password"
+                        id="id_password2"
+                        name="password2"
+                        placeholder="Repeat your password"
+                        autocomplete="new-password"
+                        required
+                    >
+
+                </div>
+
+
+                {% if form.password2.errors %}
+
+                    <div class="error-box">
+
+                        {{ form.password2.errors }}
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- TERMS -->
+
+            <div class="form-policy-row">
+
+                <label class="policy-checkbox-label">
+
+                    <input
+                        type="checkbox"
+                        required
+                    >
+
+                    <span>
+                        I agree to the
+                        <a href="#">
+                            Terms of Service
+                        </a>
+                        and
+                        <a href="#">
+                            Privacy Policy
+                        </a>.
+                    </span>
+
+                </label>
+
+            </div>
+
+
+            <!-- SUBMIT -->
+
+            <button
+                type="submit"
+                class="btn-auth-submit"
+            >
+
+                Register Account
+
+                <i class="fa-solid fa-user-plus"></i>
+
+            </button>
+
+
+            <!-- LOGIN -->
+
+            <p class="auth-footer-prompt">
+
+                Already registered?
+
+                <a href="{% url 'login' %}">
+                    Sign In Here
+                </a>
+
+            </p>
+
+
+        </form>
+
+    </div>
+
+</main>
+
+
+</body>
+
+</html>

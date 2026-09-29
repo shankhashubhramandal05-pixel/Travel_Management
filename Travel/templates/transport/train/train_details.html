@@ -1,0 +1,592 @@
+{% extends "Travel/base.html" %}
+
+{% block title %}
+Train Details - {{ train.train_number }}
+{% endblock %}
+
+{% block content %}
+
+<main style="
+    max-width: 1200px;
+    margin: 130px auto 80px;
+    padding: 0 20px;
+">
+
+    <!-- Back Navigation -->
+    <div style="margin-bottom: 24px;">
+        <a href="{% url 'train_list' %}"
+           style="
+               display: inline-flex;
+               align-items: center;
+               gap: 8px;
+               text-decoration: none;
+               color: #475569;
+               border: 1px solid #cbd5e1;
+               padding: 9px 16px;
+               border-radius: 7px;
+               font-size: 13px;
+               font-weight: 600;
+               background: #ffffff;
+           ">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back to Train Search
+        </a>
+    </div>
+
+
+    <!-- Main Grid -->
+    <div style="
+        display: grid;
+        grid-template-columns: 1.8fr 1fr;
+        gap: 30px;
+        align-items: start;
+    ">
+
+
+        <!-- LEFT SIDE -->
+        <section style="
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 32px;
+            box-shadow: var(--shadow, 0 4px 15px rgba(0,0,0,0.06));
+        ">
+
+            <!-- Train Header -->
+            <div style="
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                gap: 20px;
+                border-bottom: 2px solid #f1f5f9;
+                padding-bottom: 22px;
+                margin-bottom: 28px;
+            ">
+
+                <div>
+
+                    <span style="
+                        display: inline-block;
+                        font-size: 12px;
+                        font-weight: 700;
+                        color: #0284c7;
+                        text-transform: uppercase;
+                        letter-spacing: .5px;
+                        margin-bottom: 6px;
+                    ">
+                        {{ train.railway_name }}
+                    </span>
+
+                    <h1 style="
+                        margin: 0;
+                        color: #0f172a;
+                        font-size: 26px;
+                        font-weight: 800;
+                    ">
+                        {{ train.train_name }}
+                    </h1>
+
+                    <p style="
+                        margin: 7px 0 0;
+                        color: #64748b;
+                        font-size: 14px;
+                    ">
+                        Train No:
+                        <strong>{{ train.train_number }}</strong>
+                    </p>
+
+                </div>
+
+
+                <!-- Active Status -->
+                {% if train.is_active %}
+
+                <span style="
+                    background: #dcfce7;
+                    color: #15803d;
+                    padding: 6px 12px;
+                    border-radius: 20px;
+                    font-size: 11px;
+                    font-weight: 700;
+                    white-space: nowrap;
+                ">
+                    <i class="fa-solid fa-circle"
+                       style="font-size:7px;"></i>
+                    ACTIVE
+                </span>
+
+                {% else %}
+
+                <span style="
+                    background: #fee2e2;
+                    color: #b91c1c;
+                    padding: 6px 12px;
+                    border-radius: 20px;
+                    font-size: 11px;
+                    font-weight: 700;
+                ">
+                    INACTIVE
+                </span>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- Route Section -->
+            <div style="
+                background: #f8fafc;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                padding: 28px 22px;
+                margin-bottom: 30px;
+            ">
+
+                <div style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 20px;
+                ">
+
+                    <!-- Source -->
+                    <div style="min-width: 150px;">
+
+                        <span style="
+                            font-size: 11px;
+                            color: #64748b;
+                            text-transform: uppercase;
+                            font-weight: 700;
+                        ">
+                            Departure
+                        </span>
+
+                        <h2 style="
+                            margin: 5px 0;
+                            font-size: 22px;
+                            color: #0f172a;
+                        ">
+                            {{ train.source }}
+                        </h2>
+
+                        <p style="
+                            margin: 0;
+                            color: #0284c7;
+                            font-size: 14px;
+                            font-weight: 700;
+                        ">
+                            <i class="fa-regular fa-clock"></i>
+                            {{ train.departure_time|date:"d M Y, h:i A" }}
+                        </p>
+
+                    </div>
+
+
+                    <!-- Route Line -->
+                    <div style="
+                        flex: 1;
+                        text-align: center;
+                        position: relative;
+                    ">
+
+                        <div style="
+                            border-top: 2px solid #cbd5e1;
+                            position: relative;
+                            top: 15px;
+                        "></div>
+
+                        <i class="fa-solid fa-train"
+                           style="
+                               position: relative;
+                               background: #f8fafc;
+                               padding: 0 10px;
+                               color: #0284c7;
+                               font-size: 22px;
+                           ">
+                        </i>
+
+                        <div style="
+                            margin-top: 10px;
+                            color: #94a3b8;
+                            font-size: 11px;
+                            font-weight: 700;
+                            text-transform: uppercase;
+                        ">
+                            Rail Journey
+                        </div>
+
+                    </div>
+
+
+                    <!-- Destination -->
+                    <div style="
+                        min-width: 150px;
+                        text-align: right;
+                    ">
+
+                        <span style="
+                            font-size: 11px;
+                            color: #64748b;
+                            text-transform: uppercase;
+                            font-weight: 700;
+                        ">
+                            Arrival
+                        </span>
+
+                        <h2 style="
+                            margin: 5px 0;
+                            font-size: 22px;
+                            color: #0f172a;
+                        ">
+                            {{ train.destination }}
+                        </h2>
+
+                        <p style="
+                            margin: 0;
+                            color: #0284c7;
+                            font-size: 14px;
+                            font-weight: 700;
+                        ">
+                            <i class="fa-regular fa-clock"></i>
+                            {{ train.arrival_time|date:"d M Y, h:i A" }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Station Schedule -->
+            <div>
+
+                <h3 style="
+                    color: #0f172a;
+                    font-size: 19px;
+                    margin-bottom: 18px;
+                ">
+                    <i class="fa-solid fa-route"
+                       style="color:#0284c7;"></i>
+                    Station Schedule
+                </h3>
+
+
+                <div style="
+                    border: 1px solid #e2e8f0;
+                    border-radius: 10px;
+                    overflow: hidden;
+                ">
+
+                    <!-- Departure -->
+                    <div style="
+                        display:flex;
+                        align-items:center;
+                        gap:18px;
+                        padding:18px;
+                        border-bottom:1px solid #e2e8f0;
+                    ">
+
+                        <div style="
+                            width:42px;
+                            height:42px;
+                            border-radius:50%;
+                            background:#e0f2fe;
+                            color:#0284c7;
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                        ">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+
+                        <div style="flex:1;">
+
+                            <div style="
+                                font-size:12px;
+                                color:#64748b;
+                                font-weight:700;
+                                text-transform:uppercase;
+                            ">
+                                Departure Station
+                            </div>
+
+                            <strong style="
+                                display:block;
+                                margin-top:3px;
+                                color:#0f172a;
+                                font-size:15px;
+                            ">
+                                {{ train.source }}
+                            </strong>
+
+                        </div>
+
+                        <strong style="
+                            color:#0284c7;
+                            font-size:14px;
+                        ">
+                            {{ train.departure_time|date:"d M Y, h:i A" }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- Arrival -->
+                    <div style="
+                        display:flex;
+                        align-items:center;
+                        gap:18px;
+                        padding:18px;
+                    ">
+
+                        <div style="
+                            width:42px;
+                            height:42px;
+                            border-radius:50%;
+                            background:#dcfce7;
+                            color:#15803d;
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                        ">
+                            <i class="fa-solid fa-flag-checkered"></i>
+                        </div>
+
+                        <div style="flex:1;">
+
+                            <div style="
+                                font-size:12px;
+                                color:#64748b;
+                                font-weight:700;
+                                text-transform:uppercase;
+                            ">
+                                Arrival Station
+                            </div>
+
+                            <strong style="
+                                display:block;
+                                margin-top:3px;
+                                color:#0f172a;
+                                font-size:15px;
+                            ">
+                                {{ train.destination }}
+                            </strong>
+
+                        </div>
+
+                        <strong style="
+                            color:#15803d;
+                            font-size:14px;
+                        ">
+                            {{ train.arrival_time|date:"d M Y, h:i A" }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Train Facilities -->
+            <div style="
+                margin-top:30px;
+                display:grid;
+                grid-template-columns:repeat(2,1fr);
+                gap:15px;
+            ">
+
+                <div style="
+                    border:1px solid #e2e8f0;
+                    border-radius:9px;
+                    padding:16px;
+                ">
+                    <i class="fa-solid fa-chair"
+                       style="color:#0284c7;font-size:20px;"></i>
+
+                    <div style="
+                        margin-top:8px;
+                        color:#64748b;
+                        font-size:12px;
+                        font-weight:700;
+                    ">
+                        TOTAL SEATS
+                    </div>
+
+                    <strong style="
+                        color:#0f172a;
+                        font-size:18px;
+                    ">
+                        {{ train.total_seats }}
+                    </strong>
+                </div>
+
+
+                <div style="
+                    border:1px solid #e2e8f0;
+                    border-radius:9px;
+                    padding:16px;
+                ">
+                    <i class="fa-solid fa-check-circle"
+                       style="color:#10b981;font-size:20px;"></i>
+
+                    <div style="
+                        margin-top:8px;
+                        color:#64748b;
+                        font-size:12px;
+                        font-weight:700;
+                    ">
+                        AVAILABLE SEATS
+                    </div>
+
+                    <strong style="
+                        color:#15803d;
+                        font-size:18px;
+                    ">
+                        {{ train.available_seats }}
+                    </strong>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- RIGHT SIDE -->
+        <aside style="
+            background:#ffffff;
+            border:1px solid #e2e8f0;
+            border-radius:14px;
+            padding:28px;
+            box-shadow:var(--shadow,0 4px 15px rgba(0,0,0,.06));
+            position:sticky;
+            top:110px;
+        ">
+
+            <h3 style="
+                margin:0 0 22px;
+                color:#0f172a;
+                font-size:20px;
+            ">
+                <i class="fa-solid fa-ticket"
+                   style="color:#0284c7;"></i>
+                Journey Summary
+            </h3>
+
+
+            <div style="
+                padding-bottom:18px;
+                border-bottom:1px solid #e2e8f0;
+            ">
+
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    margin-bottom:12px;
+                    color:#64748b;
+                    font-size:14px;
+                ">
+                    <span>Train</span>
+                    <strong style="color:#0f172a;">
+                        {{ train.train_number }}
+                    </strong>
+                </div>
+
+
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    margin-bottom:12px;
+                    color:#64748b;
+                    font-size:14px;
+                ">
+                    <span>From</span>
+                    <strong style="color:#0f172a;">
+                        {{ train.source }}
+                    </strong>
+                </div>
+
+
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    color:#64748b;
+                    font-size:14px;
+                ">
+                    <span>To</span>
+                    <strong style="color:#0f172a;">
+                        {{ train.destination }}
+                    </strong>
+                </div>
+
+            </div>
+
+
+            <!-- Price -->
+            <div style="
+                margin-top:22px;
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+            ">
+
+                <span style="
+                    color:#64748b;
+                    font-size:14px;
+                ">
+                    Starting Fare
+                </span>
+
+                <strong style="
+                    color:#0284c7;
+                    font-size:24px;
+                ">
+                    ₹{{ train.price|floatformat:2 }}
+                </strong>
+
+            </div>
+
+
+            <!-- Coach Selection Button -->
+            <a href="{% url 'train_coach_selection' train.id %}"
+               style="
+                   display:flex;
+                   align-items:center;
+                   justify-content:center;
+                   gap:8px;
+                   width:100%;
+                   box-sizing:border-box;
+                   margin-top:24px;
+                   padding:14px;
+                   background:#0f172a;
+                   color:#ffffff;
+                   text-decoration:none;
+                   border-radius:8px;
+                   font-size:15px;
+                   font-weight:700;
+               ">
+
+                Select Coach
+                <i class="fa-solid fa-arrow-right"></i>
+
+            </a>
+
+
+            <p style="
+                margin:14px 0 0;
+                text-align:center;
+                color:#94a3b8;
+                font-size:12px;
+            ">
+                Choose your preferred coach class
+                on the next step.
+            </p>
+
+        </aside>
+
+    </div>
+
+</main>
+
+{% endblock %}

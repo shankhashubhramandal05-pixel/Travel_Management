@@ -1,0 +1,1091 @@
+{% extends "Travel/base.html" %}
+{% load static %}
+
+{% block title %}Search Results | YatraNest{% endblock %}
+
+{% block content %}
+
+<main class="search-results-page">
+
+    <section class="search-results-hero">
+        <div class="search-results-container">
+
+            <div class="search-results-heading">
+                <p class="search-results-kicker">EXPLORE INDIA</p>
+
+                {% if query %}
+                    <h1>Search results for “{{ query }}”</h1>
+                    <p>
+                        Discover destinations, tours, hotels and transport
+                        options matching your search.
+                    </p>
+                {% else %}
+                    <h1>Explore YatraNest</h1>
+                    <p>
+                        Search for destinations, tours, hotels and travel
+                        services across India.
+                    </p>
+                {% endif %}
+            </div>
+
+            <form
+                method="get"
+                action="{% url 'search' %}"
+                class="search-results-form"
+                role="search"
+            >
+                <label for="searchPageInput" class="sr-only">
+                    Search YatraNest
+                </label>
+
+                <input
+                    type="search"
+                    id="searchPageInput"
+                    name="q"
+                    value="{{ query|default:'' }}"
+                    placeholder="Search Goa, Kashmir, Jaipur..."
+                    autocomplete="off"
+                    enterkeyhint="search"
+                    aria-label="Search destinations, tours, hotels and travel services"
+                >
+
+                <button
+                    type="submit"
+                    aria-label="Search"
+                    title="Search"
+                >
+                    <i
+                        class="fa-solid fa-magnifying-glass"
+                        aria-hidden="true"
+                    ></i>
+                </button>
+            </form>
+
+        </div>
+    </section>
+
+
+    {% if query %}
+
+        <section class="search-results-section">
+            <div class="search-results-container">
+
+                {% if total_results %}
+
+                    <div class="search-results-summary">
+                        {{ total_results }}
+                        result{{ total_results|pluralize }}
+                        found
+                    </div>
+
+
+                    {% if destinations %}
+                        <section class="search-result-group">
+
+                            <div class="search-group-header">
+                                <div>
+                                    <span class="search-group-icon">
+                                        <i
+                                            class="fa-solid fa-location-dot"
+                                            aria-hidden="true"
+                                        ></i>
+                                    </span>
+
+                                    <div>
+                                        <p>DESTINATIONS</p>
+                                        <h2>Places to Explore</h2>
+                                    </div>
+                                </div>
+
+                                <span class="search-group-count">
+                                    {{ destinations|length }}
+                                </span>
+                            </div>
+
+                            <div class="search-result-grid">
+
+                                {% for destination in destinations %}
+                                    <article class="search-result-card">
+
+                                        <div class="search-card-icon">
+                                            <i
+                                                class="fa-solid fa-map-location-dot"
+                                                aria-hidden="true"
+                                            ></i>
+                                        </div>
+
+                                        <div class="search-card-content">
+
+                                            <span class="search-card-type">
+                                                Destination
+                                            </span>
+
+                                            <h3>
+                                                {{ destination }}
+                                            </h3>
+
+                                            <a
+                                                href="{% url 'destination_detail' destination.destination_slug %}"
+                                                class="search-card-link"
+                                            >
+                                                Explore Destination
+                                                <i
+                                                    class="fa-solid fa-arrow-right"
+                                                    aria-hidden="true"
+                                                ></i>
+                                            </a>
+
+                                        </div>
+                                    </article>
+                                {% endfor %}
+
+                            </div>
+                        </section>
+                    {% endif %}
+
+
+                    {% if tours %}
+                        <section class="search-result-group">
+
+                            <div class="search-group-header">
+                                <div>
+                                    <span class="search-group-icon">
+                                        <i
+                                            class="fa-solid fa-route"
+                                            aria-hidden="true"
+                                        ></i>
+                                    </span>
+
+                                    <div>
+                                        <p>TOURS</p>
+                                        <h2>Travel Experiences</h2>
+                                    </div>
+                                </div>
+
+                                <span class="search-group-count">
+                                    {{ tours|length }}
+                                </span>
+                            </div>
+
+                            <div class="search-result-grid">
+
+                                {% for tour in tours %}
+                                    <article class="search-result-card">
+
+                                        <div class="search-card-icon">
+                                            <i
+                                                class="fa-solid fa-compass"
+                                                aria-hidden="true"
+                                            ></i>
+                                        </div>
+
+                                        <div class="search-card-content">
+
+                                            <span class="search-card-type">
+                                                Tour
+                                            </span>
+
+                                            <h3>
+                                                {{ tour }}
+                                            </h3>
+
+                                            <a
+                                                href="{% url 'tour_detail' tour.tour_slug %}"
+                                                class="search-card-link"
+                                            >
+                                                View Tour
+                                                <i
+                                                    class="fa-solid fa-arrow-right"
+                                                    aria-hidden="true"
+                                                ></i>
+                                            </a>
+
+                                        </div>
+                                    </article>
+                                {% endfor %}
+
+                            </div>
+                        </section>
+                    {% endif %}
+
+
+                    {% if hotels %}
+                        <section class="search-result-group">
+
+                            <div class="search-group-header">
+                                <div>
+                                    <span class="search-group-icon">
+                                        <i
+                                            class="fa-solid fa-hotel"
+                                            aria-hidden="true"
+                                        ></i>
+                                    </span>
+
+                                    <div>
+                                        <p>HOTELS</p>
+                                        <h2>Places to Stay</h2>
+                                    </div>
+                                </div>
+
+                                <span class="search-group-count">
+                                    {{ hotels|length }}
+                                </span>
+                            </div>
+
+                            <div class="search-result-grid">
+
+                                {% for hotel in hotels %}
+                                    <article class="search-result-card">
+
+                                        <div class="search-card-icon">
+                                            <i
+                                                class="fa-solid fa-bed"
+                                                aria-hidden="true"
+                                            ></i>
+                                        </div>
+
+                                        <div class="search-card-content">
+
+                                            <span class="search-card-type">
+                                                Hotel
+                                            </span>
+
+                                            <h3>
+                                                {{ hotel }}
+                                            </h3>
+
+                                            <a
+                                                href="{% url 'hotel_detail' hotel.id %}"
+                                                class="search-card-link"
+                                            >
+                                                View Hotel
+                                                <i
+                                                    class="fa-solid fa-arrow-right"
+                                                    aria-hidden="true"
+                                                ></i>
+                                            </a>
+
+                                        </div>
+                                    </article>
+                                {% endfor %}
+
+                            </div>
+                        </section>
+                    {% endif %}
+
+
+                    {% if guides %}
+                        <section class="search-result-group">
+
+                            <div class="search-group-header">
+                                <div>
+                                    <span class="search-group-icon">
+                                        <i
+                                            class="fa-solid fa-user-tie"
+                                            aria-hidden="true"
+                                        ></i>
+                                    </span>
+
+                                    <div>
+                                        <p>GUIDES</p>
+                                        <h2>Travel Guides</h2>
+                                    </div>
+                                </div>
+
+                                <span class="search-group-count">
+                                    {{ guides|length }}
+                                </span>
+                            </div>
+
+                            <div class="search-result-grid">
+
+                                {% for guide in guides %}
+                                    <article class="search-result-card">
+
+                                        <div class="search-card-icon">
+                                            <i
+                                                class="fa-solid fa-person-hiking"
+                                                aria-hidden="true"
+                                            ></i>
+                                        </div>
+
+                                        <div class="search-card-content">
+
+                                            <span class="search-card-type">
+                                                Guide
+                                            </span>
+
+                                            <h3>
+                                                {{ guide }}
+                                            </h3>
+
+                                            <a
+                                                href="{% url 'guide_detail' guide.id %}"
+                                                class="search-card-link"
+                                            >
+                                                View Guide
+                                                <i
+                                                    class="fa-solid fa-arrow-right"
+                                                    aria-hidden="true"
+                                                ></i>
+                                            </a>
+
+                                        </div>
+                                    </article>
+                                {% endfor %}
+
+                            </div>
+                        </section>
+                    {% endif %}
+
+
+                    {% if buses %}
+                        <section class="search-result-group">
+
+                            <div class="search-group-header">
+                                <div>
+                                    <span class="search-group-icon">
+                                        <i
+                                            class="fa-solid fa-bus"
+                                            aria-hidden="true"
+                                        ></i>
+                                    </span>
+
+                                    <div>
+                                        <p>BUSES</p>
+                                        <h2>Bus Services</h2>
+                                    </div>
+                                </div>
+
+                                <span class="search-group-count">
+                                    {{ buses|length }}
+                                </span>
+                            </div>
+
+                            <div class="search-result-grid">
+
+                                {% for bus in buses %}
+                                    <article class="search-result-card">
+
+                                        <div class="search-card-icon">
+                                            <i
+                                                class="fa-solid fa-bus-simple"
+                                                aria-hidden="true"
+                                            ></i>
+                                        </div>
+
+                                        <div class="search-card-content">
+
+                                            <span class="search-card-type">
+                                                Bus Service
+                                            </span>
+
+                                            <h3>
+                                                {{ bus }}
+                                            </h3>
+
+                                            <a
+                                                href="{% url 'bus_list' %}"
+                                                class="search-card-link"
+                                            >
+                                                View Buses
+                                                <i
+                                                    class="fa-solid fa-arrow-right"
+                                                    aria-hidden="true"
+                                                ></i>
+                                            </a>
+
+                                        </div>
+                                    </article>
+                                {% endfor %}
+
+                            </div>
+                        </section>
+                    {% endif %}
+
+
+                    {% if flights %}
+                        <section class="search-result-group">
+
+                            <div class="search-group-header">
+                                <div>
+                                    <span class="search-group-icon">
+                                        <i
+                                            class="fa-solid fa-plane"
+                                            aria-hidden="true"
+                                        ></i>
+                                    </span>
+
+                                    <div>
+                                        <p>FLIGHTS</p>
+                                        <h2>Flight Services</h2>
+                                    </div>
+                                </div>
+
+                                <span class="search-group-count">
+                                    {{ flights|length }}
+                                </span>
+                            </div>
+
+                            <div class="search-result-grid">
+
+                                {% for flight in flights %}
+                                    <article class="search-result-card">
+
+                                        <div class="search-card-icon">
+                                            <i
+                                                class="fa-solid fa-plane-departure"
+                                                aria-hidden="true"
+                                            ></i>
+                                        </div>
+
+                                        <div class="search-card-content">
+
+                                            <span class="search-card-type">
+                                                Flight
+                                            </span>
+
+                                            <h3>
+                                                {{ flight }}
+                                            </h3>
+
+                                            <a
+                                                href="{% url 'flight_list' %}"
+                                                class="search-card-link"
+                                            >
+                                                View Flights
+                                                <i
+                                                    class="fa-solid fa-arrow-right"
+                                                    aria-hidden="true"
+                                                ></i>
+                                            </a>
+
+                                        </div>
+                                    </article>
+                                {% endfor %}
+
+                            </div>
+                        </section>
+                    {% endif %}
+
+
+                    {% if trains %}
+                        <section class="search-result-group">
+
+                            <div class="search-group-header">
+                                <div>
+                                    <span class="search-group-icon">
+                                        <i
+                                            class="fa-solid fa-train"
+                                            aria-hidden="true"
+                                        ></i>
+                                    </span>
+
+                                    <div>
+                                        <p>TRAINS</p>
+                                        <h2>Train Services</h2>
+                                    </div>
+                                </div>
+
+                                <span class="search-group-count">
+                                    {{ trains|length }}
+                                </span>
+                            </div>
+
+                            <div class="search-result-grid">
+
+                                {% for train in trains %}
+                                    <article class="search-result-card">
+
+                                        <div class="search-card-icon">
+                                            <i
+                                                class="fa-solid fa-train-subway"
+                                                aria-hidden="true"
+                                            ></i>
+                                        </div>
+
+                                        <div class="search-card-content">
+
+                                            <span class="search-card-type">
+                                                Train
+                                            </span>
+
+                                            <h3>
+                                                {{ train }}
+                                            </h3>
+
+                                            <a
+                                                href="{% url 'train_list' %}"
+                                                class="search-card-link"
+                                            >
+                                                View Trains
+                                                <i
+                                                    class="fa-solid fa-arrow-right"
+                                                    aria-hidden="true"
+                                                ></i>
+                                            </a>
+
+                                        </div>
+                                    </article>
+                                {% endfor %}
+
+                            </div>
+                        </section>
+                    {% endif %}
+
+
+                {% else %}
+
+                    <div class="search-no-results">
+
+                        <div class="search-no-results-icon">
+                            <i
+                                class="fa-solid fa-magnifying-glass"
+                                aria-hidden="true"
+                            ></i>
+                        </div>
+
+                        <p class="search-results-kicker">
+                            NO MATCHES
+                        </p>
+
+                        <h2>
+                            We couldn't find anything for
+                            “{{ query }}”
+                        </h2>
+
+                        <p>
+                            Try another destination, tour, hotel or
+                            travel service.
+                        </p>
+
+                        <div class="search-popular-links">
+
+                            <a href="{% url 'search' %}?q=Goa">
+                                Goa
+                            </a>
+
+                            <a href="{% url 'search' %}?q=Kashmir">
+                                Kashmir
+                            </a>
+
+                            <a href="{% url 'search' %}?q=Rajasthan">
+                                Rajasthan
+                            </a>
+
+                            <a href="{% url 'search' %}?q=Himachal">
+                                Himachal
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+        </section>
+
+    {% else %}
+
+        <section class="search-results-section">
+
+            <div class="search-results-container">
+
+                <div class="search-no-results">
+
+                    <div class="search-no-results-icon">
+                        <i
+                            class="fa-solid fa-compass"
+                            aria-hidden="true"
+                        ></i>
+                    </div>
+
+                    <p class="search-results-kicker">
+                        START EXPLORING
+                    </p>
+
+                    <h2>
+                        Where will you go next?
+                    </h2>
+
+                    <p>
+                        Enter a destination, tour, hotel or travel
+                        service above to begin your search.
+                    </p>
+
+                    <div class="search-popular-links">
+
+                        <a href="{% url 'search' %}?q=Goa">
+                            Goa
+                        </a>
+
+                        <a href="{% url 'search' %}?q=Kashmir">
+                            Kashmir
+                        </a>
+
+                        <a href="{% url 'search' %}?q=Rajasthan">
+                            Rajasthan
+                        </a>
+
+                        <a href="{% url 'search' %}?q=Himachal">
+                            Himachal
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    {% endif %}
+
+</main>
+
+
+<style>
+
+.search-results-page {
+    min-height: 80vh;
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(238, 166, 44, 0.10),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 90% 20%,
+            rgba(96, 82, 220, 0.08),
+            transparent 32%
+        ),
+        #f5f7fb;
+    padding-bottom: 90px;
+}
+
+
+.search-results-hero {
+    padding: 145px 20px 55px;
+    background:
+        linear-gradient(
+            135deg,
+            #0c1b30 0%,
+            #182231 55%,
+            #101c35 100%
+        );
+    color: #ffffff;
+}
+
+
+.search-results-container {
+    width: min(1180px, 100%);
+    margin: 0 auto;
+}
+
+
+.search-results-heading {
+    max-width: 850px;
+    margin: 0 auto 32px;
+    text-align: center;
+}
+
+
+.search-results-kicker {
+    margin: 0 0 12px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    opacity: 0.72;
+}
+
+
+.search-results-heading h1 {
+    margin: 0 0 14px;
+    font-family: "Playfair Display", serif;
+    font-size: clamp(36px, 5vw, 58px);
+    line-height: 1.1;
+}
+
+
+.search-results-heading p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.7;
+    opacity: 0.78;
+}
+
+
+.search-results-form {
+    width: min(760px, 100%);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.10);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+
+.search-results-form input {
+    flex: 1;
+    min-width: 0;
+    height: 56px;
+    padding: 0 18px;
+    border: 0;
+    outline: 0;
+    border-radius: 13px;
+    background: rgba(255, 255, 255, 0.96);
+    color: #182231;
+    font-size: 16px;
+}
+
+
+.search-results-form input::placeholder {
+    color: #8b93a1;
+}
+
+
+.search-results-form input:focus {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.18);
+}
+
+
+.search-results-form button {
+    width: 56px;
+    height: 56px;
+    flex: 0 0 56px;
+    border: 0;
+    border-radius: 13px;
+    cursor: pointer;
+    background: #ffffff;
+    color: #182231;
+    font-size: 18px;
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.search-results-form button:hover {
+    transform: translateY(-2px);
+    background: #f4f6f9;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
+}
+
+
+.search-results-form button:active {
+    transform: translateY(0);
+}
+
+
+.search-results-section {
+    padding: 55px 20px 0;
+}
+
+
+.search-results-summary {
+    margin-bottom: 30px;
+    color: #667085;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+.search-result-group {
+    margin-bottom: 48px;
+}
+
+
+.search-group-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 22px;
+}
+
+
+.search-group-header > div {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+
+.search-group-icon {
+    width: 50px;
+    height: 50px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 50px;
+    border-radius: 15px;
+    background: #ffffff;
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.08);
+    color: #182231;
+    font-size: 19px;
+}
+
+
+.search-group-header p {
+    margin: 0 0 3px;
+    color: #8a93a3;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+
+.search-group-header h2 {
+    margin: 0;
+    color: #182231;
+    font-family: "Playfair Display", serif;
+    font-size: 27px;
+}
+
+
+.search-group-count {
+    min-width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    padding: 0 10px;
+    border-radius: 50px;
+    background: #ffffff;
+    color: #182231;
+    font-size: 13px;
+    font-weight: 800;
+    box-shadow: 0 5px 18px rgba(15, 23, 42, 0.07);
+}
+
+
+.search-result-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+
+.search-result-card {
+    display: flex;
+    gap: 17px;
+    min-height: 170px;
+    padding: 24px;
+    border: 1px solid rgba(15, 23, 42, 0.07);
+    border-radius: 22px;
+    background: #ffffff;
+    box-shadow: 0 12px 35px rgba(15, 23, 42, 0.06);
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+.search-result-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.11);
+}
+
+
+.search-card-icon {
+    width: 45px;
+    height: 45px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 45px;
+    border-radius: 13px;
+    background: #f1f4f8;
+    color: #182231;
+}
+
+
+.search-card-content {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+
+.search-card-type {
+    display: block;
+    margin-bottom: 7px;
+    color: #8992a2;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+
+.search-card-content h3 {
+    margin: 0 0 17px;
+    color: #182231;
+    font-family: "Playfair Display", serif;
+    font-size: 21px;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
+
+
+.search-card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #182231;
+    font-size: 13px;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+
+.search-card-link:hover {
+    text-decoration: none;
+}
+
+
+.search-card-link i {
+    transition: transform 0.2s ease;
+}
+
+
+.search-card-link:hover i {
+    transform: translateX(4px);
+}
+
+
+.search-no-results {
+    max-width: 760px;
+    margin: 20px auto 0;
+    padding: 65px 30px;
+    text-align: center;
+    border: 1px solid rgba(15, 23, 42, 0.07);
+    border-radius: 28px;
+    background: #ffffff;
+    box-shadow: 0 15px 45px rgba(15, 23, 42, 0.06);
+}
+
+
+.search-no-results-icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 22px;
+    display: grid;
+    place-items: center;
+    border-radius: 20px;
+    background: #f1f4f8;
+    color: #182231;
+    font-size: 25px;
+}
+
+
+.search-no-results h2 {
+    margin: 0 0 12px;
+    color: #182231;
+    font-family: "Playfair Display", serif;
+    font-size: clamp(27px, 4vw, 38px);
+}
+
+
+.search-no-results > p:not(.search-results-kicker) {
+    margin: 0 auto;
+    max-width: 600px;
+    color: #667085;
+    line-height: 1.7;
+}
+
+
+.search-popular-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 28px;
+}
+
+
+.search-popular-links a {
+    padding: 10px 17px;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    border-radius: 50px;
+    color: #182231;
+    background: #f8fafc;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+
+.search-popular-links a:hover {
+    transform: translateY(-2px);
+    background: #ffffff;
+}
+
+
+@media (max-width: 900px) {
+
+    .search-result-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 640px) {
+
+    .search-results-hero {
+        padding-top: 120px;
+    }
+
+
+    .search-results-form {
+        gap: 8px;
+    }
+
+
+    .search-results-form input {
+        height: 50px;
+        font-size: 14px;
+    }
+
+
+    .search-results-form button {
+        width: 50px;
+        height: 50px;
+        flex-basis: 50px;
+    }
+
+
+    .search-result-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .search-result-card {
+        min-height: auto;
+    }
+
+
+    .search-group-header h2 {
+        font-size: 23px;
+    }
+
+
+    .search-no-results {
+        padding: 45px 20px;
+    }
+
+}
+
+</style>
+
+{% endblock %}

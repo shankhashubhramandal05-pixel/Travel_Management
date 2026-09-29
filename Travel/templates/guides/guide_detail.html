@@ -1,0 +1,506 @@
+{% extends "Travel/base.html" %}
+
+{% block title %}
+{{ guide.guide_name }} | YatraNest
+{% endblock %}
+
+{% block content %}
+
+<style>
+.guide-detail-wrapper {
+    max-width: 1100px;
+    margin: 110px auto 60px;
+    padding: 0 24px;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 22px;
+    transition: 0.2s ease;
+}
+
+.back-link:hover {
+    color: #0284c7;
+}
+
+.guide-detail-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+.guide-hero {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    min-height: 360px;
+}
+
+.guide-photo {
+    background: #f1f5f9;
+    min-height: 360px;
+}
+
+.guide-photo img {
+    width: 100%;
+    height: 100%;
+    min-height: 360px;
+    object-fit: cover;
+    display: block;
+}
+
+.guide-photo-placeholder {
+    width: 100%;
+    height: 100%;
+    min-height: 360px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    font-size: 70px;
+}
+
+.guide-content {
+    padding: 42px;
+}
+
+.guide-badge {
+    display: inline-block;
+    background: #e0f2fe;
+    color: #0284c7;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.guide-content h1 {
+    margin: 0 0 10px;
+    color: #0f172a;
+    font-size: 34px;
+    font-weight: 800;
+}
+
+.guide-specialization {
+    color: #0284c7;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 18px;
+}
+
+.guide-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
+.guide-status.available {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.guide-status.unavailable {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.guide-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 30px;
+}
+
+.info-item {
+    background: #f8fafc;
+    border: 1px solid #f1f5f9;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.info-label {
+    display: block;
+    color: #64748b;
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+
+.info-label i {
+    color: #0284c7;
+    margin-right: 7px;
+}
+
+.info-value {
+    color: #0f172a;
+    font-size: 14px;
+    font-weight: 600;
+    word-break: break-word;
+}
+
+.guide-section {
+    margin-top: 32px;
+    padding-top: 28px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.guide-section h2 {
+    color: #0f172a;
+    font-size: 20px;
+    margin: 0 0 14px;
+}
+
+.guide-section h2 i {
+    color: #0284c7;
+    margin-right: 8px;
+}
+
+.guide-section p {
+    color: #475569;
+    line-height: 1.8;
+    margin: 0;
+    white-space: pre-line;
+}
+
+.guide-actions {
+    margin-top: 30px;
+}
+
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #0f172a;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 13px 22px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+.btn-back:hover {
+    background: #0284c7;
+}
+
+@media (max-width: 800px) {
+
+    .guide-hero {
+        grid-template-columns: 1fr;
+    }
+
+    .guide-photo,
+    .guide-photo img,
+    .guide-photo-placeholder {
+        min-height: 300px;
+        height: 300px;
+    }
+
+    .guide-content {
+        padding: 28px 22px;
+    }
+
+    .guide-content h1 {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 550px) {
+
+    .guide-detail-wrapper {
+        margin-top: 90px;
+        padding: 0 15px;
+    }
+
+    .guide-info {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<main class="guide-detail-wrapper">
+
+<!-- BACK -->
+
+<a
+    href="{% url 'guide_list' %}"
+    class="back-link"
+>
+    <i class="fa-solid fa-arrow-left"></i>
+    Back to Guides
+</a>
+
+
+<!-- GUIDE CARD -->
+
+<div class="guide-detail-card">
+
+    <div class="guide-hero">
+
+
+        <!-- GUIDE PHOTO -->
+
+        <div class="guide-photo">
+
+            {% if guide.guide_photo %}
+
+                <img
+                    src="{{ guide.guide_photo.url }}"
+                    alt="{{ guide.guide_name }}"
+                >
+
+            {% else %}
+
+                <div class="guide-photo-placeholder">
+
+                    <i class="fa-solid fa-user-tie"></i>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- GUIDE CONTENT -->
+
+        <div class="guide-content">
+
+
+            <span class="guide-badge">
+
+                PROFESSIONAL TOUR GUIDE
+
+            </span>
+
+
+            <h1>
+
+                {{ guide.guide_name }}
+
+            </h1>
+
+
+            {% if guide.guide_specialization %}
+
+                <div class="guide-specialization">
+
+                    <i class="fa-solid fa-compass"></i>
+
+                    {{ guide.guide_specialization }}
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- AVAILABILITY -->
+
+            {% if guide.is_available %}
+
+                <div class="guide-status available">
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                    Available for Tours
+
+                </div>
+
+            {% else %}
+
+                <div class="guide-status unavailable">
+
+                    <i class="fa-solid fa-circle-xmark"></i>
+
+                    Currently Unavailable
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- GUIDE INFORMATION -->
+
+            <div class="guide-info">
+
+
+                {% if guide.guide_email %}
+
+                    <div class="info-item">
+
+                        <span class="info-label">
+
+                            <i class="fa-solid fa-envelope"></i>
+
+                            Email
+
+                        </span>
+
+                        <span class="info-value">
+
+                            {{ guide.guide_email }}
+
+                        </span>
+
+                    </div>
+
+                {% endif %}
+
+
+                {% if guide.guide_phone %}
+
+                    <div class="info-item">
+
+                        <span class="info-label">
+
+                            <i class="fa-solid fa-phone"></i>
+
+                            Phone
+
+                        </span>
+
+                        <span class="info-value">
+
+                            {{ guide.guide_phone }}
+
+                        </span>
+
+                    </div>
+
+                {% endif %}
+
+
+                {% if guide.guide_location %}
+
+                    <div class="info-item">
+
+                        <span class="info-label">
+
+                            <i class="fa-solid fa-location-dot"></i>
+
+                            Location
+
+                        </span>
+
+                        <span class="info-value">
+
+                            {{ guide.guide_location }}
+
+                        </span>
+
+                    </div>
+
+                {% endif %}
+
+
+                <div class="info-item">
+
+                    <span class="info-label">
+
+                        <i class="fa-solid fa-briefcase"></i>
+
+                        Experience
+
+                    </span>
+
+                    <span class="info-value">
+
+                        {{ guide.guide_experience }} years
+
+                    </span>
+
+                </div>
+
+
+                {% if guide.guide_languages %}
+
+                    <div class="info-item">
+
+                        <span class="info-label">
+
+                            <i class="fa-solid fa-language"></i>
+
+                            Languages
+
+                        </span>
+
+                        <span class="info-value">
+
+                            {{ guide.guide_languages }}
+
+                        </span>
+
+                    </div>
+
+                {% endif %}
+
+
+            </div>
+
+
+            <!-- BIO -->
+
+            {% if guide.guide_bio %}
+
+                <div class="guide-section">
+
+                    <h2>
+
+                        <i class="fa-solid fa-user"></i>
+
+                        About the Guide
+
+                    </h2>
+
+                    <p>
+
+                        {{ guide.guide_bio }}
+
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- ACTION -->
+
+            <div class="guide-actions">
+
+                <a
+                    href="{% url 'guide_list' %}"
+                    class="btn-back"
+                >
+
+                    <i class="fa-solid fa-arrow-left"></i>
+
+                    View All Guides
+
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+</main>
+
+{% endblock %}
